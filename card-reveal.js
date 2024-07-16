@@ -147,14 +147,13 @@ function returnHome() {
   const cardRevealContainer = document.getElementById('card-reveal-container');
   cardRevealContainer.style.display = 'none';
 
-  const difficultyScreen = document.getElementById('difficulty-screen');
-  difficultyScreen.style.display = 'flex';
-
   saveProgress();
   saveTurns();
 
   // Reset the card reveal game state for the next play
   resetCardRevealState();
+
+  window.location.href = 'index.html';
 }
 
 function resetCardRevealState() {

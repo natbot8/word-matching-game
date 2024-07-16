@@ -12,124 +12,69 @@ let selectedDifficulty = '';
 
 // Fetch word categories from JSON file
 async function fetchWordCategories() {
-  try {
-    const response = await fetch('word-categories.json');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching word categories:', error);
-    return null;
-  }
-}
-
-// Initialize the game
-async function initGame() {
-  const categories = await fetchWordCategories();
-  if (!categories) {
-    alert('Failed to load word categories. Please try again.');
-    return;
-  }
-
-  const categoryDropdown = document.getElementById('category-dropdown');
-
-  // Populate the category dropdown
-  Object.keys(categories).forEach(category => {
-    const option = document.createElement('option');
-    option.value = category;
-    option.textContent = category;
-    categoryDropdown.appendChild(option);
-  });
-
-  // Set the initial selected category
-  selectedCategory = categoryDropdown.value;
-
-  const difficultyButtons = document.querySelectorAll('.difficulty-button');
-  const startGameButton = document.getElementById('start-game-button');
-
-  categoryDropdown.addEventListener('change', () => {
-    selectedCategory = categoryDropdown.value;
-    checkSelections();
-  });
-
-  difficultyButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      selectedDifficulty = button.dataset.difficulty;
-      difficultyButtons.forEach(btn => btn.classList.remove('selected'));
-      button.classList.add('selected');
-      checkSelections();
-    });
-  });
-
-  startGameButton.addEventListener('click', () => {
-    words = categories;
-    startGame(selectedDifficulty);
-  });
-
-  function checkSelections() {
-    startGameButton.disabled = !(selectedCategory && selectedDifficulty);
-  }
-
-  // Load letter sounds
-  try {
-    const response = await fetch('letter-sounds.json');
-    letterSounds = await response.json();
-  } catch (error) {
-    console.error('Error loading letter sounds:', error);
-    letterSounds = { singleLetters: {}, letterCombinations: {} };
-  }
+    try {
+        const response = await fetch('word-categories.json');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching word categories:', error);
+        return null;
+    }
 }
 
 // Function to start the game based on the selected difficulty
-function startGame(difficulty) {
-  // Hide the difficulty selection screen
-  const difficultyScreen = document.getElementById('difficulty-screen');
-  difficultyScreen.style.display = 'none';
+async function initializeGame() {
+    const selectedCategory = localStorage.getItem('selectedCategory');
+    const selectedDifficulty = localStorage.getItem('selectedDifficulty');
 
-  // Show the game level container
-  const levelContainer = document.getElementById('level-container');
-  levelContainer.style.display = 'block';
+    if (!selectedCategory || !selectedDifficulty) {
+        console.error('Category or difficulty not selected');
+        return;
+    }
 
-  // Reset the score to 0 when starting a new game
-  score = 0;
-  updateRedBalls();
-  document.getElementById('score-value').innerText = score;
+    // Fetch word categories
+    try {
+        words = await fetchWordCategories();
+        if (!words) {
+            throw new Error('Failed to fetch word categories');
+        }
+    } catch (error) {
+        console.error('Error loading word categories:', error);
+        return;
+    }
 
-  // Load saved turns
-  loadSavedTurns();
+    // Set the difficulty based on the selected value
+    if (selectedDifficulty === 'easy') {
+        numImages = 3;
+    } else if (selectedDifficulty === 'hard') {
+        numImages = 4;
+    } else if (selectedDifficulty === 'superhard') {
+        numImages = 6;
+    } else if (selectedDifficulty === 'superduperhard') {
+        numImages = 12;
+    }
 
-  // Set the number of images based on the difficulty
-  if (difficulty === 'easy') {
-    numImages = 3;
-    new Audio('game-sounds/easy.m4a').play();
-  } else if (difficulty === 'hard') {
-    numImages = 4;
-    new Audio('game-sounds/hard.m4a').play();
-  } else if (difficulty === 'superhard') {
-    numImages = 6;
-    new Audio('game-sounds/superhard.m4a').play();
-  } else if (difficulty === 'superduperhard') {
-    numImages = 12;
-    new Audio('game-sounds/superduperhard.m4a').play();
-  }
+    // Shuffle words and create levels
+    const categoryWords = words[selectedCategory].words;
+    shuffleArray(categoryWords);
+    levels.length = 0; // Clear previous levels
+    for (let i = 0; i < WORDS_PER_ROUND; i++) {
+        const word = categoryWords[i];
+        const level = {
+            word: word.toUpperCase(),
+            image: `./images/${word}.jpg`,
+        };
+        levels.push(level);
+    }
 
-  // Shuffle words and create levels
-  const categoryWords = words[selectedCategory].words;
-  shuffleArray(categoryWords);
-  levels.length = 0; // Clear previous levels
-  for (let i = 0; i < WORDS_PER_ROUND; i++) {
-    const word = categoryWords[i];
-    const level = {
-      word: word.toUpperCase(),
-      image: `./images/${word}.jpg`,
-    };
-    levels.push(level);
-  }
+    // Reset currentLevel
+    currentLevel = 0;
 
-  // Reset currentLevel
-  currentLevel = 0;
+    // Start the game with the selected difficulty
+    loadLevel();
 
-  // Start the game with the selected difficulty
-  loadLevel();
+    // Make sure the game container is visible
+    document.getElementById('level-container').style.display = 'block';
 }
 
 // Load the initial level
@@ -305,7 +250,6 @@ function checkImage(imgElement, currentLevelData) {
 
     // Show confetti animation
     showConfetti();
-    // showConfetti2();
 
     showResultText('Congratulations!', 1500);
     setTimeout(() => {
@@ -381,9 +325,13 @@ function startCardRevealGame(totalTurns) {
   }
 }
 
-// Call initGame when the page loads
-window.addEventListener('load', () => {
-  initGame();
-  loadSavedTurns();
+// Call startGame when the game page loads
+document.addEventListener('DOMContentLoaded', () => {
+    initializeGame().catch(error => {
+        console.error('Error initializing the game:', error);
+        // You might want to display an error message to the user here
+    });
 });
+
+
 

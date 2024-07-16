@@ -1,0 +1,79 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.difficulty-selector, .points-display {
+    display: flex;
+    align-items: center;
+}
+
+.difficulty-selector img, .points-display img {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+#category-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.category-tile {
+    background-color: #8a2be2;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.category-cards {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.category-cards img {
+    width: 50px;
+    height: 50px;
+    margin-right: -25px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.category-title {
+    color: white;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.play-button {
+    background-color: #32cd32;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.play-button:hover {
+    background-color: #28a428;
+}
