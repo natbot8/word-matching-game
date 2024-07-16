@@ -5,6 +5,8 @@ async function initHomeScreen() {
         const response = await fetch('word-categories.json');
         wordCategories = await response.json();
         createCategoryTiles();
+        setupDifficultySelector();
+        updatePointsDisplay();
     } catch (error) {
         console.error('Error loading word categories:', error);
     }
@@ -50,6 +52,40 @@ function startGame(category) {
     localStorage.setItem('selectedCategory', category);
     localStorage.setItem('selectedDifficulty', difficulty);
     window.location.href = 'game.html';
+}
+
+// Set up difficulty selector
+function setupDifficultySelector() {
+    const difficultyDropdown = document.getElementById('difficulty-dropdown');
+    difficultyDropdown.addEventListener('change', (event) => {
+        const difficulty = event.target.value;
+        localStorage.setItem('selectedDifficulty', difficulty);
+        playDifficultySound(difficulty);
+    });
+}
+
+// Play difficulty sounds
+function playDifficultySound(difficulty) {
+    const soundMap = {
+        'easy': 'easy.m4a',
+        'hard': 'hard.m4a',
+        'superhard': 'superhard.m4a',
+        'superduperhard': 'superduperhard.m4a'
+    };
+    const soundFile = soundMap[difficulty];
+    if (soundFile) {
+        const audio = new Audio(`game-sounds/${soundFile}`);
+        audio.play();
+    }
+}
+
+// Update points display
+function updatePointsDisplay() {
+    const pointsValue = localStorage.getItem('savedPoints') || '0';
+    const pointsDisplay = document.getElementById('points-value');
+    if (pointsDisplay) {
+        pointsDisplay.textContent = pointsValue;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', initHomeScreen);

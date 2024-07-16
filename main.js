@@ -2,8 +2,8 @@ let words = {};
 const levels = [];
 let letterSounds = {};
 const WORDS_PER_ROUND = 10;
-let score = 0; 
-let savedTurns = 0;
+let points = 0; 
+let savedPoints = 0;
 let numImages = 2;
 let currentLevel = 0;
 let isProcessing = false;
@@ -137,41 +137,41 @@ function loadLevel() {
     imageContainer.appendChild(imgElement);
   }
 
-  // Get score and red-balls containers
-  const scoreContainer = document.getElementById('score-container');
-  const scoreElement = document.getElementById('score');
+  // Get points and red-balls containers
+  const pointsContainer = document.getElementById('points-container');
+  const pointsElement = document.getElementById('points');
   const redBallsContainer = document.getElementById('red-balls');
 
-  // Append score and red-balls elements within score-container
-  scoreContainer.innerHTML = ''; // Clear previous score elements
-  scoreContainer.appendChild(scoreElement);
-  scoreContainer.appendChild(redBallsContainer);
+  // Append points and red-balls elements within points-container
+  pointsContainer.innerHTML = ''; // Clear previous points elements
+  pointsContainer.appendChild(pointsElement);
+  pointsContainer.appendChild(redBallsContainer);
 
   // Append containers to the level-container
   const levelContainer = document.getElementById('level-container');
   levelContainer.innerHTML = ''; // Clear previous elements
   levelContainer.appendChild(confettiContainer);
-  levelContainer.appendChild(scoreContainer);
+  levelContainer.appendChild(pointsContainer);
   levelContainer.appendChild(letterContainer);
   levelContainer.appendChild(imageContainer);
 }
 
-// Load saved turns
-function loadSavedTurns() {
-  const savedTurnsData = localStorage.getItem('savedTurns');
-  if (savedTurnsData) {
-    savedTurns = parseInt(savedTurnsData, 10);
+// Load saved points
+function loadSavedPoints() {
+  const savedPointsData = localStorage.getItem('savedPoints');
+  if (savedPointsData) {
+    savedPoints = parseInt(savedPointsData, 10);
   } else {
-    savedTurns = 0;
+    savedPoints = 0;
   }
-  updateSavedTurnsDisplay();
+  updateSavedPointsDisplay();
 }
 
-// Update the saved turns display
-function updateSavedTurnsDisplay() {
-  const savedTurnsElement = document.getElementById('saved-turns');
-  if (savedTurnsElement) {
-    savedTurnsElement.textContent = `Saved Turns: ${savedTurns}`;
+// Update the saved points display
+function updateSavedPointsDisplay() {
+  const savedPointsElement = document.getElementById('saved-points');
+  if (savedPointsElement) {
+    savedPointsElement.textContent = `Saved Points: ${savedPoints}`;
   }
 }
 
@@ -245,7 +245,7 @@ function checkImage(imgElement, currentLevelData) {
   const wrongSound = new Audio('game-sounds/try-again.m4a')
 
   if (currentWord === wordDisplay) {
-    updateScore(true); // Pass true for correct answer
+    updatePoints(true); // Pass true for correct answer
     correctSound.play();
 
     // Show confetti animation
@@ -257,24 +257,24 @@ function checkImage(imgElement, currentLevelData) {
       isProcessing = false; 
     }, 1500);
   } else {
-    updateScore(false); 
+    updatePoints(false); 
     wrongSound.play();
     showResultText('Try again', 1500);
     isProcessing = false;
   }
 }
 
-function updateScore(correctAnswer) {
+function updatePoints(correctAnswer) {
   if (correctAnswer) {
-    score++;
+    points++;
   } else {
-    if (score > 0) {
-      score--;
+    if (points > 0) {
+      points--;
     }
   }
-  console.log('Score:', score); // Debugging point
+  console.log('Points:', points); // Debugging point
   updateRedBalls();
-  document.getElementById('score-value').innerText = score;
+  document.getElementById('points-value').innerText = points;
 }
 
 function updateRedBalls() {
@@ -282,7 +282,7 @@ function updateRedBalls() {
 
   redBallsContainer.innerHTML = ''; // Clear existing red balls
 
-  for (let i = 0; i < score; i++) {
+  for (let i = 0; i < points; i++) {
     const redBall = document.createElement('div');
     redBall.classList.add('red-ball');
     redBallsContainer.appendChild(redBall);
@@ -294,9 +294,9 @@ function nextLevel() {
   if (currentLevel < WORDS_PER_ROUND) {
     loadLevel();
   } else {
-    const totalTurns = score + savedTurns;
-    alert(`Congratulations! You completed all ${WORDS_PER_ROUND} words. Your total turns for the Card Reveal game: ${totalTurns}`);
-    startCardRevealGame(totalTurns);
+    const totalPoints = points + savedPoints;
+    alert(`Congratulations! You completed all ${WORDS_PER_ROUND} words. Your total points for the Card Reveal game: ${totalPoints}`);
+    startCardRevealGame(totalPoints);
   }
 }
 
@@ -315,13 +315,13 @@ function showResultText(text, duration) {
 }
 
 // Start card reveal game
-function startCardRevealGame(totalTurns) {
+function startCardRevealGame(totalPoints) {
   // Load any existing progress before initializing
   const progress = JSON.parse(localStorage.getItem('cardRevealProgress'));
   if (progress) {
-    initCardReveal(totalTurns + progress.turnsLeft, selectedCategory);
+    initCardReveal(totalPoints + progress.pointsLeft, selectedCategory);
   } else {
-    initCardReveal(totalTurns, selectedCategory);
+    initCardReveal(totalPoints, selectedCategory);
   }
 }
 

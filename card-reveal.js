@@ -1,30 +1,30 @@
-let turnsLeft = 0;
+let pointsLeft = 0;
 let revealedBlocks = 0;
 const totalBlocks = 16;
 let currentCardCategory = '';
 let currentCard = '';
 let isCardFullyRevealed = false;
 
-async function initCardReveal(initialTurns, category) {
-  console.log('Initializing Card Reveal with', initialTurns, 'turns and category:', category);
+async function initCardReveal(initialPoints, category) {
+  console.log('Initializing Card Reveal with', initialPoints, 'points and category:', category);
   currentCardCategory = category;
   const progress = JSON.parse(localStorage.getItem('cardRevealProgress'));
 
   if (progress) {
     console.log('Found saved progress:', progress);
-    turnsLeft = initialTurns;
+    pointsLeft = initialPoints;
     revealedBlocks = progress.revealedBlocks;
     currentCard = progress.currentCard;
     isCardFullyRevealed = progress.isCardFullyRevealed || false;
   } else {
     console.log('No saved progress found');
-    turnsLeft = initialTurns;
+    pointsLeft = initialPoints;
     revealedBlocks = 0;
     isCardFullyRevealed = false;
     await selectRandomCard();
   }
 
-  console.log('Current state:', { turnsLeft, revealedBlocks, currentCard, currentCardCategory, isCardFullyRevealed });
+  console.log('Current state:', { pointsLeft, revealedBlocks, currentCard, currentCardCategory, isCardFullyRevealed });
 
   const cardRevealContainer = document.getElementById('card-reveal-container');
   cardRevealContainer.style.display = 'block';
@@ -34,7 +34,7 @@ async function initCardReveal(initialTurns, category) {
 
   updateCardImage();
   createCardBoard();
-  updateTurnsDisplay();
+  updatePointsDisplay();
   applyProgress();
 }
 
@@ -98,21 +98,21 @@ function applyProgress() {
 }
 
 function revealBlock(block, index) {
-  if (turnsLeft > 0 && block.style.opacity !== '0') {
+  if (pointsLeft > 0 && block.style.opacity !== '0') {
     block.style.opacity = '0';
-    turnsLeft--;
+    pointsLeft--;
     revealedBlocks++;
-    updateTurnsDisplay();
+    updatePointsDisplay();
     saveProgress();
     checkGameState();
-    console.log('Block revealed, current state:', { turnsLeft, revealedBlocks });
+    console.log('Block revealed, current state:', { pointsLeft, revealedBlocks });
   }
 }
 
-function updateTurnsDisplay() {
-  const turnsLeftElement = document.getElementById('turns-left');
-  if (turnsLeftElement) {
-    turnsLeftElement.textContent = `Turns left: ${turnsLeft}`;
+function updatePointsDisplay() {
+  const pointsLeftElement = document.getElementById('points-left');
+  if (pointsLeftElement) {
+    pointsLeftElement.textContent = `Points left: ${pointsLeft}`;
   }
 }
 
@@ -123,18 +123,18 @@ function checkGameState() {
     // Remove all blocks to fully show the card
     const blocks = document.querySelectorAll('.card-block');
     blocks.forEach(block => block.style.display = 'none');
-    // Update the turns display
-    updateTurnsDisplay();
+    // Update the points display
+    updatePointsDisplay();
     // Save the progress
     saveProgress();
-  } else if (turnsLeft === 0 && !isCardFullyRevealed) {
-    alert('You ran out of turns! Play more word games to earn more turns.');
+  } else if (pointsLeft === 0 && !isCardFullyRevealed) {
+    alert('You ran out of points! Play more word games to earn more points.');
   }
 }
 
 function saveProgress() {
   const progress = {
-    turnsLeft: turnsLeft,
+    pointsLeft: pointsLeft,
     revealedBlocks: revealedBlocks,
     currentCard: currentCard,
     isCardFullyRevealed: isCardFullyRevealed
@@ -148,7 +148,7 @@ function returnHome() {
   cardRevealContainer.style.display = 'none';
 
   saveProgress();
-  saveTurns();
+  savePoints();
 
   // Reset the card reveal game state for the next play
   resetCardRevealState();
@@ -163,25 +163,25 @@ function resetCardRevealState() {
     selectRandomCard().then(() => {
       updateCardImage();
       createCardBoard();
-      updateTurnsDisplay();
+      updatePointsDisplay();
     });
   }
 }
 
-function saveTurns() {
-  localStorage.setItem('savedTurns', turnsLeft.toString());
-  console.log('Saved turns:', turnsLeft);
+function savePoints() {
+  localStorage.setItem('savedPoints', pointsLeft.toString());
+  console.log('Saved points:', pointsLeft);
 }
 
 function resetCardRevealProgress() {
   localStorage.removeItem('cardRevealProgress');
-  localStorage.removeItem('savedTurns');
+  localStorage.removeItem('savedPoints');
   revealedBlocks = 0;
-  turnsLeft = 0;
+  pointsLeft = 0;
   selectRandomCard().then(() => {
     updateCardImage();
     createCardBoard();
-    updateTurnsDisplay();
+    updatePointsDisplay();
   });
   console.log('Card reveal progress reset');
 }
