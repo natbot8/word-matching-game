@@ -1,0 +1,26 @@
+{
+  "Simple Words": {
+    "words": [
+      "cat", "dog", "frog", "pen", "sad", "hat", "bag", "fan", "mad", "bat", 
+      "rat", "cow", "sun", "mat", "bed", "pig", "bus", "red", "run", "sit"
+    ],
+    "cards": [
+      "blue-panda.png", 
+      "blue-fox.png", 
+      "blue-dog.png", 
+      "blue-frog.png"
+    ]
+  },
+  "Letter Combinations": {
+    "words": [
+      "ship", "chip", "chess", "chin", "chat", "fish", "dish", "brush", 
+      "trash", "shell", "cash", "bath", "cloth", "path", "math"
+    ],
+    "cards": [
+      "pink-bunny.png",
+      "pink-elephant.png", 
+      "pink-squirrel.png", 
+      "pink-turtle.png"
+    ]
+  }
+}

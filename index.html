@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learn to Read App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="card-reveal.css">
+</head>
+
+<body>
+  <div id="difficulty-screen">
+    <div id="category-selection">
+      <h2>Choose a Word Category:</h2>
+      <select id="category-dropdown">
+        <!-- Options will be dynamically populated -->
+      </select>
+    </div>
+
+    <div id="difficulty-selection">
+      <h2>Choose Difficulty:</h2>
+      <button class="difficulty-button" data-difficulty="easy">Easy</button>
+      <button class="difficulty-button" data-difficulty="hard">Hard</button>
+      <button class="difficulty-button" data-difficulty="superhard">Super Hard</button>
+      <button class="difficulty-button" data-difficulty="superduperhard">Super Duper Hard</button>
+    </div>
+
+    <button id="start-game-button" disabled>Get Started</button>
+  </div>
+  
+  <div id="level-container" style="display: none;">
+    <div id="word-display"></div>
+    <div id="confetti-container"></div>
+    <div id="score-container">
+      <div id="score">Score: <span id="score-value">0</span></div>
+      <div id="saved-turns"></div>
+      <div id="red-balls"></div>
+    </div>
+    <div id="letter-container"></div>
+    <div id="image-container"></div>
+  </div>
+
+  <div id="card-reveal-container" class="card-reveal-container" style="display: none;">
+    <h2>Card Reveal Game</h2>
+    <div id="turns-left"></div>
+    <div class="card-image-container">
+      <img id="card-image" class="card-image" src="" alt="Reward Card">
+      <div id="card-board" class="card-board"></div>
+    </div>
+    <button onclick="returnHome()">Return Home</button>
+  </div>
+
+    <script src="js/confetti.js"></script>
+    <script src="main.js"></script>
+    <script src="card-reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+
+</body>
+</html>

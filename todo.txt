@@ -1,0 +1,25 @@
+add letter combinations where both letter have boundary square and play the combination sound 
+
+think of a way to handle magic E?
+
+clean up the words and put in a separate json file 
+
+create ai images for all of the words 
+
+separate words by easy, medium, hard, etc
+
+maybe limit to 10 words per round and show the score at the end 
+
+create a game that you play at the end of the round with the balls/coins you earned -- mini games like king game
+
+from the games you win some collectable like battle cards or something
+
+see if there is a way to make better on mobile, maybe react native?
+
+figure out how to create login, save state, track progress / scores, etc
+
+maybe make parts work offline 
+
+stats for parents -- which words they get right / wrong, etc
+
+algorithm for spaced repetition, when you get words right, show less often, but still show on occasion

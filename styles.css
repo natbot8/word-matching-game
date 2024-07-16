@@ -1,0 +1,196 @@
+#level-container {
+  text-align: center;
+}
+
+#letter-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+  padding: 10px 0;
+  white-space: nowrap;
+}
+
+.letter-button {
+  background-image: linear-gradient(92.88deg, #455EB5 9.16%, #5643CC 43.89%, #673FD7 64.72%);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: "Inter UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 48px;
+  font-weight: 325;
+  height: 1.5em;
+  padding: 0 0.5em;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-right: 1px;
+  margin-bottom: 10px;
+}
+
+.image-option {
+  max-height: 200px;
+  border-radius: 8px;
+  width: auto;
+  height: auto;
+  cursor: pointer;
+  margin: 10px;
+}
+
+#saved-turns {
+  font-size: 18px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#score-container {
+  text-align: center;
+  margin-top: 20px;
+  position: relative;
+}
+
+#score {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 0px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+#red-balls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.red-ball {
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border-radius: 50%;
+  margin: 5px;
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(-200px) rotateZ(0);
+  }
+
+  100% {
+    transform: translateY(800px) rotateZ(1080deg);
+  }
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #f00;
+  opacity: 0.7;
+  will-change: transform;
+  animation: confetti 2s ease-out infinite;
+}
+
+/* #difficulty-screen {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  height: 100vh;
+} */
+
+#difficulty-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+#category-selection,
+#difficulty-selection {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#category-dropdown {
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.difficulty-button {
+  background-image: linear-gradient(92.88deg, #455EB5 9.16%, #5643CC 43.89%, #673FD7 64.72%);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: "Inter UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 32px;
+  font-weight: 325;
+  height: 4rem;
+  padding: 0 1.6rem;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.difficulty-button:hover {
+  box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+  transition-duration: .1s;
+  transform: scale(1.1);
+}
+
+.difficulty-button.selected {
+  background-image: linear-gradient(92.88deg, #45b5a8 9.16%, #43cb77 43.89%, #41d8bf 64.72%);
+}
+
+#start-game-button {
+  background-image: linear-gradient(92.88deg, #b5a245 9.16%, #cb9343 43.89%, #d86641 64.72%);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-family: "Inter UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  height: 4rem;
+  padding: 0 1.6rem;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-top: 20px;
+}
+
+#start-game-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#start-game-button:hover:not(:disabled) {
+  box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+  transition-duration: .1s;
+  transform: scale(1.1);
+}
