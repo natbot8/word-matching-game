@@ -3,7 +3,8 @@ const levels = [];
 let letterSounds = {};
 const WORDS_PER_ROUND = 10;
 let points = 0; 
-let savedPoints = 0;
+let totalPoints = 0;
+// let savedPoints = 0;
 let numImages = 2;
 let currentLevel = 0;
 let isProcessing = false;
@@ -31,6 +32,11 @@ async function initializeGame() {
         console.error('Category or difficulty not selected');
         return;
     }
+
+    // Load total points from localStorage
+    totalPoints = parseInt(localStorage.getItem('savedPoints') || '0');
+    console.log('Loaded total points:', totalPoints);
+    updateTotalPointsDisplay();
 
     // Fetch word categories
     try {
@@ -67,8 +73,9 @@ async function initializeGame() {
         levels.push(level);
     }
 
-    // Reset currentLevel
+    // Reset currentLevel and points
     currentLevel = 0;
+    points = 0;
 
     // Start the game with the selected difficulty
     loadLevel();
@@ -80,11 +87,48 @@ async function initializeGame() {
 // Load the initial level
 function loadLevel() {
   const currentLevelData = levels[currentLevel];
-  const letterContainer = document.getElementById('letter-container');
-  letterContainer.innerHTML = ''; // Clear previous letters
+  const levelContainer = document.getElementById('level-container');
+  levelContainer.innerHTML = ''; // Clear previous elements
 
-  const confettiContainer = document.getElementById('confetti-container');
+  // Create and append the points display
+  const pointsDisplay = document.createElement('div');
+  pointsDisplay.className = 'points-display';
+  pointsDisplay.innerHTML = `
+    <span id="total-points-value">${totalPoints}</span>
+    <img src="icons/coin.png" alt="Total Points">
+  `;
+  levelContainer.appendChild(pointsDisplay);
 
+  // Create and append the word display
+  const wordDisplay = document.createElement('div');
+  wordDisplay.id = 'word-display';
+  levelContainer.appendChild(wordDisplay);
+
+  // Create and append the confetti container
+  const confettiContainer = document.createElement('div');
+  confettiContainer.id = 'confetti-container';
+  levelContainer.appendChild(confettiContainer);
+
+  // Create and append the score container
+  const scoreContainer = document.createElement('div');
+  scoreContainer.id = 'score-container';
+  scoreContainer.innerHTML = `
+    <div id="current-points">Points Won: <span id="current-points-value">${points}</span></div>
+    <div id="coin-container"></div>
+  `;
+  levelContainer.appendChild(scoreContainer);
+
+  // Create and append the letter container
+  const letterContainer = document.createElement('div');
+  letterContainer.id = 'letter-container';
+  levelContainer.appendChild(letterContainer);
+
+  // Create and append the image container
+  const imageContainer = document.createElement('div');
+  imageContainer.id = 'image-container';
+  levelContainer.appendChild(imageContainer);
+
+  // Populate letter buttons
   const word = currentLevelData.word.toLowerCase();
   let i = 0;
   while (i < word.length) {
@@ -113,47 +157,28 @@ function loadLevel() {
     i = j;
   }
 
+  // Adjust letter container alignment
   if (letterContainer.scrollWidth > letterContainer.clientWidth) {
     letterContainer.style.justifyContent = 'flex-start'; // Left align when overflow
   } else {
     letterContainer.style.justifyContent = 'center'; // Center align when no overflow
   }
 
-  const imageContainer = document.getElementById('image-container');
-  imageContainer.innerHTML = ''; // Clear previous images
-
+  // Populate image options
   const images = [...getRandomImages(currentLevelData)];
-
-  // Randomize the order of the images
   const shuffledImages = shuffleArray(images);
 
-  // Create image elements and add them to the container
   for (const imgSrc of shuffledImages) {
     const imgElement = document.createElement('img');
     imgElement.src = imgSrc;
     imgElement.alt = 'Word Image';
-    imgElement.classList.add('image-option'); // Use 'image-option' class
+    imgElement.classList.add('image-option');
     imgElement.onclick = () => checkImage(imgElement, currentLevelData);
     imageContainer.appendChild(imgElement);
   }
 
-  // Get points and red-balls containers
-  const pointsContainer = document.getElementById('points-container');
-  const pointsElement = document.getElementById('points');
-  const redBallsContainer = document.getElementById('red-balls');
-
-  // Append points and red-balls elements within points-container
-  pointsContainer.innerHTML = ''; // Clear previous points elements
-  pointsContainer.appendChild(pointsElement);
-  pointsContainer.appendChild(redBallsContainer);
-
-  // Append containers to the level-container
-  const levelContainer = document.getElementById('level-container');
-  levelContainer.innerHTML = ''; // Clear previous elements
-  levelContainer.appendChild(confettiContainer);
-  levelContainer.appendChild(pointsContainer);
-  levelContainer.appendChild(letterContainer);
-  levelContainer.appendChild(imageContainer);
+  // Update coin icons
+  updateCoinIcons();
 }
 
 // Load saved points
@@ -265,38 +290,47 @@ function checkImage(imgElement, currentLevelData) {
 }
 
 function updatePoints(correctAnswer) {
-  if (correctAnswer) {
-    points++;
-  } else {
-    if (points > 0) {
-      points--;
+    if (correctAnswer) {
+        points++;
+    } else {
+        if (points > 0) {
+            points--;
+        }
     }
-  }
-  console.log('Points:', points); // Debugging point
-  updateRedBalls();
-  document.getElementById('points-value').innerText = points;
+    console.log('Current Points:', points);
+    updateCoinIcons();
+    document.getElementById('current-points-value').innerText = points;
 }
 
-function updateRedBalls() {
-  const redBallsContainer = document.getElementById('red-balls');
+function updateCoinIcons() {
+    const coinContainer = document.getElementById('coin-container');
+    coinContainer.innerHTML = ''; // Clear existing coins
 
-  redBallsContainer.innerHTML = ''; // Clear existing red balls
+    for (let i = 0; i < points; i++) {
+        const coinIcon = document.createElement('img');
+        coinIcon.src = 'icons/coin.png';
+        coinIcon.alt = 'Coin';
+        coinIcon.classList.add('coin-icon');
+        coinContainer.appendChild(coinIcon);
+    }
+}
 
-  for (let i = 0; i < points; i++) {
-    const redBall = document.createElement('div');
-    redBall.classList.add('red-ball');
-    redBallsContainer.appendChild(redBall);
-  }
+function updateTotalPointsDisplay() {
+    const totalPointsDisplay = document.getElementById('total-points-value');
+    if (totalPointsDisplay) {
+        totalPointsDisplay.textContent = totalPoints;
+    }
 }
 
 function nextLevel() {
   currentLevel++;
   if (currentLevel < WORDS_PER_ROUND) {
-    loadLevel();
+      loadLevel();
   } else {
-    const totalPoints = points + savedPoints;
-    alert(`Congratulations! You completed all ${WORDS_PER_ROUND} words. Your total points for the Card Reveal game: ${totalPoints}`);
-    startCardRevealGame(totalPoints);
+      totalPoints += points;
+      localStorage.setItem('points', totalPoints.toString());
+      alert(`Congratulations! You completed all ${WORDS_PER_ROUND} words. Your total points: ${totalPoints}`);
+      startCardRevealGame(totalPoints);
   }
 }
 
