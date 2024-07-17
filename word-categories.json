@@ -15,7 +15,8 @@
   "Letter Combinations": {
     "words": [
       "ship", "chip", "chess", "chin", "chat", "fish", "dish", "brush", 
-      "trash", "shell", "cash", "bath", "cloth", "path", "math"
+      "trash", "shell", "cash", "bath", "cloth", "path", "math", "chick", "shack", "lock",
+      "sock", "truck"
     ],
     "cards": [
       "pink-bunny.png",

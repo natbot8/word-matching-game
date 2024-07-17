@@ -31,6 +31,8 @@
     "sh": "sh.mp3",
     "ch": "ch.mp3",
     "th": "th.mp3",
+    "ck": "k.mp3",
+    "ll": "l.mp3", 
     "oo": "oo.mp3"
   }
 }
