@@ -62,8 +62,8 @@
 }
 
 .points-display img {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
 }
 
 #points-container {
@@ -90,7 +90,7 @@
 }
 
 .coin-icon {
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   margin: 2px;
 }
