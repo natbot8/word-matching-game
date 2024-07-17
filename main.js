@@ -7,7 +7,7 @@ let totalPoints = 0;
 let numImages = 2;
 let currentLevel = 0;
 let isProcessing = false;
-let selectedCategory = 'Simple Words';
+let selectedCategory = '';
 let selectedDifficulty = '';
 
 // Fetch word categories from JSON file
@@ -22,13 +22,29 @@ async function fetchWordCategories() {
     }
 }
 
+// Fetch word categories from JSON file
+async function fetchLetterSounds() {
+    try {
+        const response = await fetch('letter-sounds.json');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching letter sounds:', error);
+        return null;
+    }
+}
+
 // Function to start the game based on the selected difficulty
 async function initializeGame() {
-    const selectedCategory = localStorage.getItem('selectedCategory');
-    const selectedDifficulty = localStorage.getItem('selectedDifficulty');
+    selectedCategory = localStorage.getItem('selectedCategory');
+    selectedDifficulty = localStorage.getItem('selectedDifficulty');
+
+    console.log('Selected Category:', selectedCategory);
+    console.log('Selected Difficulty:', selectedDifficulty);
 
     if (!selectedCategory || !selectedDifficulty) {
         console.error('Category or difficulty not selected');
+        // You might want to redirect to the home page or show an error message
         return;
     }
 
@@ -39,13 +55,21 @@ async function initializeGame() {
 
     // Fetch word categories
     try {
-        words = await fetchWordCategories();
-        if (!words) {
-            throw new Error('Failed to fetch word categories');
-        }
+      words = await fetchWordCategories();
+      if (!words) {
+          throw new Error('Failed to fetch word categories');
+      }
+      console.log('Fetched word categories:', words);
+  
+      // Load letter sounds
+      letterSounds = await fetchLetterSounds();
+      if (!letterSounds) {
+          throw new Error('Failed to fetch letter sounds');
+      }
+      console.log('Fetched letter sounds:', letterSounds);
     } catch (error) {
-        console.error('Error loading word categories:', error);
-        return;
+      console.error('Error loading data:', error);
+      return;
     }
 
     // Set the difficulty based on the selected value
@@ -61,9 +85,14 @@ async function initializeGame() {
 
     // Shuffle words and create levels
     const categoryWords = words[selectedCategory].words;
+    if (!Array.isArray(categoryWords) || categoryWords.length === 0) {
+        console.error('No words found for the selected category');
+        return;
+    }
+
     shuffleArray(categoryWords);
     levels.length = 0; // Clear previous levels
-    for (let i = 0; i < WORDS_PER_ROUND; i++) {
+    for (let i = 0; i < Math.min(WORDS_PER_ROUND, categoryWords.length); i++) {
         const word = categoryWords[i];
         const level = {
             word: word.toUpperCase(),
@@ -136,12 +165,10 @@ function loadLevel() {
 
     // Check for letter combinations
     if (letterSounds && letterSounds.letterCombinations) {
-      while (j < word.length) {
-        const potentialCombination = word.slice(i, j + 1);
-        if (letterSounds.letterCombinations[potentialCombination]) {
-          soundUnit = potentialCombination;
-          j++;
-        } else {
+      for (let combo of Object.keys(letterSounds.letterCombinations)) {
+        if (word.slice(i).startsWith(combo)) {
+          soundUnit = combo;
+          j = i + combo.length;
           break;
         }
       }
@@ -189,9 +216,11 @@ function shuffleArray(array) {
   return array;
 }
 
+// get sound files from https://www.readnaturally.com/article/audio-examples-of-phonics-sounds
 function playLetterSound(soundUnit) {
-  // get sound files from https://www.readnaturally.com/article/audio-examples-of-phonics-sounds
   let soundFile;
+  soundUnit = soundUnit.toLowerCase();
+
   if (letterSounds.letterCombinations && letterSounds.letterCombinations[soundUnit]) {
     soundFile = letterSounds.letterCombinations[soundUnit];
   } else if (letterSounds.singleLetters && letterSounds.singleLetters[soundUnit]) {
@@ -202,13 +231,23 @@ function playLetterSound(soundUnit) {
   }
 
   const audio = new Audio(`./letter-sounds/${soundFile}`);
-  audio.play();
+  audio.play().catch(error => console.error('Error playing audio:', error));
 }
 
 function getRandomImages(currentLevelData) {
+  if (!words || !words[selectedCategory] || !Array.isArray(words[selectedCategory].words)) {
+    console.error('Invalid word data structure');
+    return [];
+  }
+
   const randomImages = [];
   const categoryWords = words[selectedCategory].words;
   const wordIndex = categoryWords.findIndex(word => word.trim().toLowerCase() === currentLevelData.word.toLowerCase().trim());
+
+  if (wordIndex === -1) {
+    console.error('Current word not found in category words');
+    return [];
+  }
 
   // Get the word's image
   randomImages.push(currentLevelData.image);
@@ -221,15 +260,13 @@ function getRandomImages(currentLevelData) {
   const shuffledWords = shuffleArray(tempWords);
 
   // Get unique random images from the shuffled words array
-  while (randomImages.length < numImages) {
+  while (randomImages.length < numImages && shuffledWords.length > 0) {
     const randomWord = shuffledWords.pop();
     if (randomWord) {
       const randomImage = `./images/${encodeURIComponent(randomWord)}.jpg`;
       if (!randomImages.includes(randomImage)) {
         randomImages.push(randomImage);
       }
-    } else {
-      break; // No more unique words available
     }
   }
 
