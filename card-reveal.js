@@ -102,7 +102,7 @@ function applyProgress() {
   }
 }
 
-export function revealBlock(block, index) {
+function revealBlock(block, index) {
     if (pointsLeft > 0 && block.style.opacity !== '0') {
         block.style.opacity = '0';
         pointsLeft--;
@@ -111,6 +111,8 @@ export function revealBlock(block, index) {
         saveProgress();
         checkGameState();
         console.log('Block revealed, current state:', { pointsLeft, revealedBlocks });
+    } else if (pointsLeft === 0) {
+        showOutOfPointsMessage();
     }
 }
 
@@ -122,20 +124,54 @@ function updatePointsDisplay() {
 }
 
 function checkGameState() {
-  if (revealedBlocks === totalBlocks && !isCardFullyRevealed) {
-      isCardFullyRevealed = true;
-      alert('Congratulations! You revealed the entire card!');
-      // Remove all blocks to fully show the card
-      const blocks = document.querySelectorAll('.card-block');
-      blocks.forEach(block => block.style.display = 'none');
-      // Update the points display
-      updatePointsDisplay();
-      // Save the progress
-      saveProgress();
-  } else if (pointsLeft === 0 && !isCardFullyRevealed) {
-      alert('You ran out of points! Play more word games to earn more points.');
-  }
+    if (revealedBlocks === totalBlocks && !isCardFullyRevealed) {
+        isCardFullyRevealed = true;
+        revealCard();
+        // Save the progress
+        saveProgress();
+    }
 }
+
+// Animation when the card is fully revealed
+function revealCard() {
+    const cardImageContainer = document.querySelector('.card-image-container');
+    const cardBoard = document.getElementById('card-board');
+
+    // Hide the card board
+    cardBoard.style.display = 'none';
+
+    // Add the revealed class to apply the pop-up effect
+    cardImageContainer.classList.add('card-revealed');
+
+    // Add sparkle animation
+    addSparkles(cardImageContainer);
+}
+
+// Sparkle animation for when the card is revealed
+function addSparkles(container) {
+    const numSparkles = 20;
+
+    for (let i = 0; i < numSparkles; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+
+        // Random position within the container
+        const left = Math.random() * 100 + '%';
+        const top = Math.random() * 100 + '%';
+
+        sparkle.style.left = left;
+        sparkle.style.top = top;
+
+        // Random delay and duration for the animation
+        const delay = Math.random() * 1000 + 'ms';
+        const duration = (Math.random() * 1000 + 1000) + 'ms';
+
+        sparkle.style.animation = `sparkle ${duration} ${delay} infinite`;
+
+        container.appendChild(sparkle);
+    }
+}
+
 
 function saveProgress() {
     const progress = {
@@ -146,6 +182,15 @@ function saveProgress() {
     localStorage.setItem('cardRevealProgress', JSON.stringify(progress));
     localStorage.setItem('points', pointsLeft.toString());
     console.log('Progress saved:', progress);
+}
+
+function showOutOfPointsMessage() {
+    const message = document.getElementById('out-of-points-message');
+    message.classList.add('show');
+
+    setTimeout(() => {
+        message.classList.remove('show');
+    }, 3000);
 }
 
 export function returnHome() {

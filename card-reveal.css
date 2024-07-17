@@ -35,11 +35,68 @@
 }
 
 .card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  height: auto;
+  transition: all 0.3s ease;
 }
 
+.card-revealed .card-image-container {
+  transform: scale(1.05);
+}
+
+.card-revealed .card-image {
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+.out-of-points-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 15px 30px;
+  border-radius: 5px;
+  font-size: 18px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.out-of-points-message.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sparkle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes sparkle {
+  0% {
+      transform: scale(0) rotate(0deg);
+      opacity: 0;
+  }
+  50% {
+      transform: scale(1) rotate(180deg);
+      opacity: 1;
+  }
+  100% {
+      transform: scale(0) rotate(360deg);
+      opacity: 0;
+  }
+}
+
+
+
+
+/* Can remove this once we add better home buttons for navigation  */
 #home-button {
   margin-top: 20px;
   padding: 10px 20px;
