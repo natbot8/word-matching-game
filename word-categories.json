@@ -8,7 +8,8 @@
       "blue-panda.png", 
       "blue-fox.png", 
       "blue-dog.png", 
-      "blue-frog.png"
+      "blue-frog.png", 
+      "blue-dragon.png"
     ]
   },
   "Letter Combinations": {
@@ -20,7 +21,8 @@
       "pink-bunny.png",
       "pink-elephant.png", 
       "pink-squirrel.png", 
-      "pink-turtle.png"
+      "pink-turtle.png", 
+      "pink-unicorn.png"
     ]
   }
 }

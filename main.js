@@ -4,7 +4,6 @@ let letterSounds = {};
 const WORDS_PER_ROUND = 10;
 let points = 0; 
 let totalPoints = 0;
-// let savedPoints = 0;
 let numImages = 2;
 let currentLevel = 0;
 let isProcessing = false;
@@ -34,7 +33,7 @@ async function initializeGame() {
     }
 
     // Load total points from localStorage
-    totalPoints = parseInt(localStorage.getItem('savedPoints') || '0');
+    totalPoints = parseInt(localStorage.getItem('points') || '0');
     console.log('Loaded total points:', totalPoints);
     updateTotalPointsDisplay();
 
@@ -181,25 +180,6 @@ function loadLevel() {
   updateCoinIcons();
 }
 
-// Load saved points
-function loadSavedPoints() {
-  const savedPointsData = localStorage.getItem('savedPoints');
-  if (savedPointsData) {
-    savedPoints = parseInt(savedPointsData, 10);
-  } else {
-    savedPoints = 0;
-  }
-  updateSavedPointsDisplay();
-}
-
-// Update the saved points display
-function updateSavedPointsDisplay() {
-  const savedPointsElement = document.getElementById('saved-points');
-  if (savedPointsElement) {
-    savedPointsElement.textContent = `Saved Points: ${savedPoints}`;
-  }
-}
-
 // Shuffle array function
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -330,7 +310,7 @@ function nextLevel() {
       totalPoints += points;
       localStorage.setItem('points', totalPoints.toString());
       alert(`Congratulations! You completed all ${WORDS_PER_ROUND} words. Your total points: ${totalPoints}`);
-      startCardRevealGame(totalPoints);
+      initCardReveal(totalPoints, selectedCategory);
   }
 }
 
@@ -346,17 +326,6 @@ function showResultText(text, duration) {
   setTimeout(() => {
     levelContainer.removeChild(resultText);
   }, duration);
-}
-
-// Start card reveal game
-function startCardRevealGame(totalPoints) {
-  // Load any existing progress before initializing
-  const progress = JSON.parse(localStorage.getItem('cardRevealProgress'));
-  if (progress) {
-    initCardReveal(totalPoints + progress.pointsLeft, selectedCategory);
-  } else {
-    initCardReveal(totalPoints, selectedCategory);
-  }
 }
 
 // Call startGame when the game page loads

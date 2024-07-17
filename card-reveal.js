@@ -8,23 +8,23 @@ let isCardFullyRevealed = false;
 async function initCardReveal(initialPoints, category) {
   console.log('Initializing Card Reveal with', initialPoints, 'points and category:', category);
   currentCardCategory = category;
-  const progress = JSON.parse(localStorage.getItem('cardRevealProgress'));
 
-  if (progress) {
+  const progress = JSON.parse(localStorage.getItem('cardRevealProgress'));
+  const savedPoints = parseInt(localStorage.getItem('points') || '0');
+
+  if (progress && !progress.isCardFullyRevealed) {
     console.log('Found saved progress:', progress);
-    pointsLeft = initialPoints;
     revealedBlocks = progress.revealedBlocks;
     currentCard = progress.currentCard;
-    isCardFullyRevealed = progress.isCardFullyRevealed || false;
+    isCardFullyRevealed = false;
+    pointsLeft = savedPoints;  // Use saved points instead of initialPoints
   } else {
-    console.log('No saved progress found');
-    pointsLeft = initialPoints;
+    console.log('No saved progress or card was fully revealed. Starting new card.');
     revealedBlocks = 0;
     isCardFullyRevealed = false;
+    pointsLeft = initialPoints;
     await selectRandomCard();
   }
-
-  console.log('Current state:', { pointsLeft, revealedBlocks, currentCard, currentCardCategory, isCardFullyRevealed });
 
   const cardRevealContainer = document.getElementById('card-reveal-container');
   cardRevealContainer.style.display = 'block';
@@ -98,15 +98,15 @@ function applyProgress() {
 }
 
 function revealBlock(block, index) {
-  if (pointsLeft > 0 && block.style.opacity !== '0') {
-    block.style.opacity = '0';
-    pointsLeft--;
-    revealedBlocks++;
-    updatePointsDisplay();
-    saveProgress();
-    checkGameState();
-    console.log('Block revealed, current state:', { pointsLeft, revealedBlocks });
-  }
+    if (pointsLeft > 0 && block.style.opacity !== '0') {
+        block.style.opacity = '0';
+        pointsLeft--;
+        revealedBlocks++;
+        updatePointsDisplay();
+        saveProgress();
+        checkGameState();
+        console.log('Block revealed, current state:', { pointsLeft, revealedBlocks });
+    }
 }
 
 function updatePointsDisplay() {
@@ -118,70 +118,32 @@ function updatePointsDisplay() {
 
 function checkGameState() {
   if (revealedBlocks === totalBlocks && !isCardFullyRevealed) {
-    isCardFullyRevealed = true;
-    alert('Congratulations! You revealed the entire card!');
-    // Remove all blocks to fully show the card
-    const blocks = document.querySelectorAll('.card-block');
-    blocks.forEach(block => block.style.display = 'none');
-    // Update the points display
-    updatePointsDisplay();
-    // Save the progress
-    saveProgress();
+      isCardFullyRevealed = true;
+      alert('Congratulations! You revealed the entire card!');
+      // Remove all blocks to fully show the card
+      const blocks = document.querySelectorAll('.card-block');
+      blocks.forEach(block => block.style.display = 'none');
+      // Update the points display
+      updatePointsDisplay();
+      // Save the progress
+      saveProgress();
   } else if (pointsLeft === 0 && !isCardFullyRevealed) {
-    alert('You ran out of points! Play more word games to earn more points.');
+      alert('You ran out of points! Play more word games to earn more points.');
   }
 }
 
 function saveProgress() {
-  const progress = {
-    pointsLeft: pointsLeft,
-    revealedBlocks: revealedBlocks,
-    currentCard: currentCard,
-    isCardFullyRevealed: isCardFullyRevealed
-  };
-  localStorage.setItem('cardRevealProgress', JSON.stringify(progress));
-  console.log('Progress saved:', progress);
+    const progress = {
+        revealedBlocks: revealedBlocks,
+        currentCard: currentCard,
+        isCardFullyRevealed: isCardFullyRevealed
+    };
+    localStorage.setItem('cardRevealProgress', JSON.stringify(progress));
+    localStorage.setItem('points', pointsLeft.toString());
+    console.log('Progress saved:', progress);
 }
 
 function returnHome() {
-  const cardRevealContainer = document.getElementById('card-reveal-container');
-  cardRevealContainer.style.display = 'none';
-
-  saveProgress();
-  savePoints();
-
-  // Reset the card reveal game state for the next play
-  resetCardRevealState();
-
-  window.location.href = 'index.html';
-}
-
-function resetCardRevealState() {
-  if (isCardFullyRevealed) {
-    revealedBlocks = 0;
-    isCardFullyRevealed = false;
-    selectRandomCard().then(() => {
-      updateCardImage();
-      createCardBoard();
-      updatePointsDisplay();
-    });
-  }
-}
-
-function savePoints() {
-  localStorage.setItem('savedPoints', pointsLeft.toString());
-  console.log('Saved points:', pointsLeft);
-}
-
-function resetCardRevealProgress() {
-  localStorage.removeItem('cardRevealProgress');
-  localStorage.removeItem('savedPoints');
-  revealedBlocks = 0;
-  pointsLeft = 0;
-  selectRandomCard().then(() => {
-    updateCardImage();
-    createCardBoard();
-    updatePointsDisplay();
-  });
-  console.log('Card reveal progress reset');
+    saveProgress();
+    window.location.href = 'index.html';
 }

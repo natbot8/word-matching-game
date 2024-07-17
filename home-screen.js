@@ -81,7 +81,7 @@ function playDifficultySound(difficulty) {
 
 // Update points display
 function updatePointsDisplay() {
-    const pointsValue = localStorage.getItem('savedPoints') || '0';
+    const pointsValue = localStorage.getItem('points') || '0';
     const pointsDisplay = document.getElementById('points-value');
     if (pointsDisplay) {
         pointsDisplay.textContent = pointsValue;
