@@ -12,7 +12,7 @@
       "blue-dragon.png"
     ]
   },
-  "Letter Combinations": {
+  "Letter Combos 1": {
     "words": [
       "ship", "chip", "chess", "chin", "chat", "fish", "dish", "brush", 
       "trash", "shell", "cash", "bath", "cloth", "path", "math", "chick", "shack", "lock",
@@ -26,6 +26,11 @@
       "pink-unicorn.png", 
       "pink-jellyfish.png", 
       "pink-mermaid.png"
+    ]
+  }, 
+  "Letter Combos 2": {
+    "words": [
+      "book", "cook", "wood", 
     ]
   }
 }
