@@ -1,11 +1,13 @@
-let pointsLeft = 0;
-let revealedBlocks = 0;
-const totalBlocks = 16;
-let currentCardCategory = '';
-let currentCard = '';
-let isCardFullyRevealed = false;
+import { showScreen } from './app.js';
 
-async function initCardReveal(initialPoints, category) {
+export let pointsLeft = 0;
+export let revealedBlocks = 0;
+export const totalBlocks = 16;
+export let currentCardCategory = '';
+export let currentCard = '';
+export let isCardFullyRevealed = false;
+
+export async function initCardReveal(initialPoints, category) {
   console.log('Initializing Card Reveal with', initialPoints, 'points and category:', category);
   currentCardCategory = category;
 
@@ -71,14 +73,17 @@ function updateCardImage() {
   };
 }
 
-function createCardBoard() {
+export function createCardBoard() {
   const cardBoard = document.getElementById('card-board');
   cardBoard.innerHTML = '';
 
   for (let i = 0; i < totalBlocks; i++) {
     const block = document.createElement('div');
     block.className = 'card-block';
-    block.addEventListener('click', () => revealBlock(block, i));
+    block.dataset.index = i;  // Store the index in a data attribute
+    block.addEventListener('click', function() {
+      revealBlock(this, this.dataset.index);
+    });
     cardBoard.appendChild(block);
   }
 }
@@ -97,7 +102,7 @@ function applyProgress() {
   }
 }
 
-function revealBlock(block, index) {
+export function revealBlock(block, index) {
     if (pointsLeft > 0 && block.style.opacity !== '0') {
         block.style.opacity = '0';
         pointsLeft--;
@@ -143,7 +148,8 @@ function saveProgress() {
     console.log('Progress saved:', progress);
 }
 
-function returnHome() {
+export function returnHome() {
     saveProgress();
-    window.location.href = 'index.html';
+    showScreen('home-screen');
+    updatePointsDisplay();
 }

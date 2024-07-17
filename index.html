@@ -4,28 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Word Game</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="home-screen.css">
+    <link rel="stylesheet" href="card-reveal.css">
 </head>
 <body>
-    <header>
-        <div class="difficulty-selector">
-            <img src="icons/brain.png" alt="Difficulty">
-            <select id="difficulty-dropdown">
-                <option value="easy">Easy</option>
-                <option value="hard" selected>Hard</option>
-                <option value="superhard">Super Hard</option>
-                <option value="superduperhard">Super Duper Hard</option>
-            </select>
-        </div>
+    <div id="home-screen">
+        <header>
+            <div class="difficulty-selector">
+                <img src="icons/brain.png" alt="Difficulty">
+                <select id="difficulty-dropdown">
+                    <option value="easy">Easy</option>
+                    <option value="hard" selected>Hard</option>
+                    <option value="superhard">Super Hard</option>
+                    <option value="superduperhard">Super Duper Hard</option>
+                </select>
+            </div>
+
+            <div class="points-display">
+                <span id="points-value">0</span>
+                <img src="icons/coin.png" alt="Points">
+            </div>
+        </header>
+
         <h1>The Word Game</h1>
-        <div class="points-display">
-            <span id="points-value">0</span>
-            <img src="icons/coin.png" alt="Points">
+
+        <div id="category-container" role="main">
+            <!-- Category tiles will be added here dynamically -->
         </div>
-    </header>
-    <main id="category-container">
-        <!-- Category tiles will be dynamically added here -->
-    </main>
-    <script src="home-screen.js"></script>
+    </div>
+
+    <div id="game-screen" style="display: none;">
+        <div id="level-container">
+            <div class="points-display">
+                <span id="total-points-value">0</span>
+                <img src="icons/coin.png" alt="Total Points">
+            </div>
+            <div id="word-display"></div>
+            <div id="confetti-container"></div>
+            <div id="points-container">
+                <div id="current-points">Points Won: <span id="current-points-value">0</span></div>
+                <div id="coin-container"></div>
+            </div>
+            <div id="letter-container"></div>
+            <div id="image-container"></div>
+        </div>
+    </div>
+
+    <div id="card-reveal-screen" style="display: none;">
+        <div id="card-reveal-container" class="card-reveal-container">
+            <h2>Card Reveal Game</h2>
+            <div id="points-left"></div>
+            <div class="card-image-container">
+                <img id="card-image" class="card-image" src="" alt="Reward Card">
+                <div id="card-board" class="card-board"></div>
+            </div>
+            <button id="return-home-button">Return Home</button>
+        </div>
+    </div>
+
+    <script src="app.js" type="module"></script>
+    <script src="js/confetti.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 </body>
 </html>

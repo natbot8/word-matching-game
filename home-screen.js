@@ -1,24 +1,41 @@
-let wordCategories = {};
+export let wordCategories = {};
+let difficultyAudio = null;
 
-async function initHomeScreen() {
+// Add this function to fetch word categories
+async function fetchWordCategories() {
     try {
         const response = await fetch('word-categories.json');
-        wordCategories = await response.json();
-        createCategoryTiles();
-        setupDifficultySelector();
-        updatePointsDisplay();
+        const data = await response.json();
+        return data;
     } catch (error) {
-        console.error('Error loading word categories:', error);
+        console.error('Error fetching word categories:', error);
+        return null;
     }
 }
 
-function createCategoryTiles() {
+export function initHomeScreen() {
+    fetchWordCategories()
+        .then(categories => {
+            wordCategories = categories;
+            createCategoryTiles();
+            setupDifficultySelector();
+            updatePointsDisplay();
+        })
+        .catch(error => {
+            console.error('Error loading word categories:', error);
+        });
+}
+
+export function createCategoryTiles() {
     const container = document.getElementById('category-container');
-    
+
+    // Clear existing tiles
+    container.innerHTML = '';
+
     for (const [category, data] of Object.entries(wordCategories)) {
         const tile = document.createElement('div');
         tile.className = 'category-tile';
-        
+
         const cardsContainer = document.createElement('div');
         cardsContainer.className = 'category-cards';
         data.cards.slice(0, 3).forEach(card => {
@@ -27,16 +44,16 @@ function createCategoryTiles() {
             img.alt = 'Card';
             cardsContainer.appendChild(img);
         });
-        
+
         const title = document.createElement('h2');
         title.className = 'category-title';
         title.textContent = category;
-        
+
         const playButton = document.createElement('button');
         playButton.className = 'play-button';
         playButton.textContent = 'Play';
-        playButton.onclick = () => startGame(category);
-        
+        playButton.onclick = () => window.startGame(category);
+
         tile.appendChild(cardsContainer);
         tile.appendChild(title);
         tile.appendChild(playButton);
@@ -44,29 +61,21 @@ function createCategoryTiles() {
     }
 }
 
-function startGame(category) {
-    const difficulty = document.getElementById('difficulty-dropdown').value;
-    console.log(`Starting game with category: ${category}, difficulty: ${difficulty}`);
+// Set up difficulty selector
+export function setupDifficultySelector() {
+    const difficultyDropdown = document.getElementById('difficulty-dropdown');
 
-    //Play start game audio
-    new Audio('game-sounds/lets-go.m4a').play();
+    // Remove any existing event listeners
+    difficultyDropdown.removeEventListener('change', handleDifficultyChange);
 
-    // Set a timeout to wait for the audio to start playing before navigating
-    setTimeout(() => {
-        localStorage.setItem('selectedCategory', category);
-        localStorage.setItem('selectedDifficulty', difficulty);
-        window.location.href = 'game.html';
-    }, 1400); // Adjust this delay if needed
+    // Add the event listener
+    difficultyDropdown.addEventListener('change', handleDifficultyChange);
 }
 
-// Set up difficulty selector
-function setupDifficultySelector() {
-    const difficultyDropdown = document.getElementById('difficulty-dropdown');
-    difficultyDropdown.addEventListener('change', (event) => {
-        const difficulty = event.target.value;
-        localStorage.setItem('selectedDifficulty', difficulty);
-        playDifficultySound(difficulty);
-    });
+function handleDifficultyChange(event) {
+    const difficulty = event.target.value;
+    localStorage.setItem('selectedDifficulty', difficulty);
+    playDifficultySound(difficulty);
 }
 
 // Play difficulty sounds
@@ -78,19 +87,24 @@ function playDifficultySound(difficulty) {
         'superduperhard': 'superduperhard.m4a'
     };
     const soundFile = soundMap[difficulty];
+
+    // Stop any currently playing audio
+    if (difficultyAudio) {
+        difficultyAudio.pause();
+        difficultyAudio.currentTime = 0;
+    }
+
     if (soundFile) {
-        const audio = new Audio(`game-sounds/${soundFile}`);
-        audio.play();
+        difficultyAudio = new Audio(`game-sounds/${soundFile}`);
+        difficultyAudio.play().catch(error => console.error('Error playing audio:', error));
     }
 }
 
 // Update points display
-function updatePointsDisplay() {
+export function updatePointsDisplay() {
     const pointsValue = localStorage.getItem('points') || '0';
     const pointsDisplay = document.getElementById('points-value');
     if (pointsDisplay) {
         pointsDisplay.textContent = pointsValue;
     }
 }
-
-document.addEventListener('DOMContentLoaded', initHomeScreen);

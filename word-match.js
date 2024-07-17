@@ -1,14 +1,17 @@
+import { showScreen } from './app.js';
+import { initCardReveal } from './card-reveal.js';
+
 let words = {};
-const levels = [];
-let letterSounds = {};
-const WORDS_PER_ROUND = 10;
-let points = 0; 
-let totalPoints = 0;
-let numImages = 2;
-let currentLevel = 0;
-let isProcessing = false;
-let selectedCategory = '';
-let selectedDifficulty = '';
+export const levels = [];
+export let letterSounds = {};
+export const WORDS_PER_ROUND = 10;
+export let points = 0; 
+export let totalPoints = 0;
+export let numImages = 2;
+export let currentLevel = 0;
+export let isProcessing = false;
+export let selectedCategory = '';
+export let selectedDifficulty = '';
 
 // Fetch word categories from JSON file
 async function fetchWordCategories() {
@@ -35,7 +38,7 @@ async function fetchLetterSounds() {
 }
 
 // Function to start the game based on the selected difficulty
-async function initializeGame() {
+export async function initializeGame() {
     selectedCategory = localStorage.getItem('selectedCategory');
     selectedDifficulty = localStorage.getItem('selectedDifficulty');
 
@@ -113,7 +116,7 @@ async function initializeGame() {
 }
 
 // Load the initial level
-function loadLevel() {
+export function loadLevel() {
   const currentLevelData = levels[currentLevel];
   const levelContainer = document.getElementById('level-container');
   levelContainer.innerHTML = ''; // Clear previous elements
@@ -217,7 +220,7 @@ function shuffleArray(array) {
 }
 
 // get sound files from https://www.readnaturally.com/article/audio-examples-of-phonics-sounds
-function playLetterSound(soundUnit) {
+export function playLetterSound(soundUnit) {
   let soundFile;
   soundUnit = soundUnit.toLowerCase();
 
@@ -273,7 +276,7 @@ function getRandomImages(currentLevelData) {
   return randomImages;
 }
 
-function checkImage(imgElement, currentLevelData) {
+export function checkImage(imgElement, currentLevelData) {
   if (isProcessing) {
     return; 
   }
@@ -339,16 +342,17 @@ function updateTotalPointsDisplay() {
     }
 }
 
-function nextLevel() {
-  currentLevel++;
-  if (currentLevel < WORDS_PER_ROUND) {
-      loadLevel();
-  } else {
-      totalPoints += points;
-      localStorage.setItem('points', totalPoints.toString());
-      alert(`Congratulations! You completed all ${WORDS_PER_ROUND} words. Your total points: ${totalPoints}`);
-      initCardReveal(totalPoints, selectedCategory);
-  }
+export function nextLevel() {
+    currentLevel++;
+    if (currentLevel < WORDS_PER_ROUND) {
+        loadLevel();
+    } else {
+        totalPoints += points;
+        localStorage.setItem('points', totalPoints.toString());
+        alert(`Congratulations! You completed all ${WORDS_PER_ROUND} words. Your total points: ${totalPoints}`);
+        showScreen('card-reveal-screen');
+        initCardReveal(totalPoints, selectedCategory);
+    }
 }
 
 // Function to show result text and clear it after a specified duration
@@ -364,14 +368,6 @@ function showResultText(text, duration) {
     levelContainer.removeChild(resultText);
   }, duration);
 }
-
-// Call startGame when the game page loads
-document.addEventListener('DOMContentLoaded', () => {
-    initializeGame().catch(error => {
-        console.error('Error initializing the game:', error);
-        // You might want to display an error message to the user here
-    });
-});
 
 
 
