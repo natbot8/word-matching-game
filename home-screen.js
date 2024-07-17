@@ -46,12 +46,17 @@ function createCategoryTiles() {
 
 function startGame(category) {
     const difficulty = document.getElementById('difficulty-dropdown').value;
-    // Here you would typically navigate to the game screen or initialize the game
     console.log(`Starting game with category: ${category}, difficulty: ${difficulty}`);
-    // You might want to use localStorage to pass these values to the game screen
-    localStorage.setItem('selectedCategory', category);
-    localStorage.setItem('selectedDifficulty', difficulty);
-    window.location.href = 'game.html';
+
+    //Play start game audio
+    new Audio('game-sounds/lets-go.m4a').play();
+
+    // Set a timeout to wait for the audio to start playing before navigating
+    setTimeout(() => {
+        localStorage.setItem('selectedCategory', category);
+        localStorage.setItem('selectedDifficulty', difficulty);
+        window.location.href = 'game.html';
+    }, 1400); // Adjust this delay if needed
 }
 
 // Set up difficulty selector
