@@ -27,5 +27,19 @@
       "pink-jellyfish.png", 
       "pink-mermaid.png"
     ]
+  }, 
+  "Letter Combos 2": {
+    "words": [
+      "bee", "tree", "feet", "sleep", "green", "sheep", "peel", "sweep", "cheer", "shout",
+      "mouth", "cloud", "couch", "round", "butter", "river", "winter"
+    ], 
+    "cards": [
+      "turquoise-koala.png", 
+      "turquoise-kitten.png", 
+      "turquoise-lamb.png", 
+      "turquoise-kangaroo.png", 
+      "turquoise-hedgehog.png", 
+      "turquoise-pig.png"
+    ]
   }
 }
