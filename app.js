@@ -10,10 +10,11 @@ let currentScreen = 'home';
 export function showScreen(screenId) {
     document.getElementById('home-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'none';
+    document.getElementById('results-screen').style.display = 'none';
     document.getElementById('card-reveal-screen').style.display = 'none';
-    document.getElementById(screenId).style.display = 'block';
-    currentScreen = screenId.replace('-screen', '');
+    document.getElementById(screenId).style.display = screenId === 'results-screen' ? 'flex' : 'block';
 }
+
 
 // Modified startGame function
 function startGame(category) {

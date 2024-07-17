@@ -1,5 +1,6 @@
 import { showScreen } from './app.js';
 import { initCardReveal } from './card-reveal.js';
+import { updatePointsDisplay } from './home-screen.js';
 
 let words = {};
 export const levels = [];
@@ -349,10 +350,29 @@ export function nextLevel() {
     } else {
         totalPoints += points;
         localStorage.setItem('points', totalPoints.toString());
-        alert(`Congratulations! You completed all ${WORDS_PER_ROUND} words. Your total points: ${totalPoints}`);
+        showResultsScreen();
+    }
+}
+
+// Function to show results screen after completing round of word game
+function showResultsScreen() {
+    const resultsMessage = document.getElementById('results-message');
+    resultsMessage.textContent = `You completed all ${WORDS_PER_ROUND} words and earned ${points} points!`;
+
+    const homeButton = document.getElementById('home-button');
+    const cardRevealButton = document.getElementById('card-reveal-button');
+
+    homeButton.onclick = () => {
+        showScreen('home-screen');
+        updatePointsDisplay();
+    };
+
+    cardRevealButton.onclick = () => {
         showScreen('card-reveal-screen');
         initCardReveal(totalPoints, selectedCategory);
-    }
+    };
+
+    showScreen('results-screen');
 }
 
 // Function to show result text and clear it after a specified duration
