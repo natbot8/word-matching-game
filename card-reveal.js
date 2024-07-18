@@ -8,36 +8,47 @@ export let currentCard = '';
 export let isCardFullyRevealed = false;
 
 export async function initCardReveal(initialPoints, category) {
-  console.log('Initializing Card Reveal with', initialPoints, 'points and category:', category);
-  currentCardCategory = category;
+    console.log('Initializing Card Reveal with', initialPoints, 'points and category:', category);
+    currentCardCategory = category;
 
-  const progress = JSON.parse(localStorage.getItem('cardRevealProgress'));
-  const savedPoints = parseInt(localStorage.getItem('points') || '0');
+    const progress = JSON.parse(localStorage.getItem('cardRevealProgress'));
+    const savedPoints = parseInt(localStorage.getItem('points') || '0');
 
-  if (progress && !progress.isCardFullyRevealed) {
-    console.log('Found saved progress:', progress);
-    revealedBlocks = progress.revealedBlocks;
-    currentCard = progress.currentCard;
-    isCardFullyRevealed = false;
-    pointsLeft = savedPoints;  // Use saved points instead of initialPoints
-  } else {
-    console.log('No saved progress or card was fully revealed. Starting new card.');
-    revealedBlocks = 0;
-    isCardFullyRevealed = false;
-    pointsLeft = initialPoints;
-    await selectRandomCard();
-  }
+    if (progress && !progress.isCardFullyRevealed) {
+        console.log('Found saved progress:', progress);
+        revealedBlocks = progress.revealedBlocks;
+        currentCard = progress.currentCard;
+        isCardFullyRevealed = false;
+        pointsLeft = savedPoints;  // Use saved points
+    } else {
+        console.log('No saved progress or card was fully revealed. Starting new card.');
+        revealedBlocks = 0;
+        isCardFullyRevealed = false;
+        pointsLeft = initialPoints;
+        document.getElementById('card-board').style.display = 'block';
+        await selectRandomCard();
+    }
 
-  const cardRevealContainer = document.getElementById('card-reveal-container');
-  cardRevealContainer.style.display = 'block';
+    // Reset DOM elements
+    const cardBoard = document.getElementById('card-board');
+    cardBoard.style.display = 'grid'; // or whatever the default display value should be
+    cardBoard.innerHTML = ''; // Clear existing blocks
 
-  const levelContainer = document.getElementById('level-container');
-  levelContainer.style.display = 'none';
+    const cardImageContainer = document.querySelector('.card-image-container');
+    cardImageContainer.classList.remove('card-revealed');
 
-  updateCardImage();
-  createCardBoard();
-  updatePointsDisplay();
-  applyProgress();
+    // Remove any existing sparkles
+    const sparkles = cardImageContainer.querySelectorAll('.sparkle');
+    sparkles.forEach(sparkle => sparkle.remove());
+
+    updateCardImage();
+    createCardBoard();
+    updatePointsDisplay();
+    applyProgress();
+
+    // Show the card reveal container
+    const cardRevealContainer = document.getElementById('card-reveal-container');
+    cardRevealContainer.style.display = 'block';
 }
 
 async function selectRandomCard() {
