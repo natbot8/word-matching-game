@@ -45,7 +45,7 @@
 }
 
 .card-revealed .card-image {
-  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+  filter: drop-shadow(rgba(0, 0, 0, 0.45) 0px 25px 20px);
 }
 
 .out-of-points-message {
