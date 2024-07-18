@@ -137,9 +137,9 @@ export function loadLevel() {
   levelContainer.appendChild(wordDisplay);
 
   // Create and append the confetti container
-  const confettiContainer = document.createElement('div');
-  confettiContainer.id = 'confetti-container';
-  levelContainer.appendChild(confettiContainer);
+  const confettiGameContainer = document.createElement('div');
+  confettiGameContainer.id = 'confetti-container';
+  levelContainer.appendChild(confettiGameContainer);
 
   // Create and append the score container
   const scoreContainer = document.createElement('div');
@@ -295,7 +295,7 @@ export function checkImage(imgElement, currentLevelData) {
     correctSound.play();
 
     // Show confetti animation
-    showConfetti();
+    showConfettiCannon();
 
     showResultText('Congratulations!', 1500);
     setTimeout(() => {
@@ -351,6 +351,7 @@ export function nextLevel() {
         totalPoints += points;
         localStorage.setItem('points', totalPoints.toString());
         showResultsScreen();
+        showConfettiFireworks();
     }
 }
 

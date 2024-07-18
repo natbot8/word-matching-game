@@ -1,7 +1,7 @@
 // Confetti animation
 // new confetti animation from tsParticles https://confetti.js.org/more.html
-function showConfetti() {
-  const duration = 1 * 1000,
+function showConfettiFireworks() {
+  const duration = 5 * 1000,
     animationEnd = Date.now() + duration,
     defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
@@ -41,5 +41,23 @@ function showConfetti() {
   }, 250);
 }
 
+function showConfettiCannon() {
+  function randomInRange(min, max) {
+    return Math.random() * (max - min) + min;
+  }
 
+  confetti({
+    angle: randomInRange(55, 125),
+    spread: randomInRange(50, 70),
+    particleCount: randomInRange(50, 100),
+    origin: { y: 0.6 },
+    scalar: 2,
+    shapes: ["emoji"],
+      shapeOptions: {
+        emoji: {
+          value: ["🦄", "🌈"],
+        },
+      },
+  });
+}
 
