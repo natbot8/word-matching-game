@@ -106,7 +106,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 1001;
 }
 
 .results-container {
@@ -137,16 +137,17 @@
   flex-direction: column;
   align-items: center;
   padding: 15px;
-  border: none;
+  border-color: #828282;
   border-radius: 5px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #e8e8e8;
+  /* color: white; */
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .results-button:hover {
-  background-color: #45a049;
+  transform: scale(1.1);
+  box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.1);
 }
 
 .results-button img {
