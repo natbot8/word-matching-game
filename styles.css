@@ -154,3 +154,42 @@
   height: 40px;
   margin-bottom: 10px;
 }
+
+#bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.nav-item img {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 5px;
+}
+
+.nav-item span {
+  font-size: 12px;
+}
+
+.nav-item.selected {
+  border-bottom: 2px solid #007bff;
+}
+
+/* Adjust main content to not be hidden behind the nav bar */
+#home-screen, #game-screen, #card-reveal-screen {
+  padding-bottom: 60px; /* Adjust this value based on your nav bar height */
+}

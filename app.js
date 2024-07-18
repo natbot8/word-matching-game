@@ -8,11 +8,37 @@ let currentScreen = 'home';
 
 // Function to switch between screens
 export function showScreen(screenId) {
+    // Save points if navigating away from the game screen
+    if (currentScreen === 'game' && screenId !== 'game-screen') {
+        saveGamePoints();
+    }
+
     document.getElementById('home-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('results-screen').style.display = 'none';
     document.getElementById('card-reveal-screen').style.display = 'none';
     document.getElementById(screenId).style.display = screenId === 'results-screen' ? 'flex' : 'block';
+
+    currentScreen = screenId.replace('-screen', '');
+    updateNavHighlight(screenId);
+
+    // Additional logic for specific screens
+    if (screenId === 'home-screen') {
+        HomeScreen.updatePointsDisplay();
+    } else if (screenId === 'card-reveal-screen') {
+        const totalPoints = parseInt(localStorage.getItem('points') || '0');
+        CardReveal.initCardReveal(totalPoints, localStorage.getItem('selectedCategory'));
+    }
+}
+
+function initNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            const screenId = item.dataset.screen;
+            showScreen(screenId);
+        });
+    });
 }
 
 
@@ -29,10 +55,26 @@ function startGame(category) {
     localStorage.setItem('selectedDifficulty', difficulty);
 
     // Switch to game screen and initialize game
-    setTimeout(() => {
-        showScreen('game-screen');
-        Game.initializeGame();
-    }, 1400);
+    showScreen('game-screen');
+    Game.initializeGame();
+}
+
+function updateNavHighlight(screenId) {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        if (item.dataset.screen === screenId) {
+            item.classList.add('selected');
+        } else {
+            item.classList.remove('selected');
+        }
+    });
+}
+
+function saveGamePoints() {
+    const currentPoints = Game.points;
+    const totalPoints = parseInt(localStorage.getItem('points') || '0') + currentPoints;
+    localStorage.setItem('points', totalPoints.toString());
+    console.log(`Saved ${currentPoints} points. New total: ${totalPoints}`);
 }
 
 // Modified returnHome function
@@ -45,7 +87,8 @@ function returnHomeHandler() {
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         await HomeScreen.initHomeScreen();
-        document.getElementById('return-home-button').addEventListener('click', returnHomeHandler);
+        document.getElementById('return-home-button').addEventListener('click', () => showScreen('home-screen'));
+        initNavigation();
     } catch (error) {
         console.error('Failed to initialize home screen:', error);
         // You might want to display an error message to the user here
