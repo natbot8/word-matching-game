@@ -76,6 +76,7 @@ h1 {
 .category-cards {
     display: flex;
     margin-bottom: 10px;
+    transform: translateX(calc(-25px / 2)); /* -25x is the img offset */
 }
 
 .category-cards img {
@@ -84,6 +85,11 @@ h1 {
     margin-right: -25px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.category-cards img:hover {
+    transform: translateY(-5px) scale(1.2);
+    transition: transform 0.2s ease;
 }
 
 .category-title {

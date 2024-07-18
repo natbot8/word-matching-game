@@ -38,7 +38,7 @@ export function createCategoryTiles() {
 
         const cardsContainer = document.createElement('div');
         cardsContainer.className = 'category-cards';
-        data.cards.slice(0, 3).forEach(card => {
+        data.cards.slice(0, 10).forEach(card => {
             const img = document.createElement('img');
             img.src = `card-images/${card}`;
             img.alt = 'Card';
