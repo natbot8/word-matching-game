@@ -1,5 +1,3 @@
-import { showScreen } from './app.js';
-
 export let pointsLeft = 0;
 export let revealedBlocks = 0;
 export const totalBlocks = 16;
@@ -202,10 +200,4 @@ function showOutOfPointsMessage() {
     setTimeout(() => {
         message.classList.remove('show');
     }, 3000);
-}
-
-export function returnHome() {
-    saveProgress();
-    showScreen('home-screen');
-    updatePointsDisplay();
 }

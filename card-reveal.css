@@ -93,25 +93,6 @@
   }
 }
 
-
-
-
-/* Can remove this once we add better home buttons for navigation  */
-#home-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-#home-button:hover {
-  background-color: #45a049;
-}
-
 #points-left {
   font-size: 18px;
   margin-bottom: 10px;

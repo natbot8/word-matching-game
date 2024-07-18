@@ -86,12 +86,10 @@ function returnHomeHandler() {
 // Event listeners
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        await HomeScreen.initHomeScreen();
-        document.getElementById('return-home-button').addEventListener('click', () => showScreen('home-screen'));
+        HomeScreen.initHomeScreen();
         initNavigation();
     } catch (error) {
         console.error('Failed to initialize home screen:', error);
-        // You might want to display an error message to the user here
     }
 });
 
