@@ -1,6 +1,7 @@
 import { showScreen } from './app.js';
 import { initCardReveal } from './card-reveal.js';
 import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
+import { wordCategories, fetchWordCategories } from './app.js';
 
 let words = {};
 export const levels = [];
@@ -25,19 +26,7 @@ const incorrectSounds = [
   new Audio('game-sounds/oops.m4a')
 ];
 
-// Fetch word categories from JSON file
-async function fetchWordCategories() {
-    try {
-        const response = await fetch('word-categories.json');
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching word categories:', error);
-        return null;
-    }
-}
-
-// Fetch word categories from JSON file
+// Fetch letter sounds from JSON file
 async function fetchLetterSounds() {
     try {
         const response = await fetch('letter-sounds.json');

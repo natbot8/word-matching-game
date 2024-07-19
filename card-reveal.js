@@ -7,10 +7,9 @@ export let currentCard = '';
 export let isCardFullyRevealed = false;
 const noPointsSound = new Audio('game-sounds/need-points.m4a');
 
-export async function initCardReveal(category) {
-    // Get the latest points value from localStorage
-    const totalPoints = parseInt(localStorage.getItem('points') || '0');
-    console.log('Initializing Card Reveal with', totalPoints, 'points and category:', category);
+  export async function initCardReveal(category, categoryData) {
+    const currentPoints = parseInt(localStorage.getItem('points') || '0');
+    console.log('Initializing Card Reveal with', currentPoints, 'points and category:', category);
     currentCardCategory = category;
 
     const progress = JSON.parse(localStorage.getItem('cardRevealProgress'));
@@ -24,7 +23,7 @@ export async function initCardReveal(category) {
         console.log('No saved progress or card was fully revealed. Starting new card.');
         revealedBlocks = 0;
         isCardFullyRevealed = false;
-        await selectRandomCard();
+        await selectRandomCard(categoryData);
     }
 
     // Reset DOM elements
@@ -52,21 +51,17 @@ export async function initCardReveal(category) {
     cardRevealContainer.style.display = 'block';
 }
 
-async function selectRandomCard() {
-  try {
-    console.log('Fetching word categories...');
-    const response = await fetch('word-categories.json');
-    const categories = await response.json();
-    console.log('Fetched categories:', categories);
-    console.log('Current category:', currentCardCategory);
-    const cards = categories[currentCardCategory].cards;
-    console.log('Available cards:', cards);
-    currentCard = cards[Math.floor(Math.random() * cards.length)];
-    console.log('Selected card:', currentCard);
-  } catch (error) {
-    console.error('Error selecting random card:', error);
-    currentCard = 'default-card.png';
-  }
+async function selectRandomCard(categoryData) {
+    try {
+        console.log('Selecting random card from category data:', categoryData);
+        const cards = categoryData.cards;
+        console.log('Available cards:', cards);
+        currentCard = cards[Math.floor(Math.random() * cards.length)];
+        console.log('Selected card:', currentCard);
+    } catch (error) {
+        console.error('Error selecting random card:', error);
+        currentCard = 'default-card.png';
+    }
 }
 
 function updateCardImage() {
@@ -133,6 +128,7 @@ function checkGameState() {
     if (revealedBlocks === totalBlocks && !isCardFullyRevealed) {
         isCardFullyRevealed = true;
         revealCard();
+        saveWonCard();
         saveProgress();
     }
 }
@@ -197,6 +193,18 @@ function saveProgress() {
     };
     localStorage.setItem('cardRevealProgress', JSON.stringify(progress));
     console.log('Progress saved:', progress);
+}
+
+// Save won cards to local storage
+function saveWonCard() {
+    const wonCards = JSON.parse(localStorage.getItem('wonCards') || '{}');
+    if (!wonCards[currentCardCategory]) {
+        wonCards[currentCardCategory] = [];
+    }
+    if (!wonCards[currentCardCategory].includes(currentCard)) {
+        wonCards[currentCardCategory].push(currentCard);
+        localStorage.setItem('wonCards', JSON.stringify(wonCards));
+    }
 }
 
 function showOutOfPointsMessage() {

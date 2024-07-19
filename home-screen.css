@@ -75,11 +75,57 @@ h1 {
 
 .category-cards {
     display: flex;
-    margin-bottom: 10px;
-    transform: translateX(calc(-25px / 2)); /* -25x is the img offset */
 }
 
-.category-cards img {
+.card-wrapper {
+    position: relative;
+    margin-right: -25px; /* This creates the overlap effect */
+    transition: transform 0.3s ease;
+}
+
+.card-wrapper:last-child {
+    margin-right: 0; /* Remove margin from the last card to prevent extra space */
+}
+
+.card-wrapper img {
+    display: block; /* This removes any extra space below the image */
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.82); /* Grey overlay */
+    border-radius: 5px; /* Match the border-radius of the image */
+    transition: opacity 0.3s ease;
+    pointer-events: none; /* This allows clicks to pass through to the image */
+}
+
+.won-card .card-overlay {
+    opacity: 0;
+}
+
+.not-won-card .card-overlay {
+    opacity: 1;
+}
+
+.card-wrapper:hover {
+    transform: translateY(-5px) scale(1.3);
+    z-index: 1;
+}
+
+.card-wrapper:hover .card-overlay {
+    opacity: 0;
+}
+
+/* .category-cards img {
     width: 50px;
     height: 50px;
     margin-right: -25px;
@@ -87,10 +133,21 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.category-cards img.not-won-card {
+    filter: grayscale(100%) opacity(50%);
+    transition: filter 0.3s ease;
+}
+
+.category-cards img.won-card {
+    filter: none;
+    transition: filter 0.3s ease;
+}
+
 .category-cards img:hover {
     transform: translateY(-5px) scale(1.2);
     transition: transform 0.2s ease;
-}
+    filter: none;
+} */
 
 .category-title {
     color: white;

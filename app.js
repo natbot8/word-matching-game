@@ -6,6 +6,7 @@ import * as CardReveal from './card-reveal.js';
 // Global state
 let currentScreen = 'home';
 export let totalPoints = 0;
+export let wordCategories = {};
 
 // Function to switch between screens
 export function showScreen(screenId) {
@@ -30,10 +31,27 @@ export function showScreen(screenId) {
     // Additional logic for specific screens
     if (screenId === 'home-screen') {
         console.log('Updating points display for home screen');
-        updatePointsDisplay();
+        HomeScreen.initHomeScreen();
     } else if (screenId === 'card-reveal-screen') {
         const savedCategory = localStorage.getItem('selectedCategory');
-        CardReveal.initCardReveal(savedCategory);
+        if (savedCategory && wordCategories[savedCategory]) {
+            CardReveal.initCardReveal(savedCategory, wordCategories[savedCategory]);
+        } else {
+            console.error('Invalid category for card reveal:', savedCategory);
+            // Handle error - maybe show an alert or redirect to home
+        }
+    }
+}
+
+// Fetch word categories
+export async function fetchWordCategories() {
+    try {
+        const response = await fetch('word-categories.json');
+        wordCategories = await response.json();
+        return wordCategories;
+    } catch (error) {
+        console.error('Error fetching word categories:', error);
+        return null;
     }
 }
 
@@ -114,11 +132,11 @@ function initializePoints() {
 // Event listeners
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        await fetchWordCategories();
         loadPoints();
         HomeScreen.initHomeScreen();
         initializePoints();
         initNavigation();
-        // updatePointsDisplay();
     } catch (error) {
         console.error('Failed to initialize home screen:', error);
     }

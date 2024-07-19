@@ -1,40 +1,26 @@
 import { updatePointsDisplay, totalPoints } from './app.js';
+import { wordCategories, fetchWordCategories } from './app.js';
 
-export let wordCategories = {};
 let difficultyAudio = null;
 
-// Add this function to fetch word categories
-async function fetchWordCategories() {
+export async function initHomeScreen() {
     try {
-        const response = await fetch('word-categories.json');
-        const data = await response.json();
-        return data;
+        if (Object.keys(wordCategories).length === 0) {
+            await fetchWordCategories();
+        }
+        createCategoryTiles();
+        setupDifficultySelector();
+        updatePointsDisplay();
     } catch (error) {
-        console.error('Error fetching word categories:', error);
-        return null;
+        console.error('Error initializing home screen:', error);
     }
-}
-
-export function initHomeScreen() {
-    fetchWordCategories()
-        .then(categories => {
-            wordCategories = categories;
-            createCategoryTiles();
-            setupDifficultySelector();
-            // updatePointsDisplay();
-        })
-        .catch(error => {
-            console.error('Error loading word categories:', error);
-        });
-
-    updatePointsDisplay();
 }
 
 export function createCategoryTiles() {
     const container = document.getElementById('category-container');
+    container.innerHTML = '';  // Clear existing tiles
 
-    // Clear existing tiles
-    container.innerHTML = '';
+    const wonCards = JSON.parse(localStorage.getItem('wonCards') || '{}');
 
     for (const [category, data] of Object.entries(wordCategories)) {
         const tile = document.createElement('div');
@@ -43,10 +29,26 @@ export function createCategoryTiles() {
         const cardsContainer = document.createElement('div');
         cardsContainer.className = 'category-cards';
         data.cards.slice(0, 10).forEach(card => {
+            const cardWrapper = document.createElement('div');
+            cardWrapper.className = 'card-wrapper';
+
             const img = document.createElement('img');
             img.src = `card-images/${card}`;
             img.alt = 'Card';
-            cardsContainer.appendChild(img);
+
+            const overlay = document.createElement('div');
+            overlay.className = 'card-overlay';
+
+            cardWrapper.appendChild(img);
+            cardWrapper.appendChild(overlay);
+
+            if (wonCards[category] && wonCards[category].includes(card)) {
+                cardWrapper.classList.add('won-card');
+            } else {
+                cardWrapper.classList.add('not-won-card');
+            }
+
+            cardsContainer.appendChild(cardWrapper);
         });
 
         const title = document.createElement('h2');
@@ -56,7 +58,7 @@ export function createCategoryTiles() {
         const playButton = document.createElement('button');
         playButton.className = 'play-button';
         playButton.textContent = 'Play';
-        playButton.onclick = () => window.startGame(category);
+        playButton.onclick = () => startGame(category);
 
         tile.appendChild(cardsContainer);
         tile.appendChild(title);
