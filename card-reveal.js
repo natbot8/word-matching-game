@@ -118,6 +118,7 @@ function revealBlock(block, index) {
     if (totalPoints > 0 && block.style.opacity !== '0') {
         block.style.opacity = '0';
         updatePoints(-1); // This will decrease totalPoints and update localStorage
+        animatePointsDecrement();
         revealedBlocks++;
         saveProgress();
         checkGameState();
@@ -176,6 +177,17 @@ function addSparkles(container) {
     }
 }
 
+function animatePointsDecrement() {
+    const pointsDisplay = document.getElementById('card-reveal-points');
+    if (pointsDisplay) {
+        pointsDisplay.classList.add('decrement');
+        setTimeout(() => {
+            pointsDisplay.classList.remove('decrement');
+        }, 500); // Match this to the animation duration in CSS
+    } else {
+        console.error('Points display element not found in card reveal screen');
+    }
+}
 
 function saveProgress() {
     const progress = {

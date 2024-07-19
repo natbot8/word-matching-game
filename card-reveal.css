@@ -94,3 +94,31 @@
       opacity: 0;
   }
 }
+
+
+@keyframes pointsDecrement {
+  0% {
+      color: inherit;
+      transform: scale(1);
+  }
+  25% {
+    color: #cc0000;
+    transform: scale(1.4);
+  }
+  50% {
+      color: red;
+      transform: scale(1.6);
+  }
+  75% {
+      color: #cc0000;
+      transform: scale(1.4);
+  }
+  100% {
+      color: inherit;
+      transform: scale(1);
+  }
+}
+
+.points-display span.decrement {
+  animation: pointsDecrement 0.5s ease-in-out;
+}

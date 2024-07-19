@@ -98,7 +98,10 @@ export function updatePointsDisplay() {
     console.log('Updating points display. Current total points:', totalPoints);
     const pointsDisplays = document.querySelectorAll('.points-display span');
     pointsDisplays.forEach(display => {
-        display.textContent = totalPoints;
+        // Only update the text content if it's different
+        if (display.textContent !== totalPoints.toString()) {
+            display.textContent = totalPoints;
+        }
     });
 }
 
