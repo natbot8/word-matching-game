@@ -1,3 +1,5 @@
+import { updatePointsDisplay, totalPoints } from './app.js';
+
 export let wordCategories = {};
 let difficultyAudio = null;
 
@@ -19,11 +21,13 @@ export function initHomeScreen() {
             wordCategories = categories;
             createCategoryTiles();
             setupDifficultySelector();
-            updatePointsDisplay();
+            // updatePointsDisplay();
         })
         .catch(error => {
             console.error('Error loading word categories:', error);
         });
+
+    updatePointsDisplay();
 }
 
 export function createCategoryTiles() {
@@ -97,14 +101,5 @@ function playDifficultySound(difficulty) {
     if (soundFile) {
         difficultyAudio = new Audio(`game-sounds/${soundFile}`);
         difficultyAudio.play().catch(error => console.error('Error playing audio:', error));
-    }
-}
-
-// Update points display
-export function updatePointsDisplay() {
-    const pointsValue = localStorage.getItem('points') || '0';
-    const pointsDisplay = document.getElementById('points-value');
-    if (pointsDisplay) {
-        pointsDisplay.textContent = pointsValue;
     }
 }

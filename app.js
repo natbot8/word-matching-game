@@ -5,14 +5,16 @@ import * as CardReveal from './card-reveal.js';
 
 // Global state
 let currentScreen = 'home';
+export let totalPoints = 0;
 
 // Function to switch between screens
 export function showScreen(screenId) {
-    // Save points if navigating away from the game screen
-    if (currentScreen === 'game' && screenId !== 'game-screen') {
-        saveGamePoints();
-    }
+    // Log the screen we're switching to
+    console.log('Switching to screen:', screenId);
 
+    // Update totalPoints from localStorage before switching screens
+    totalPoints = parseInt(localStorage.getItem('points') || '0');
+    
     document.getElementById('home-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('results-screen').style.display = 'none';
@@ -22,20 +24,26 @@ export function showScreen(screenId) {
     currentScreen = screenId.replace('-screen', '');
     updateNavHighlight(screenId);
 
+    // Update points display when switching screens
+    updatePointsDisplay();
+
     // Additional logic for specific screens
     if (screenId === 'home-screen') {
-        HomeScreen.updatePointsDisplay();
+        console.log('Updating points display for home screen');
+        updatePointsDisplay();
     } else if (screenId === 'card-reveal-screen') {
-        const totalPoints = parseInt(localStorage.getItem('points') || '0');
-        CardReveal.initCardReveal(totalPoints, localStorage.getItem('selectedCategory'));
+        const savedCategory = localStorage.getItem('selectedCategory');
+        CardReveal.initCardReveal(savedCategory);
     }
 }
+
 
 function initNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', () => {
             const screenId = item.dataset.screen;
+            console.log('Navigation clicked:', screenId);
             showScreen(screenId);
         });
     });
@@ -59,6 +67,7 @@ function startGame(category) {
     Game.initializeGame();
 }
 
+// Styling for navigation screen
 function updateNavHighlight(screenId) {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
@@ -70,24 +79,43 @@ function updateNavHighlight(screenId) {
     });
 }
 
-function saveGamePoints() {
-    const currentPoints = Game.points;
-    const totalPoints = parseInt(localStorage.getItem('points') || '0') + currentPoints;
-    localStorage.setItem('points', totalPoints.toString());
-    console.log(`Saved ${currentPoints} points. New total: ${totalPoints}`);
+// Function to load points from localStorage
+function loadPoints() {
+    totalPoints = parseInt(localStorage.getItem('points') || '0');
 }
 
-// Modified returnHome function
-function returnHomeHandler() {
-    showScreen('home-screen');
-    HomeScreen.updatePointsDisplay();
+// Function to update points
+export function updatePoints(change) {
+    console.log('Updating points. Current:', totalPoints, 'Change:', change);
+    totalPoints += change;
+    localStorage.setItem('points', totalPoints.toString());
+    console.log('New total points:', totalPoints);
+    updatePointsDisplay();
+}
+
+// Function to update points display on all screens
+export function updatePointsDisplay() {
+    console.log('Updating points display. Current total points:', totalPoints);
+    const pointsDisplays = document.querySelectorAll('.points-display span');
+    pointsDisplays.forEach(display => {
+        display.textContent = totalPoints;
+    });
+}
+
+function initializePoints() {
+    totalPoints = parseInt(localStorage.getItem('points') || '0');
+    console.log('Initialized total points:', totalPoints);
+    updatePointsDisplay();
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', async () => {
     try {
+        loadPoints();
         HomeScreen.initHomeScreen();
+        initializePoints();
         initNavigation();
+        // updatePointsDisplay();
     } catch (error) {
         console.error('Failed to initialize home screen:', error);
     }
@@ -104,3 +132,5 @@ window.playLetterSound = function(soundUnit) {
 window.checkImage = function(imgElement, currentLevelData) {
     Game.checkImage(imgElement, currentLevelData);
 };
+
+// export { totalPoints };

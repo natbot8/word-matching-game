@@ -1,13 +1,12 @@
 import { showScreen } from './app.js';
 import { initCardReveal } from './card-reveal.js';
-import { updatePointsDisplay } from './home-screen.js';
+import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
 
 let words = {};
 export const levels = [];
 export let letterSounds = {};
 export const WORDS_PER_ROUND = 10;
-export let points = 0; 
-export let totalPoints = 0;
+export let gamePoints = 0; 
 export let numImages = 2;
 export let currentLevel = 0;
 export let isProcessing = false;
@@ -54,19 +53,16 @@ async function fetchLetterSounds() {
 export async function initializeGame() {
     selectedCategory = localStorage.getItem('selectedCategory');
     selectedDifficulty = localStorage.getItem('selectedDifficulty');
-
+  
     console.log('Selected Category:', selectedCategory);
     console.log('Selected Difficulty:', selectedDifficulty);
-
+  
     if (!selectedCategory || !selectedDifficulty) {
         console.error('Category or difficulty not selected');
-        // You might want to redirect to the home page or show an error message
         return;
     }
 
-    // Load total points from localStorage
-    totalPoints = parseInt(localStorage.getItem('points') || '0');
-    console.log('Loaded total points:', totalPoints);
+    // Load total points from localStorage (handled in app.js)
     updateTotalPointsDisplay();
 
     // Pre-load audio
@@ -122,7 +118,7 @@ export async function initializeGame() {
 
     // Reset currentLevel and points
     currentLevel = 0;
-    points = 0;
+    gamePoints = 0;
 
     // Start the game with the selected difficulty
     loadLevel();
@@ -160,7 +156,7 @@ export function loadLevel() {
   const scoreContainer = document.createElement('div');
   scoreContainer.id = 'score-container';
   scoreContainer.innerHTML = `
-    <div id="current-points">Points Won: <span id="current-points-value">${points}</span></div>
+    <div id="current-points">Points Won: <span id="current-points-value">${gamePoints}</span></div>
     <div id="coin-container"></div>
   `;
   levelContainer.appendChild(scoreContainer);
@@ -304,7 +300,7 @@ export function checkImage(imgElement, currentLevelData) {
   const currentWord = decodeURIComponent(currentImageSrc.substring(currentImageSrc.lastIndexOf('/') + 1, currentImageSrc.lastIndexOf('.')));
 
   if (currentWord === wordDisplay) {
-    updatePoints(true); // Pass true for correct answer
+    updateGamePoints(true); // Pass true for correct answer
     playRandomSound(correctSounds);
 
     // Show confetti animation
@@ -316,31 +312,33 @@ export function checkImage(imgElement, currentLevelData) {
       isProcessing = false; 
     }, 1500);
   } else {
-    updatePoints(false); 
+    updateGamePoints(false); 
     playRandomSound(incorrectSounds);
     showResultText('Try again', 1500);
     isProcessing = false;
   }
 }
 
-function updatePoints(correctAnswer) {
+function updateGamePoints(correctAnswer) {
     if (correctAnswer) {
-        points++;
+        gamePoints++;
+        updatePoints(1); // Update total points in app.js
     } else {
-        if (points > 0) {
-            points--;
+        if (gamePoints > 0) {
+            gamePoints--;
+            updatePoints(-1); // Update total points in app.js
         }
     }
-    console.log('Current Points:', points);
+    console.log('Current Game Points:', gamePoints);
     updateCoinIcons();
-    document.getElementById('current-points-value').innerText = points;
+    document.getElementById('current-points-value').innerText = gamePoints;
 }
 
 function updateCoinIcons() {
     const coinContainer = document.getElementById('coin-container');
     coinContainer.innerHTML = ''; // Clear existing coins
 
-    for (let i = 0; i < points; i++) {
+    for (let i = 0; i < gamePoints; i++) {
         const coinIcon = document.createElement('img');
         coinIcon.src = 'icons/coin.png';
         coinIcon.alt = 'Coin';
@@ -361,8 +359,6 @@ export function nextLevel() {
     if (currentLevel < WORDS_PER_ROUND) {
         loadLevel();
     } else {
-        totalPoints += points;
-        localStorage.setItem('points', totalPoints.toString());
         showResultsScreen();
     }
 }
@@ -370,7 +366,7 @@ export function nextLevel() {
 // Function to show results screen after completing round of word game
 function showResultsScreen() {
     const resultsMessage = document.getElementById('results-message');
-    resultsMessage.textContent = `You completed all ${WORDS_PER_ROUND} words and earned ${points} points!`;
+    resultsMessage.textContent = `You completed all ${WORDS_PER_ROUND} words and earned ${gamePoints} points!`;
 
     const homeButton = document.getElementById('home-button');
     const cardRevealButton = document.getElementById('card-reveal-button');
