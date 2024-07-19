@@ -14,6 +14,18 @@ export let isProcessing = false;
 export let selectedCategory = '';
 export let selectedDifficulty = '';
 
+const correctSounds = [
+  new Audio('game-sounds/nice.m4a'),
+  new Audio('game-sounds/oo-nice.m4a'),
+  new Audio('game-sounds/good-job.m4a'), 
+  new Audio('game-sounds/great.m4a')
+];
+
+const incorrectSounds = [
+  new Audio('game-sounds/try-again.m4a'),
+  new Audio('game-sounds/oops.m4a')
+];
+
 // Fetch word categories from JSON file
 async function fetchWordCategories() {
     try {
@@ -56,6 +68,9 @@ export async function initializeGame() {
     totalPoints = parseInt(localStorage.getItem('points') || '0');
     console.log('Loaded total points:', totalPoints);
     updateTotalPointsDisplay();
+
+    // Pre-load audio
+    preloadAudio();
 
     // Fetch word categories
     try {
@@ -287,12 +302,10 @@ export function checkImage(imgElement, currentLevelData) {
   const wordDisplay = currentLevelData.word.toLowerCase();
   const currentImageSrc = imgElement.src.toLowerCase();
   const currentWord = decodeURIComponent(currentImageSrc.substring(currentImageSrc.lastIndexOf('/') + 1, currentImageSrc.lastIndexOf('.')));
-  const correctSound = new Audio('game-sounds/nice-2.m4a')
-  const wrongSound = new Audio('game-sounds/try-again.m4a')
 
   if (currentWord === wordDisplay) {
     updatePoints(true); // Pass true for correct answer
-    correctSound.play();
+    playRandomSound(correctSounds);
 
     // Show confetti animation
     showConfettiCannon();
@@ -304,7 +317,7 @@ export function checkImage(imgElement, currentLevelData) {
     }, 1500);
   } else {
     updatePoints(false); 
-    wrongSound.play();
+    playRandomSound(incorrectSounds);
     showResultText('Try again', 1500);
     isProcessing = false;
   }
@@ -389,5 +402,16 @@ function showResultText(text, duration) {
   }, duration);
 }
 
+// Function to play random sound file
+function playRandomSound(soundArray) {
+    const randomIndex = Math.floor(Math.random() * soundArray.length);
+    const sound = soundArray[randomIndex];
+    sound.currentTime = 0; // Reset to start of the audio
+    sound.play().catch(error => console.error('Error playing audio:', error));
+}
 
-
+function preloadAudio() {
+    [...correctSounds, ...incorrectSounds].forEach(sound => {
+        sound.load();
+    });
+}

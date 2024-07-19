@@ -4,6 +4,7 @@ export const totalBlocks = 16;
 export let currentCardCategory = '';
 export let currentCard = '';
 export let isCardFullyRevealed = false;
+const noPointsSound = new Audio('game-sounds/need-points.m4a');
 
 export async function initCardReveal(initialPoints, category) {
     console.log('Initializing Card Reveal with', initialPoints, 'points and category:', category);
@@ -38,6 +39,9 @@ export async function initCardReveal(initialPoints, category) {
     // Remove any existing sparkles
     const sparkles = cardImageContainer.querySelectorAll('.sparkle');
     sparkles.forEach(sparkle => sparkle.remove());
+
+    // Preload audio
+    noPointsSound.load();
 
     updateCardImage();
     createCardBoard();
@@ -122,6 +126,7 @@ function revealBlock(block, index) {
         console.log('Block revealed, current state:', { pointsLeft, revealedBlocks });
     } else if (pointsLeft === 0) {
         showOutOfPointsMessage();
+        playNoPointsSound();
     }
 }
 
@@ -199,5 +204,10 @@ function showOutOfPointsMessage() {
 
     setTimeout(() => {
         message.classList.remove('show');
-    }, 3000);
+    }, 1500);
+}
+
+function playNoPointsSound() {
+    noPointsSound.currentTime = 0; // Reset the audio to the beginning
+    noPointsSound.play().catch(error => console.error('Error playing audio:', error));
 }
