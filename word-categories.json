@@ -39,7 +39,25 @@
       "turquoise-lamb.png", 
       "turquoise-kangaroo.png", 
       "turquoise-hedgehog.png", 
-      "turquoise-pig.png"
+      "turquoise-pig.png", 
+      "turquoise-rooster.png"
+    ]
+  }, 
+  "Letter Combos 3": {
+    "words": [
+      "car", "star", "park", "farm", "art", "shark", "arm", "card", "yard", "barn", "dart",
+      "target", "market", "saw", "paw", "draw", "claw", "straw", "crawl"
+    ], 
+    "cards": [
+      "yellow-butterfly.png", 
+      "yellow-chick.png",
+      "yellow-dog.png", 
+      "yellow-dog2.png", 
+      "yellow-giraffe.png",
+      "yellow-guinea-pig.png",
+      "yellow-lizard.png",
+      "yellow-penguin.png",
+      "yellow-tiger.png"
     ]
   }
 }

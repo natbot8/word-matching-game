@@ -84,8 +84,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  max-width: 300px;
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -203,6 +202,7 @@
 
 .nav-item.selected img {
   filter: drop-shadow(4px 4px 5px #a09c9c);
+  -webkit-filter: drop-shadow(4px 4px 5px #a09c9c);
 }
 
 /* Adjust main content to not be hidden behind the nav bar */

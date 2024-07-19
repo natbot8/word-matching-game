@@ -351,7 +351,6 @@ export function nextLevel() {
         totalPoints += points;
         localStorage.setItem('points', totalPoints.toString());
         showResultsScreen();
-        showConfettiFireworks();
     }
 }
 
