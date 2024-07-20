@@ -357,7 +357,7 @@ export function nextLevel() {
 // Function to show results screen after completing round of word game
 function showResultsScreen() {
     const resultsMessage = document.getElementById('results-message');
-    resultsMessage.textContent = `You completed all ${WORDS_PER_ROUND} words and earned ${gamePoints} points!`;
+    resultsMessage.textContent = `You completed ${WORDS_PER_ROUND} words and earned ${gamePoints} points!`;
 
     const homeButton = document.getElementById('home-button');
     const cardRevealButton = document.getElementById('card-reveal-button');
