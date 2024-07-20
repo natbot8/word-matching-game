@@ -41,6 +41,13 @@
   height: auto;
   cursor: pointer;
   margin: 10px;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.image-option.disabled {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  cursor: not-allowed;
 }
 
 .points-display {

@@ -116,11 +116,14 @@ export async function initializeGame() {
     document.getElementById('level-container').style.display = 'block';
 }
 
-// Load the initial level
+// Load the level
 export function loadLevel() {
   const currentLevelData = levels[currentLevel];
   const levelContainer = document.getElementById('level-container');
   levelContainer.innerHTML = ''; // Clear previous elements
+
+  // Reser disabled images
+  resetDisabledImages();
 
   // Create and append the points display
   const pointsDisplay = document.createElement('div');
@@ -278,7 +281,7 @@ function getRandomImages(currentLevelData) {
 }
 
 export function checkImage(imgElement, currentLevelData) {
-  if (isProcessing) {
+  if (isProcessing || imgElement.classList.contains('disabled')) {
     return; 
   }
 
@@ -295,15 +298,14 @@ export function checkImage(imgElement, currentLevelData) {
     // Show confetti animation
     showConfettiCannon();
 
-    showResultText('Congratulations!', 1500);
     setTimeout(() => {
       nextLevel();
       isProcessing = false; 
-    }, 1500);
+    }, 1000);
   } else {
     updateGamePoints(false); 
     playRandomSound(incorrectSounds);
-    showResultText('Try again', 1500);
+    imgElement.classList.add('disabled');
     isProcessing = false;
   }
 }
@@ -373,26 +375,18 @@ function showResultsScreen() {
     showScreen('results-screen');
 }
 
-// Function to show result text and clear it after a specified duration
-function showResultText(text, duration) {
-  const resultText = document.createElement('p');
-  resultText.style.fontSize = '20px';
-  resultText.style.fontWeight = 'bold';
-  resultText.style.marginTop = '10px';
-  resultText.innerText = text;
-  const levelContainer = document.getElementById('level-container');
-  levelContainer.appendChild(resultText);
-  setTimeout(() => {
-    levelContainer.removeChild(resultText);
-  }, duration);
-}
-
 // Function to play random sound file
 function playRandomSound(soundArray) {
     const randomIndex = Math.floor(Math.random() * soundArray.length);
     const sound = soundArray[randomIndex];
     sound.currentTime = 0; // Reset to start of the audio
     sound.play().catch(error => console.error('Error playing audio:', error));
+}
+
+// Reset disabled images when next level loads
+function resetDisabledImages() {
+  const disabledImages = document.querySelectorAll('.image-option.disabled');
+  disabledImages.forEach(img => img.classList.remove('disabled'));
 }
 
 function preloadAudio() {
