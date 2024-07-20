@@ -38,7 +38,8 @@ export function showScreen(screenId) {
             CardReveal.initCardReveal(savedCategory, wordCategories[savedCategory]);
         } else {
             console.error('Invalid category for card reveal:', savedCategory);
-            // Handle error - maybe show an alert or redirect to home
+            alert('Error loading card reveal. Please try again.');
+            showScreen('home-screen'); // Redirect to home screen on error
         }
     }
 }

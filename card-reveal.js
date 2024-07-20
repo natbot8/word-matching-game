@@ -7,7 +7,7 @@ export let currentCard = '';
 export let isCardFullyRevealed = false;
 const noPointsSound = new Audio('game-sounds/need-points.m4a');
 
-  export async function initCardReveal(category, categoryData) {
+export async function initCardReveal(category, categoryData) {
     const currentPoints = parseInt(localStorage.getItem('points') || '0');
     console.log('Initializing Card Reveal with', currentPoints, 'points and category:', category);
     currentCardCategory = category;
@@ -23,7 +23,10 @@ const noPointsSound = new Audio('game-sounds/need-points.m4a');
         console.log('No saved progress or card was fully revealed. Starting new card.');
         revealedBlocks = 0;
         isCardFullyRevealed = false;
-        await selectRandomCard(categoryData);
+        if (!selectRandomCard(categoryData)) {
+            console.error('Failed to select a random card. Unable to initialize card reveal.');
+            return; // Exit the function if we can't select a card
+        }
     }
 
     // Reset DOM elements
@@ -51,33 +54,45 @@ const noPointsSound = new Audio('game-sounds/need-points.m4a');
     cardRevealContainer.style.display = 'block';
 }
 
-async function selectRandomCard(categoryData) {
+function selectRandomCard(categoryData) {
     try {
         console.log('Selecting random card from category data:', categoryData);
+        if (!categoryData || !categoryData.cards || categoryData.cards.length === 0) {
+            console.error('Invalid category data or no cards available');
+            return false;
+        }
         const cards = categoryData.cards;
         console.log('Available cards:', cards);
         currentCard = cards[Math.floor(Math.random() * cards.length)];
         console.log('Selected card:', currentCard);
+        return true;
     } catch (error) {
         console.error('Error selecting random card:', error);
-        currentCard = 'default-card.png';
+        return false;
     }
 }
 
 function updateCardImage() {
-  const cardImage = document.getElementById('card-image');
-  const imagePath = `card-images/${currentCard}`;
-  console.log('Setting card image src to:', imagePath);
-  cardImage.src = imagePath;
-  cardImage.alt = `Card from ${currentCardCategory}`;
+    const cardImage = document.getElementById('card-image');
+    if (!currentCard) {
+        console.error('No card selected. Unable to update card image.');
+        return;
+    }
+    const imagePath = `card-images/${currentCard}`;
+    console.log('Setting card image src to:', imagePath);
+    cardImage.src = imagePath;
+    cardImage.alt = `Card from ${currentCardCategory}`;
 
-  cardImage.onload = () => {
-    console.log('Image loaded successfully');
-  };
+    cardImage.onload = () => {
+        console.log('Image loaded successfully');
+    };
 
-  cardImage.onerror = () => {
-    console.error('Failed to load image:', imagePath);
-  };
+    cardImage.onerror = () => {
+        console.error('Failed to load image:', imagePath);
+        // Set a default image or show an error message
+        cardImage.src = 'path/to/default-or-error-image.png';
+        cardImage.alt = 'Error loading card image';
+    };
 }
 
 export function createCardBoard() {
