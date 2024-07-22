@@ -30,7 +30,6 @@ header {
 .difficulty-selector img, .points-display img {
     width: 30px;
     height: 30px;
-    margin-right: 5px;
 }
 
 .difficulty-selector select, .points-display span {
@@ -43,6 +42,7 @@ header {
     background: transparent;
     font-size: 16px;
     font-weight: bold;
+    margin: 5px;
     cursor: pointer;
 }
 

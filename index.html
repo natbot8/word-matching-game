@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="home-screen.css">
     <link rel="stylesheet" href="card-reveal.css">
+    <link rel="stylesheet" href="plinko.css">
 </head>
 <body>
     <div id="home-screen">
@@ -63,6 +64,10 @@
                     <img src="icons/card-reveal.png" alt="Card Icon">
                     Card Reveal
                 </button>
+                <button id="plinko-button" class="results-button">
+                    <img src="icons/plinko.png" alt="Card Icon">
+                    Plinko
+                </button>
             </div>
         </div>
     </div>
@@ -82,6 +87,20 @@
         </div>
     </div>
 
+    <div id="plinko-screen" class="screen" style="display: none;">
+        <div class="points-display">
+            <span id="plinko-points">0</span>
+            <img src="icons/coin.png" alt="Total Points">
+        </div>
+        <div id="plinko-game-container">
+            <div id="plinko-progress-container">
+                <div id="plinko-progress-bar"></div>
+            </div>
+            <div id="plinko-board"></div>
+                <!-- Plinko pegs will be added here dynamically -->
+        </div>
+    </div>
+
     <nav id="bottom-nav">
         <div class="nav-item" data-screen="home-screen">
             <img src="icons/home.png" alt="Home">
@@ -90,6 +109,10 @@
         <div class="nav-item" data-screen="card-reveal-screen">
             <img src="icons/card-reveal.png" alt="Card Reveal">
             <span>Cards</span>
+        </div>
+        <div class="nav-item" data-screen="plinko-screen">
+            <img src="icons/plinko.png" alt="Plinko">
+            <span>Plinko</span>
         </div>
     </nav>
 

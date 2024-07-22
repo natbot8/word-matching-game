@@ -2,6 +2,7 @@
 import * as HomeScreen from './home-screen.js';
 import * as Game from './word-match.js';
 import * as CardReveal from './card-reveal.js';
+import * as PlinkoGame from './plinko-game.js';
 
 // Global state
 let currentScreen = 'home';
@@ -20,6 +21,7 @@ export function showScreen(screenId) {
     document.getElementById('game-screen').style.display = 'none';
     document.getElementById('results-screen').style.display = 'none';
     document.getElementById('card-reveal-screen').style.display = 'none';
+    document.getElementById('plinko-screen').style.display = 'none';
     document.getElementById(screenId).style.display = screenId === 'results-screen' ? 'flex' : 'block';
 
     currentScreen = screenId.replace('-screen', '');
@@ -32,6 +34,15 @@ export function showScreen(screenId) {
     if (screenId === 'home-screen') {
         console.log('Updating points display for home screen');
         HomeScreen.initHomeScreen();
+    } else if (screenId === 'plinko-screen') {
+            const savedCategory = localStorage.getItem('selectedCategory');
+            if (savedCategory && wordCategories[savedCategory]) {
+                PlinkoGame.initPlinkoGame(savedCategory, wordCategories[savedCategory]);
+            } else {
+                console.error('Invalid category for Plinko game:', savedCategory);
+                alert('Error loading Plinko game. Please try again.');
+                showScreen('home-screen'); // Redirect to home screen on error
+            }
     } else if (screenId === 'card-reveal-screen') {
         const savedCategory = localStorage.getItem('selectedCategory');
         if (savedCategory && wordCategories[savedCategory]) {
