@@ -122,9 +122,6 @@ export function loadLevel() {
   const levelContainer = document.getElementById('level-container');
   levelContainer.innerHTML = ''; // Clear previous elements
 
-  // Reser disabled images
-  resetDisabledImages();
-
   // Create and append the points display
   const pointsDisplay = document.createElement('div');
   pointsDisplay.className = 'points-display';
@@ -133,6 +130,16 @@ export function loadLevel() {
     <img src="icons/coin.png" alt="Total Points">
   `;
   levelContainer.appendChild(pointsDisplay);
+
+  // Create sticky wrapper for letter container
+  const stickyWrapper = document.createElement('div');
+  stickyWrapper.className = 'sticky-wrapper';
+  levelContainer.appendChild(stickyWrapper);
+
+  // Create and append the letter container inside the sticky wrapper
+  const letterContainer = document.createElement('div');
+  letterContainer.id = 'letter-container';
+  stickyWrapper.appendChild(letterContainer);
 
   // Create and append the word display
   const wordDisplay = document.createElement('div');
@@ -152,11 +159,6 @@ export function loadLevel() {
     <div id="coin-container"></div>
   `;
   levelContainer.appendChild(scoreContainer);
-
-  // Create and append the letter container
-  const letterContainer = document.createElement('div');
-  letterContainer.id = 'letter-container';
-  levelContainer.appendChild(letterContainer);
 
   // Create and append the image container
   const imageContainer = document.createElement('div');
@@ -210,8 +212,8 @@ export function loadLevel() {
     imageContainer.appendChild(imgElement);
   }
 
-  // Update coin icons
   updateCoinIcons();
+  resetDisabledImages();
 }
 
 // Shuffle array function
