@@ -217,4 +217,5 @@
 /* Adjust main content to not be hidden behind the nav bar */
 #home-screen, #game-screen, #card-reveal-screen, #plinko-screen {
   padding-bottom: 60px; /* Adjust this value based on your nav bar height */
+  margin: 20px;
 }

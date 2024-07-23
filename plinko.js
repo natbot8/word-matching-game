@@ -1,6 +1,7 @@
 import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
 import { wordCategories } from './app.js';
 import { updateCardImage, selectRandomCard } from './card-reveal.js';
+import { showWonCard } from './show-won-card.js';
 
 let progressBarFill = 0;
 let currentPlinkoCategory = '';
@@ -93,8 +94,6 @@ function createPlinkoBoard() {
             peg.style.left = `${pegX}px`;
             peg.style.top = `${pegY}px`;
             board.appendChild(peg);
-
-            console.log(`Peg position: row ${row}, col ${col}, x: ${pegX}, y: ${pegY}`);
         }
     }
 
@@ -254,12 +253,10 @@ function revealCard() {
 
     saveProgress();
 
-    // Hide the current card image
-    const cardImage = document.getElementById('plinko-card-image');
-    cardImage.style.display = 'none';
-
-    // TODO: Implement card reveal animation
-    alert(`Congratulations! You've won a new card: ${currentPlinkoCard}`);
+    // Show the won card screen
+    setTimeout(() => {
+        showWonCard(`card-images/${currentPlinkoCard}`, 'plinko');
+    }, 500);
 }
 
 // Utility function for debouncing

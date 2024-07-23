@@ -1,4 +1,5 @@
 import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
+import { showWonCard, resetWonCardScreen } from './show-won-card.js';
 
 export let revealedBlocks = 0;
 export const totalBlocks = 16;
@@ -38,13 +39,6 @@ export async function initCardReveal(category, categoryData) {
     cardBoard.style.display = 'grid';
     cardBoard.innerHTML = '';
 
-    const cardImageContainer = document.querySelector('.card-image-container');
-    cardImageContainer.classList.remove('card-revealed');
-
-    // Remove any existing sparkles
-    const sparkles = cardImageContainer.querySelectorAll('.sparkle');
-    sparkles.forEach(sparkle => sparkle.remove());
-
     // Preload audio
     noPointsSound.load();
 
@@ -52,10 +46,6 @@ export async function initCardReveal(category, categoryData) {
     createCardBoard();
     updatePointsDisplay();
     applyProgress();
-
-    // Show the card reveal container
-    const cardRevealContainer = document.getElementById('card-reveal-container');
-    cardRevealContainer.style.display = 'block';
 }
 
 export function selectRandomCard(categoryData) {
@@ -155,49 +145,9 @@ function checkGameState() {
     if (revealedBlocks === totalBlocks && !isCardFullyRevealed) {
         isCardFullyRevealed = true;
         needNewCard = true;
-        revealCard();
         saveWonCard();
         saveProgress();
-    }
-}
-
-// Animation when the card is fully revealed
-function revealCard() {
-    const cardImageContainer = document.querySelector('.card-image-container');
-    const cardBoard = document.getElementById('card-board');
-
-    // Hide the card board
-    cardBoard.style.display = 'none';
-
-    // Add the revealed class to apply the pop-up effect
-    cardImageContainer.classList.add('card-revealed');
-
-    // Add sparkle animation
-    addSparkles(cardImageContainer);
-}
-
-// Sparkle animation for when the card is revealed
-function addSparkles(container) {
-    const numSparkles = 20;
-
-    for (let i = 0; i < numSparkles; i++) {
-        const sparkle = document.createElement('div');
-        sparkle.classList.add('sparkle');
-
-        // Random position within the container
-        const left = Math.random() * 100 + '%';
-        const top = Math.random() * 100 + '%';
-
-        sparkle.style.left = left;
-        sparkle.style.top = top;
-
-        // Random delay and duration for the animation
-        const delay = Math.random() * 1000 + 'ms';
-        const duration = (Math.random() * 1000 + 1000) + 'ms';
-
-        sparkle.style.animation = `sparkle ${duration} ${delay} infinite`;
-
-        container.appendChild(sparkle);
+        showWonCard(`card-images/${currentCard}`, 'card-reveal');
     }
 }
 

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="home-screen.css">
     <link rel="stylesheet" href="card-reveal.css">
     <link rel="stylesheet" href="plinko.css">
+    <link rel="stylesheet" href="show-won-card.css">
 </head>
 <body>
     <div id="home-screen">
@@ -73,18 +74,18 @@
     </div>
     
     <div id="card-reveal-screen" style="display: none;">
-        <div class="points-display">
-            <span id="card-reveal-points">0</span>
-            <img src="icons/coin.png" alt="Points">
+      <div class="points-display">
+        <span id="card-reveal-points">0</span>
+        <img src="icons/coin.png" alt="Points">
+      </div>
+      <div id="card-reveal-container" class="card-reveal-container">
+        <h2>Reveal a Card</h2>
+        <div class="card-reveal-image-container">
+          <img id="card-reveal-image" class="card-image" alt="Reward Card">
+          <div id="card-board" class="card-board"></div>
+          <div id="out-of-points-message" class="out-of-points-message">You're out of points</div>
         </div>
-        <div id="card-reveal-container" class="card-reveal-container">
-            <h2>Reveal a Card</h2>
-            <div class="card-image-container">
-                <img id="card-reveal-image" class="card-image" src="" alt="Reward Card">
-                <div id="card-board" class="card-board"></div>
-                <div id="out-of-points-message" class="out-of-points-message">You're out of points</div>
-            </div>
-        </div>
+      </div>
     </div>
 
             <div id="plinko-screen" class="screen" style="display: none;">
@@ -105,6 +106,19 @@
             <div id="plinko-board"></div>
                 <!-- Plinko pegs will be added here dynamically -->
         </div>
+    </div>
+
+    <div id="show-won-card-screen" class="screen" style="display: none;">
+      <div class="won-card-container">
+        <h2>You Won a Card!</h2>
+        <div class="won-card-image-container">
+          <img id="won-card-image" class="card-image" alt="Won Card">
+        </div>
+        <button id="return-home-button" class="return-home-button">
+          <img src="icons/home.png" alt="Home Icon">
+          Return Home
+        </button>
+      </div>
     </div>
 
     <nav id="bottom-nav">
