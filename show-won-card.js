@@ -6,7 +6,7 @@ export function showWonCard(cardImage, fromGame) {
     const cardContainer = document.querySelector('.won-card-image-container');
     const returnHomeButton = document.getElementById('return-home-button');
 
-    wonCardImage.src = cardImage;
+    wonCardImage.src = `card-images/${cardImage}`;
 
     // Show the won card screen
     showScreen('show-won-card-screen');

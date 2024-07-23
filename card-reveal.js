@@ -118,6 +118,6 @@ function checkGameState() {
             isCardFullyRevealed,
             needNewCard
         });
-        showWonCard(`card-images/${currentCard}`, 'card-reveal');
+        showWonCard(currentCard, 'card-reveal');
     }
 }

@@ -258,7 +258,7 @@ function revealCard() {
 
     // Show the won card screen
     setTimeout(() => {
-        showWonCard(`card-images/${currentPlinkoCard}`, 'plinko');
+        showWonCard(currentPlinkoCard, 'plinko');
     }, 500);
 }
 
