@@ -115,7 +115,10 @@ function createPlinkoBoard() {
     slotValues.forEach((value, index) => {
         const slot = document.createElement('div');
         slot.className = 'slot';
-        slot.textContent = value;
+        const slotNumber = document.createElement('span');
+        slotNumber.className = 'slot-number';
+        slotNumber.textContent = value;
+        slot.appendChild(slotNumber);
         slot.style.left = `${index * slotWidth}px`;
         slot.style.width = `${slotWidth}px`;
         slot.style.bottom = '0';
@@ -216,11 +219,24 @@ export function dropBall(startX) {
             requestAnimationFrame(updateBall);
             
         } else {
-            // Ball has reached the bottom
+        // Ball has reached the bottom
             const pointsEarned = calculatePointsEarned(position.x);
             progressBarFill += pointsEarned;
             updateProgressBar();
-            saveProgress();
+            saveProgress('plinko', {
+                progressBarFill,
+                currentPlinkoCard,
+                needNewCard
+            });
+
+            // Animate the slot number
+            const slotIndex = Math.floor(position.x / (boardWidth / 7));
+            const slot = document.querySelectorAll('.slot')[slotIndex];
+            const slotNumber = slot.querySelector('.slot-number');
+            slotNumber.classList.add('animate-slot');
+            setTimeout(() => {
+                slotNumber.classList.remove('animate-slot');
+            }, 1000); // Remove the class after 1 second
 
             if (progressBarFill >= totalProgressNeeded) {
                 revealCard();
