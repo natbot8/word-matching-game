@@ -7,9 +7,9 @@ let currentPlinkoCard = '';
 const totalProgressNeeded = 100;
 let isAnimating = false;
 
-const boardWidth = 400;
-const boardHeight = 600;
-const pegSpacing = 40;
+let boardWidth = 400;
+let boardHeight = 600;
+let pegSpacing = 40;
 const pegRadius = 5;
 
 export function initPlinkoGame(category, categoryData) {
@@ -32,6 +32,12 @@ export function initPlinkoGame(category, categoryData) {
         }
     }
 
+    // Set board dimensions based on screen size
+    const plinkoBoard = document.getElementById('plinko-board');
+    boardWidth = plinkoBoard.clientWidth;
+    boardHeight = plinkoBoard.clientHeight;
+    pegSpacing = boardWidth / 8; // This will give us 7 columns max
+
     createPlinkoBoard();
     updateProgressBar();
     updatePointsDisplay();
@@ -41,8 +47,15 @@ export function initPlinkoGame(category, categoryData) {
     plinkoContainer.style.display = 'block';
 
     // Add click event listener to the board
-    const board = document.getElementById('plinko-board');
-    board.addEventListener('click', handleBoardClick);
+    plinkoBoard.addEventListener('click', handleBoardClick);
+
+    // Add window resize listener
+    window.addEventListener('resize', debounce(() => {
+        boardWidth = plinkoBoard.clientWidth;
+        boardHeight = plinkoBoard.clientHeight;
+        pegSpacing = Math.min(boardWidth, boardHeight) / 8;
+        createPlinkoBoard();
+    }, 250));
 }
 
 function selectRandomCard(categoryData) {
@@ -67,28 +80,44 @@ function createPlinkoBoard() {
     const board = document.getElementById('plinko-board');
     board.innerHTML = ''; // Clear existing content
 
+    boardWidth = board.clientWidth;
+    boardHeight = board.clientHeight;
+
+    const rows = 10; // Fixed number of rows
+    const maxCols = Math.floor(boardWidth / pegSpacing) - 1;
+
+    // Adjust pegSpacing to fit the board width
+    pegSpacing = boardWidth / (maxCols + 1);
+
     // Create pegs
-    for (let row = 0; row < 10; row++) {
+    for (let row = 0; row < rows; row++) {
         const isEvenRow = row % 2 === 0;
-        const pegsInRow = isEvenRow ? 9 : 8;
-        const startX = isEvenRow ? pegSpacing / 2 : pegSpacing;
+        const pegsInRow = isEvenRow ? maxCols - 1 : maxCols;
+        const rowWidth = (pegsInRow - 1) * pegSpacing;
+        const startX = (boardWidth - rowWidth) / 2;
 
         for (let col = 0; col < pegsInRow; col++) {
             const peg = document.createElement('div');
             peg.className = 'peg';
-            peg.style.left = `${startX + col * pegSpacing}px`;
-            peg.style.top = `${80 + row * pegSpacing}px`;
+            const pegX = startX + col * pegSpacing;
+            const pegY = pegSpacing + row * pegSpacing;
+            peg.style.left = `${pegX}px`;
+            peg.style.top = `${pegY}px`;
             board.appendChild(peg);
+
+            console.log(`Peg position: row ${row}, col ${col}, x: ${pegX}, y: ${pegY}`);
         }
     }
 
     // Create slots
     const slotValues = [1, 2, 5, 10, 5, 2, 1];
+    const slotWidth = boardWidth / slotValues.length;
     slotValues.forEach((value, index) => {
         const slot = document.createElement('div');
         slot.className = 'slot';
         slot.textContent = value;
-        slot.style.left = `${index * (boardWidth / 7)}px`;
+        slot.style.left = `${index * slotWidth}px`;
+        slot.style.width = `${slotWidth}px`;
         slot.style.bottom = '0';
         board.appendChild(slot);
     });
@@ -97,6 +126,8 @@ function createPlinkoBoard() {
     const ball = document.createElement('div');
     ball.id = 'ball';
     board.appendChild(ball);
+
+    console.log(`Board dimensions: ${boardWidth}x${boardHeight}, Peg spacing: ${pegSpacing}`);
 }
 
 function updateProgressBar() {
@@ -111,7 +142,7 @@ function handleBoardClick(event) {
     const board = document.getElementById('plinko-board');
     const rect = board.getBoundingClientRect();
     const x = event.clientX - rect.left;
-    dropBall(Math.max(10, Math.min(390, x)));
+    dropBall(Math.max(pegRadius, Math.min(boardWidth - pegRadius, x)));
 }
 
 export function dropBall(startX) {
@@ -127,16 +158,20 @@ export function dropBall(startX) {
     const ball = document.getElementById('ball');
     ball.style.display = 'block';
     ball.style.left = `${startX}px`;
-    ball.style.top = '-20px';
+    ball.style.top = '0';
 
-    let position = { x: startX, y: -20 };
+    let position = { x: startX, y: 0 };
     let velocity = { x: 0, y: 0 };
 
     function updateBall() {
         if (position.y < boardHeight - 20) {
-            velocity.y += 0.5; // Gravity
+            velocity.y += 0.6; // Gravity
             position.x += velocity.x;
             position.y += velocity.y;
+
+            // Add slight randomness to movement
+            velocity.x += (Math.random() - 0.5) * 0.3;
+            velocity.y += (Math.random() - 0.5) * 0.3;
 
             // Collision with pegs
             document.querySelectorAll('.peg').forEach(peg => {
@@ -148,12 +183,14 @@ export function dropBall(startX) {
 
                 if (distance < pegRadius + 10) { // 10 is ball radius
                     const angle = Math.atan2(dy, dx);
-                    const bounceStrength = 3 + Math.random() * 2;
+                    const bounceStrength = 8 + Math.random() * 4;
                     velocity.x = -Math.cos(angle) * bounceStrength;
                     velocity.y = -Math.sin(angle) * bounceStrength;
 
                     // Add slight randomness to the bounce
-                    velocity.x += (Math.random() - 0.5) * 0.5;
+                    const randomAngle = (Math.random() - 0.5) * 0.5;
+                    velocity.x += Math.cos(randomAngle);
+                    velocity.y += Math.sin(randomAngle);
 
                     // Animate peg
                     peg.style.animation = 'none';
@@ -163,15 +200,16 @@ export function dropBall(startX) {
             });
 
             // Boundary collision
-            if (position.x < 10 || position.x > boardWidth - 10) {
+            if (position.x < pegRadius || position.x > boardWidth - pegRadius) {
                 velocity.x = -velocity.x * 0.8;
-                position.x = position.x < 10 ? 10 : boardWidth - 10;
+                position.x = position.x < pegRadius ? pegRadius : boardWidth - pegRadius;
             }
 
             ball.style.left = `${position.x}px`;
             ball.style.top = `${position.y}px`;
 
             requestAnimationFrame(updateBall);
+            
         } else {
             // Ball has reached the bottom
             const pointsEarned = calculatePointsEarned(position.x);
@@ -183,6 +221,7 @@ export function dropBall(startX) {
                 revealCard();
             }
 
+            ball.style.display = 'none';
             isAnimating = false;
         }
     }
@@ -228,4 +267,17 @@ function revealCard() {
 
     // Select a new card for the next game
     selectRandomCard(wordCategories[currentPlinkoCategory]);
+}
+
+// Utility function for debouncing
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }

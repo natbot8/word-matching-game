@@ -2,7 +2,7 @@
 import * as HomeScreen from './home-screen.js';
 import * as Game from './word-match.js';
 import * as CardReveal from './card-reveal.js';
-import * as PlinkoGame from './plinko-game.js';
+import * as PlinkoGame from './plinko.js';
 
 // Global state
 let currentScreen = 'home';
@@ -22,7 +22,7 @@ export function showScreen(screenId) {
     document.getElementById('results-screen').style.display = 'none';
     document.getElementById('card-reveal-screen').style.display = 'none';
     document.getElementById('plinko-screen').style.display = 'none';
-    document.getElementById(screenId).style.display = screenId === 'results-screen' ? 'flex' : 'block';
+    document.getElementById(screenId).style.display = screenId === 'results-screen' || 'plinko-screen' ? 'flex' : 'block';
 
     currentScreen = screenId.replace('-screen', '');
     updateNavHighlight(screenId);

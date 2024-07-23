@@ -1,6 +1,6 @@
 import { showScreen } from './app.js';
 import { initCardReveal } from './card-reveal.js';
-import { initPlinkoGame } from './plinko-game.js';
+import { initPlinkoGame } from './plinko.js';
 import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
 import { wordCategories, fetchWordCategories } from './app.js';
 
