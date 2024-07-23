@@ -1,8 +1,15 @@
 import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
 import { wordCategories } from './app.js';
-import { updateCardImage, selectRandomCard } from './card-reveal.js';
-import { animatePointsDecrement, showOutOfPointsMessage, checkSufficientPoints } from './mini-game-common.js';
 import { showWonCard } from './show-won-card.js';
+import { 
+    animatePointsDecrement, 
+    showOutOfPointsMessage, 
+    checkSufficientPoints, 
+    updateCardImage, 
+    selectRandomCard, 
+    saveWonCard, 
+    saveProgress 
+} from './mini-game-common.js';
 
 let progressBarFill = 0;
 let currentPlinkoCategory = '';
@@ -37,7 +44,11 @@ export function initPlinkoGame(category, categoryData) {
     if (needNewCard) {
         currentPlinkoCard = selectRandomCard(categoryData);
         needNewCard = false;
-        saveProgress();
+        saveProgress('plinko', {
+            progressBarFill,
+            currentPlinkoCard,
+            needNewCard
+        });
     }
 
     // Set board dimensions based on screen size
@@ -48,7 +59,7 @@ export function initPlinkoGame(category, categoryData) {
 
     createPlinkoBoard();
     updateProgressBar();
-    updateCardImage(currentPlinkoCard, currentPlinkoCategory, 'plinko');
+    updateCardImage(currentPlinkoCard, currentPlinkoCategory, 'plinko', 'plinko-card-image');
     updatePointsDisplay();
 
     // Show the Plinko game container
@@ -230,34 +241,20 @@ function calculatePointsEarned(finalX) {
     return slotValues[Math.min(slotIndex, 6)]; // Ensure we don't go out of bounds
 }
 
-function saveProgress() {
-    const progress = {
-        progressBarFill: progressBarFill,
-        currentPlinkoCard: currentPlinkoCard,
-        needNewCard: needNewCard
-    };
-    localStorage.setItem('plinkoProgress', JSON.stringify(progress));
-    console.log('Progress saved:', progress);
-}
-
 function revealCard() {
     console.log('Card revealed:', currentPlinkoCard);
 
-    // Save the won card
-    const wonCards = JSON.parse(localStorage.getItem('wonCards') || '{}');
-    if (!wonCards[currentPlinkoCategory]) {
-        wonCards[currentPlinkoCategory] = [];
-    }
-    if (!wonCards[currentPlinkoCategory].includes(currentPlinkoCard)) {
-        wonCards[currentPlinkoCategory].push(currentPlinkoCard);
-        localStorage.setItem('wonCards', JSON.stringify(wonCards));
-    }
+    saveWonCard(currentPlinkoCard, currentPlinkoCategory);
 
     // Reset progress and set flag for new card
     progressBarFill = 0;
     needNewCard = true;
 
-    saveProgress();
+    saveProgress('plinko', {
+        progressBarFill,
+        currentPlinkoCard,
+        needNewCard
+    });
 
     // Show the won card screen
     setTimeout(() => {
