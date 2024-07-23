@@ -15,7 +15,7 @@ let progressBarFill = 0;
 let currentPlinkoCategory = '';
 let currentPlinkoCard = '';
 let needNewCard = true;
-const totalProgressNeeded = 50;
+const totalProgressNeeded = 25;
 let isAnimating = false;
 
 let boardWidth = 400;
