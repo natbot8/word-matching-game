@@ -4,6 +4,7 @@ export let revealedBlocks = 0;
 export const totalBlocks = 16;
 export let currentCardCategory = '';
 export let currentCard = '';
+let needNewCard = true;
 export let isCardFullyRevealed = false;
 const noPointsSound = new Audio('game-sounds/need-points.m4a');
 
@@ -19,14 +20,17 @@ export async function initCardReveal(category, categoryData) {
         revealedBlocks = progress.revealedBlocks;
         currentCard = progress.currentCard;
         isCardFullyRevealed = false;
+        needNewCard = progress.needNewCard;
     } else {
         console.log('No saved progress or card was fully revealed. Starting new card.');
         revealedBlocks = 0;
         isCardFullyRevealed = false;
-        if (!selectRandomCard(categoryData)) {
-            console.error('Failed to select a random card. Unable to initialize card reveal.');
-            return; // Exit the function if we can't select a card
-        }
+        needNewCard = true;
+    }
+    if (needNewCard) {
+        currentCard = selectRandomCard(categoryData);
+        needNewCard = false;
+        saveProgress();
     }
 
     // Reset DOM elements
@@ -150,6 +154,7 @@ function revealBlock(block, index) {
 function checkGameState() {
     if (revealedBlocks === totalBlocks && !isCardFullyRevealed) {
         isCardFullyRevealed = true;
+        needNewCard = true;
         revealCard();
         saveWonCard();
         saveProgress();
@@ -212,7 +217,8 @@ function saveProgress() {
     const progress = {
         revealedBlocks: revealedBlocks,
         currentCard: currentCard,
-        isCardFullyRevealed: isCardFullyRevealed
+        isCardFullyRevealed: isCardFullyRevealed, 
+        needNewCard: needNewCard
     };
     localStorage.setItem('cardRevealProgress', JSON.stringify(progress));
     console.log('Progress saved:', progress);

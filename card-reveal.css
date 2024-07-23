@@ -34,7 +34,7 @@
   opacity: 0.8;
 }
 
-.card-image {
+#card-reveal-image {
   max-width: 100%;
   height: auto;
   transition: all 0.3s ease;

@@ -5,7 +5,7 @@ import { updateCardImage, selectRandomCard } from './card-reveal.js';
 let progressBarFill = 0;
 let currentPlinkoCategory = '';
 let currentPlinkoCard = '';
-let needNewCard = false;
+let needNewCard = true;
 const totalProgressNeeded = 50;
 let isAnimating = false;
 
