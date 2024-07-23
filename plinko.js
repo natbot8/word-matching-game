@@ -1,6 +1,7 @@
 import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
 import { wordCategories } from './app.js';
 import { updateCardImage, selectRandomCard } from './card-reveal.js';
+import { animatePointsDecrement, showOutOfPointsMessage, checkSufficientPoints } from './mini-game-common.js';
 import { showWonCard } from './show-won-card.js';
 
 let progressBarFill = 0;
@@ -125,22 +126,27 @@ function updateProgressBar() {
 }
 
 function handleBoardClick(event) {
-    if (isAnimating || totalPoints <= 0) return;
+    if (isAnimating) return;
 
-    const board = document.getElementById('plinko-board');
-    const rect = board.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    dropBall(Math.max(pegRadius, Math.min(boardWidth - pegRadius, x)));
+    if (checkSufficientPoints()) {
+        const board = document.getElementById('plinko-board');
+        const rect = board.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        dropBall(Math.max(pegRadius, Math.min(boardWidth - pegRadius, x)));
+    } else {
+        showOutOfPointsMessage('plinko-out-of-points-message');
+    }
 }
 
 export function dropBall(startX) {
-    if (isAnimating || totalPoints <= 0) {
+    if (isAnimating || !checkSufficientPoints()) {
         console.log('Cannot drop ball: animation in progress or not enough points');
         return;
     }
 
     isAnimating = true;
     updatePoints(-1); // Deduct one point for playing
+    animatePointsDecrement('plinko-points');
     updatePointsDisplay();
 
     const ball = document.getElementById('ball');

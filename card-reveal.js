@@ -1,5 +1,6 @@
 import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
-import { showWonCard, resetWonCardScreen } from './show-won-card.js';
+import { showWonCard } from './show-won-card.js';
+import { animatePointsDecrement, showOutOfPointsMessage, checkSufficientPoints } from './mini-game-common.js';
 
 export let revealedBlocks = 0;
 export const totalBlocks = 16;
@@ -7,7 +8,6 @@ export let currentCardCategory = '';
 export let currentCard = '';
 let needNewCard = true;
 export let isCardFullyRevealed = false;
-const noPointsSound = new Audio('game-sounds/need-points.m4a');
 
 export async function initCardReveal(category, categoryData) {
     const currentPoints = parseInt(localStorage.getItem('points') || '0');
@@ -38,9 +38,6 @@ export async function initCardReveal(category, categoryData) {
     const cardBoard = document.getElementById('card-board');
     cardBoard.style.display = 'grid';
     cardBoard.innerHTML = '';
-
-    // Preload audio
-    noPointsSound.load();
 
     updateCardImage();
     createCardBoard();
@@ -127,17 +124,16 @@ function applyProgress() {
 }
 
 function revealBlock(block, index) {
-    if (totalPoints > 0 && block.style.opacity !== '0') {
+    if (checkSufficientPoints() && block.style.opacity !== '0') {
         block.style.opacity = '0';
         updatePoints(-1); // This will decrease totalPoints and update localStorage
-        animatePointsDecrement();
+        animatePointsDecrement('card-reveal-points');
         revealedBlocks++;
         saveProgress();
         checkGameState();
         console.log('Block revealed, current state:', { totalPoints, revealedBlocks });
-    } else if (totalPoints === 0) {
-        showOutOfPointsMessage();
-        playNoPointsSound();
+    } else if (!checkSufficientPoints()) {
+        showOutOfPointsMessage('out-of-points-message');
     }
 }
 
@@ -148,18 +144,6 @@ function checkGameState() {
         saveWonCard();
         saveProgress();
         showWonCard(`card-images/${currentCard}`, 'card-reveal');
-    }
-}
-
-function animatePointsDecrement() {
-    const pointsDisplay = document.getElementById('card-reveal-points');
-    if (pointsDisplay) {
-        pointsDisplay.classList.add('decrement');
-        setTimeout(() => {
-            pointsDisplay.classList.remove('decrement');
-        }, 500); // Match this to the animation duration in CSS
-    } else {
-        console.error('Points display element not found in card reveal screen');
     }
 }
 
@@ -184,18 +168,4 @@ function saveWonCard() {
         wonCards[currentCardCategory].push(currentCard);
         localStorage.setItem('wonCards', JSON.stringify(wonCards));
     }
-}
-
-function showOutOfPointsMessage() {
-    const message = document.getElementById('out-of-points-message');
-    message.classList.add('show');
-
-    setTimeout(() => {
-        message.classList.remove('show');
-    }, 1500);
-}
-
-function playNoPointsSound() {
-    noPointsSound.currentTime = 0; // Reset the audio to the beginning
-    noPointsSound.play().catch(error => console.error('Error playing audio:', error));
 }
