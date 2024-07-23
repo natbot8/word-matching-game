@@ -80,23 +80,28 @@
         <div id="card-reveal-container" class="card-reveal-container">
             <h2>Reveal a Card</h2>
             <div class="card-image-container">
-                <img id="card-image" class="card-image" src="" alt="Reward Card">
+                <img id="card-reveal-image" class="card-image" src="" alt="Reward Card">
                 <div id="card-board" class="card-board"></div>
                 <div id="out-of-points-message" class="out-of-points-message">You're out of points</div>
             </div>
         </div>
     </div>
 
-    <div id="plinko-screen" class="screen" style="display: none;">
-        <div class="points-display">
-            <span id="plinko-points">0</span>
-            <img src="icons/coin.png" alt="Total Points">
-        </div>
-        <div id="plinko-game-container">
-            <h2>Drop the Ball</h2>
-            <div id="plinko-progress-container">
-                <div id="plinko-progress-bar"></div>
-            </div>
+            <div id="plinko-screen" class="screen" style="display: none;">
+              <div class="points-display">
+                <span id="plinko-points">0</span>
+                <img src="icons/coin.png" alt="Total Points">
+              </div>
+              <div id="plinko-game-container">
+                <h2>Drop the Ball</h2>
+                <div id="plinko-progress-container">
+                  <div id="progress-and-card">
+                    <div id="progress-bar-container">
+                      <div id="plinko-progress-bar"></div>
+                    </div>
+                    <img id="plinko-card-image" class="card-image" src="" alt="Reward Card">
+                  </div>
+                </div>    
             <div id="plinko-board"></div>
                 <!-- Plinko pegs will be added here dynamically -->
         </div>

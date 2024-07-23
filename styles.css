@@ -142,6 +142,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 106px;
+  height: 106px;
   padding: 15px;
   border-color: #828282;
   border-radius: 5px;

@@ -1,10 +1,12 @@
 import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
 import { wordCategories } from './app.js';
+import { updateCardImage, selectRandomCard } from './card-reveal.js';
 
 let progressBarFill = 0;
 let currentPlinkoCategory = '';
 let currentPlinkoCard = '';
-const totalProgressNeeded = 100;
+let needNewCard = false;
+const totalProgressNeeded = 50;
 let isAnimating = false;
 
 let boardWidth = 400;
@@ -23,13 +25,17 @@ export function initPlinkoGame(category, categoryData) {
         console.log('Found saved progress:', progress);
         progressBarFill = progress.progressBarFill;
         currentPlinkoCard = progress.currentPlinkoCard;
+        needNewCard = progress.needNewCard;
     } else {
         console.log('No saved progress. Starting new game.');
         progressBarFill = 0;
-        if (!selectRandomCard(categoryData)) {
-            console.error('Failed to select a random card. Unable to initialize Plinko game.');
-            return;
-        }
+        needNewCard = true;
+    }
+
+    if (needNewCard) {
+        currentPlinkoCard = selectRandomCard(categoryData);
+        needNewCard = false;
+        saveProgress();
     }
 
     // Set board dimensions based on screen size
@@ -40,6 +46,7 @@ export function initPlinkoGame(category, categoryData) {
 
     createPlinkoBoard();
     updateProgressBar();
+    updateCardImage(currentPlinkoCard, currentPlinkoCategory, 'plinko');
     updatePointsDisplay();
 
     // Show the Plinko game container
@@ -56,24 +63,6 @@ export function initPlinkoGame(category, categoryData) {
         pegSpacing = Math.min(boardWidth, boardHeight) / 8;
         createPlinkoBoard();
     }, 250));
-}
-
-function selectRandomCard(categoryData) {
-    try {
-        console.log('Selecting random card from category data:', categoryData);
-        if (!categoryData || !categoryData.cards || categoryData.cards.length === 0) {
-            console.error('Invalid category data or no cards available');
-            return false;
-        }
-        const cards = categoryData.cards;
-        console.log('Available cards:', cards);
-        currentPlinkoCard = cards[Math.floor(Math.random() * cards.length)];
-        console.log('Selected card:', currentPlinkoCard);
-        return true;
-    } catch (error) {
-        console.error('Error selecting random card:', error);
-        return false;
-    }
 }
 
 function createPlinkoBoard() {
@@ -239,7 +228,8 @@ function calculatePointsEarned(finalX) {
 function saveProgress() {
     const progress = {
         progressBarFill: progressBarFill,
-        currentPlinkoCard: currentPlinkoCard
+        currentPlinkoCard: currentPlinkoCard,
+        needNewCard: needNewCard
     };
     localStorage.setItem('plinkoProgress', JSON.stringify(progress));
     console.log('Progress saved:', progress);
@@ -247,7 +237,7 @@ function saveProgress() {
 
 function revealCard() {
     console.log('Card revealed:', currentPlinkoCard);
-    
+
     // Save the won card
     const wonCards = JSON.parse(localStorage.getItem('wonCards') || '{}');
     if (!wonCards[currentPlinkoCategory]) {
@@ -258,15 +248,18 @@ function revealCard() {
         localStorage.setItem('wonCards', JSON.stringify(wonCards));
     }
 
-    // Reset progress
+    // Reset progress and set flag for new card
     progressBarFill = 0;
+    needNewCard = true;
+
     saveProgress();
+
+    // Hide the current card image
+    const cardImage = document.getElementById('plinko-card-image');
+    cardImage.style.display = 'none';
 
     // TODO: Implement card reveal animation
     alert(`Congratulations! You've won a new card: ${currentPlinkoCard}`);
-
-    // Select a new card for the next game
-    selectRandomCard(wordCategories[currentPlinkoCategory]);
 }
 
 // Utility function for debouncing

@@ -54,34 +54,42 @@ export async function initCardReveal(category, categoryData) {
     cardRevealContainer.style.display = 'block';
 }
 
-function selectRandomCard(categoryData) {
+export function selectRandomCard(categoryData) {
     try {
         console.log('Selecting random card from category data:', categoryData);
         if (!categoryData || !categoryData.cards || categoryData.cards.length === 0) {
             console.error('Invalid category data or no cards available');
-            return false;
+            return null;
         }
         const cards = categoryData.cards;
         console.log('Available cards:', cards);
-        currentCard = cards[Math.floor(Math.random() * cards.length)];
-        console.log('Selected card:', currentCard);
-        return true;
+        const selectedCard = cards[Math.floor(Math.random() * cards.length)];
+        console.log('Selected card:', selectedCard);
+        return selectedCard;
     } catch (error) {
         console.error('Error selecting random card:', error);
-        return false;
+        return null;
     }
 }
 
-function updateCardImage() {
-    const cardImage = document.getElementById('card-image');
-    if (!currentCard) {
+export function updateCardImage(card = currentCard, category = currentCardCategory, gameType = 'cardReveal') {
+    const imageId = gameType === 'plinko' ? 'plinko-card-image' : 'card-reveal-image';
+    const cardImage = document.getElementById(imageId);
+
+    if (!cardImage) {
+        console.error(`Card image element with id '${imageId}' not found.`);
+        return;
+    }
+
+    if (!card) {
         console.error('No card selected. Unable to update card image.');
         return;
     }
-    const imagePath = `card-images/${currentCard}`;
-    console.log('Setting card image src to:', imagePath);
+
+    const imagePath = `card-images/${card}`;
+    console.log(`Setting ${gameType} card image src to:`, imagePath);
     cardImage.src = imagePath;
-    cardImage.alt = `Card from ${currentCardCategory}`;
+    cardImage.alt = `Card from ${category}`;
 
     cardImage.onload = () => {
         console.log('Image loaded successfully');
