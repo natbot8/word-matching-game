@@ -145,10 +145,11 @@
   width: 106px;
   height: 106px;
   padding: 15px;
-  border-color: #828282;
+  margin: 5px;
   border-radius: 5px;
+  border-color: #828282;
   background-color: #e8e8e8;
-  /* color: white; */
+  color: #333333; 
   cursor: pointer;
   transition: background-color 0.3s;
 }
