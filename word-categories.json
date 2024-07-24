@@ -12,11 +12,11 @@
       "blue-dragon.png"
     ]
   },
-  "Letter Combos 1": {
+  "Check the H": {
     "words": [
       "ship", "chip", "chess", "chin", "chat", "fish", "dish", "brush", 
-      "trash", "shell", "cash", "bath", "cloth", "path", "math", "chick", "shack", "lock",
-      "sock", "truck"
+      "trash", "shell", "cash", "bath", "cloth", "path", "math", "chick", "shack", 
+      "shout","mouth", "couch", "check"
     ],
     "cards": [
       "pink-bunny.png",
@@ -28,10 +28,11 @@
       "pink-mermaid.png"
     ]
   }, 
-  "Letter Combos 2": {
+  "Sneaky E": {
     "words": [
-      "bee", "tree", "feet", "sleep", "green", "sheep", "peel", "sweep", "cheer", "shout",
-      "mouth", "cloud", "couch", "round", "butter", "river", "winter"
+      "bee", "tree", "feet", "sleep", "green", "sheep", "peel", "sweep", "cheer", 
+      "butter", "river", "winter", "leaf", "read", "seat", "teacher", "team", "beach",
+      "clean", "eat", "deer"
     ], 
     "cards": [
       "turquoise-koala.png", 
@@ -43,10 +44,10 @@
       "turquoise-rooster.png"
     ]
   }, 
-  "Letter Combos 3": {
+  "Crazy A": {
     "words": [
       "car", "star", "park", "farm", "art", "shark", "arm", "card", "yard", "barn", "dart",
-      "target", "market", "saw", "paw", "draw", "claw", "crawl"
+      "target", "market", "saw", "paw", "draw", "claw", "crawl", "chair", "stair", "hair"
     ], 
     "cards": [
       "yellow-butterfly.png", 
@@ -54,7 +55,16 @@
       "yellow-dog.png", 
       "yellow-dog2.png", 
       "yellow-giraffe.png",
-      "yellow-guinea-pig.png",
+      "yellow-guinea-pig.png"
+    ]
+  }, 
+  "Sounds of O": {
+    "words": [
+      "moon", "food", "boot", "pool", "root", "spoon", "scoop", "tooth", "broom", 
+      "roof", "corn", "fork", "horn", "cord", "storm", "coin", "point", "boil", "toilet",
+      "shout","mouth", "cloud", "couch", "round"
+    ], 
+    "cards": [
       "yellow-lizard.png",
       "yellow-penguin.png",
       "yellow-tiger.png"
