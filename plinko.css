@@ -2,18 +2,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
 }
 
 #plinko-game-container {
   width: 100%;
   max-width: 400px;
-  padding: 20px;
+  padding: 10px;
 }
 
 h2 {
   font-size: 24px;
   text-align: center;
+  margin-top: 0px;
 }
 
 #plinko-progress-container {
@@ -55,7 +55,7 @@ h2 {
 }
 
 #plinko-board {
-  height: 50vh;
+  height: 55vh;
   max-height: 600px;
   background-color: #4a90e2;
   border: 10px solid #ffd700;
