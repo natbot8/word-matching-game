@@ -1,6 +1,6 @@
 import { totalPoints } from './app.js';
 
-const noPointsSound = new Audio('game-sounds/need-points.mp3');
+const noPointsSound = new Audio('game-sounds/need-points.m4a');
 
 export function animatePointsDecrement(pointsDisplayId) {
     const pointsDisplay = document.getElementById(pointsDisplayId);

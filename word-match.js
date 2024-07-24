@@ -16,15 +16,15 @@ export let selectedCategory = '';
 export let selectedDifficulty = '';
 
 const correctSounds = [
-  new Audio('game-sounds/nice.mp3'),
-  new Audio('game-sounds/oo-nice.mp3'),
-  new Audio('game-sounds/good-job.mp3'), 
-  new Audio('game-sounds/great.mp3')
+  new Audio('game-sounds/nice.m4a'),
+  new Audio('game-sounds/oo-nice.m4a'),
+  new Audio('game-sounds/good-job.m4a'), 
+  new Audio('game-sounds/great.m4a')
 ];
 
 const incorrectSounds = [
-  new Audio('game-sounds/try-again.mp3'),
-  new Audio('game-sounds/oops.mp3')
+  new Audio('game-sounds/try-again.m4a'),
+  new Audio('game-sounds/oops.m4a')
 ];
 
 // Fetch letter sounds from JSON file

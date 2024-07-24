@@ -97,7 +97,7 @@ function startGame(category) {
     console.log(`Starting game with category: ${category}, difficulty: ${difficulty}`);
 
     // Play start game audio
-    new Audio('game-sounds/lets-go.mp3').play();
+    new Audio('game-sounds/lets-go.m4a').play();
 
     // Set game parameters
     localStorage.setItem('selectedCategory', category);
