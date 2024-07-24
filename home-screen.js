@@ -87,10 +87,10 @@ function handleDifficultyChange(event) {
 // Play difficulty sounds
 function playDifficultySound(difficulty) {
     const soundMap = {
-        'easy': 'easy.m4a',
-        'hard': 'hard.m4a',
-        'superhard': 'superhard.m4a',
-        'superduperhard': 'superduperhard.m4a'
+        'easy': 'easy.mp3',
+        'hard': 'hard.mp3',
+        'superhard': 'superhard.mp3',
+        'superduperhard': 'superduperhard.mp3'
     };
     const soundFile = soundMap[difficulty];
 
