@@ -103,7 +103,7 @@ function revealBlock(block, index) {
         checkGameState();
         console.log('Block revealed, current state:', { totalPoints, revealedBlocks });
     } else if (!checkSufficientPoints()) {
-        showOutOfPointsMessage('out-of-points-message');
+        showOutOfPointsMessage('card-reveal-out-of-points-message');
     }
 }
 

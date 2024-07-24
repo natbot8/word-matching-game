@@ -12,7 +12,8 @@
 
 .out-of-points-message {
     position: absolute;
-    top: 50%;
+    text-align: center;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(0, 0, 0, 0.8);
