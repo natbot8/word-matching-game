@@ -55,7 +55,10 @@
       "yellow-dog.png", 
       "yellow-dog2.png", 
       "yellow-giraffe.png",
-      "yellow-guinea-pig.png"
+      "yellow-guinea-pig.png", 
+      "yellow-lizard.png",
+      "yellow-penguin.png",
+      "yellow-tiger.png"
     ]
   }, 
   "Sounds of O": {
@@ -65,9 +68,15 @@
       "shout","mouth", "cloud", "couch", "round"
     ], 
     "cards": [
-      "yellow-lizard.png",
-      "yellow-penguin.png",
-      "yellow-tiger.png"
+      "green-bear.png",
+      "green-butterfly.png",
+      "green-dog.png",
+      "green-dragon.png",
+      "green-elephant.png",
+      "green-fairy.png",
+      "green-lizard.png",
+      "green-raccoon.png",
+      "green-zeebra.png"
     ]
   }
 }
