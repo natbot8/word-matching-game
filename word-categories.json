@@ -78,5 +78,20 @@
       "green-raccoon.png",
       "green-zeebra.png"
     ]
+  }, 
+  "ING and INK": {
+    "words": [
+      "fishing", "ring", "king", "swing", "wing", "jumping", "sitting", "washing", 
+      "pink", "sink", "drink", "wink", "stink", "sleeping", "reading"
+    ], 
+    "cards": [
+      "red-alligator.png",
+      "red-gorilla.png", 
+      "red-lion.png",
+      "red-hippo.png",
+      "red-koala.png",
+      "red-panda.png",
+      "red-rhino.png"
+    ]
   }
 }
