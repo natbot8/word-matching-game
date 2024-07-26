@@ -5,6 +5,7 @@ import * as CardReveal from './card-reveal.js';
 import * as PlinkoGame from './plinko.js';
 import * as ShowWonCard from './show-won-card.js';
 
+
 // Global state
 let currentScreen = 'home';
 export let totalPoints = 0;
