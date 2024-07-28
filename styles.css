@@ -172,7 +172,7 @@
 
 #bottom-nav {
   position: fixed;
-  bottom: calc(8px + env(safe-area-inset-bottom));
+  bottom: max(env(safe-area-inset-bottom), 20px);
   left: 50%;
   transform: translateX(-50%);
   background-color: rgba(255, 255, 255, 0.97);
@@ -221,8 +221,6 @@
 
 /* Adjust main content to not be hidden behind the nav bar */
 #home-screen {
-  /* padding-bottom: 60px; */
-  /* padding-top: 80px; */
   padding-top: 100px;
   padding-bottom: 90px;
   margin: 0 20px;
@@ -230,7 +228,7 @@
 
 #card-reveal-screen,
 #plinko-screen {
-  padding-top: 65px;
+  padding-top: 70px;
   padding-bottom: 90px;
   margin: 0 20px;
 }

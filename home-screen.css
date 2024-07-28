@@ -1,8 +1,8 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: max(env(safe-area-inset-top), 20px) env(safe-area-inset-right)
+    max(env(safe-area-inset-bottom), 20px) env(safe-area-inset-left);
   background-color: rgb(240, 240, 240);
   /* overflow-y: scroll;
   -webkit-overflow-scrolling: touch; */
@@ -21,7 +21,7 @@ header {
   left: 0;
   right: 0;
   z-index: 1000;
-  padding-top: env(safe-area-inset-top);
+  padding-top: max(env(safe-area-inset-top), 20px);
   padding-bottom: 10px;
   background-color: rgb(240, 240, 240, 0.97);
 }
@@ -71,6 +71,15 @@ h1 {
   font-weight: bolder;
   text-align: center;
   margin: 0;
+}
+
+h2 {
+  font-size: 24px;
+  text-align: center;
+  margin: 0px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 #category-container {
