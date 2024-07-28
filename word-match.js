@@ -1,167 +1,171 @@
-import { showScreen } from './app.js';
-import { initCardReveal } from './card-reveal.js';
-import { initPlinkoGame } from './plinko.js';
-import { updatePoints, totalPoints, updatePointsDisplay } from './app.js';
-import { wordCategories, fetchWordCategories } from './app.js';
+import { showScreen } from "./app.js";
+import { initCardReveal } from "./card-reveal.js";
+import { initPlinkoGame } from "./plinko.js";
+import { updatePoints, totalPoints, updatePointsDisplay } from "./app.js";
+import { wordCategories, fetchWordCategories } from "./app.js";
 
 let words = {};
 export const levels = [];
 export let letterSounds = {};
 export const WORDS_PER_ROUND = 10;
-export let gamePoints = 0; 
+export let gamePoints = 0;
 export let numImages = 2;
 export let currentLevel = 0;
 export let isProcessing = false;
-export let selectedCategory = '';
-export let selectedDifficulty = '';
+export let selectedCategory = "Simple Words";
+export let selectedDifficulty = "Hard";
 
 const correctSounds = [
-  new Audio('game-sounds/nice.m4a'),
-  new Audio('game-sounds/oo-nice.m4a'),
-  new Audio('game-sounds/good-job.m4a'), 
-  new Audio('game-sounds/great.m4a')
+  new Audio("game-sounds/nice.m4a"),
+  new Audio("game-sounds/oo-nice.m4a"),
+  new Audio("game-sounds/good-job.m4a"),
+  new Audio("game-sounds/great.m4a"),
 ];
 
 const incorrectSounds = [
-  new Audio('game-sounds/try-again.m4a'),
-  new Audio('game-sounds/oops.m4a')
+  new Audio("game-sounds/try-again.m4a"),
+  new Audio("game-sounds/oops.m4a"),
 ];
 
 // Fetch letter sounds from JSON file
 async function fetchLetterSounds() {
-    try {
-        const response = await fetch('letter-sounds.json');
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Error fetching letter sounds:', error);
-        return null;
-    }
+  try {
+    const response = await fetch("letter-sounds.json");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching letter sounds:", error);
+    return null;
+  }
 }
 
 // Function to start the game based on the selected difficulty
 export async function initializeGame() {
-    selectedCategory = localStorage.getItem('selectedCategory');
-    selectedDifficulty = localStorage.getItem('selectedDifficulty');
-  
-    console.log('Selected Category:', selectedCategory);
-    console.log('Selected Difficulty:', selectedDifficulty);
-  
-    if (!selectedCategory || !selectedDifficulty) {
-        console.error('Category or difficulty not selected');
-        return;
+  selectedCategory = localStorage.getItem("selectedCategory");
+  selectedDifficulty = localStorage.getItem("selectedDifficulty");
+
+  console.log("Selected Category:", selectedCategory);
+  console.log("Selected Difficulty:", selectedDifficulty);
+
+  if (!selectedCategory || !selectedDifficulty) {
+    console.error("Category or difficulty not selected");
+    return;
+  }
+
+  // Load total points from localStorage (handled in app.js)
+  updateTotalPointsDisplay();
+
+  // Pre-load audio
+  preloadAudio();
+
+  // Fetch word categories
+  try {
+    words = await fetchWordCategories();
+    if (!words) {
+      throw new Error("Failed to fetch word categories");
     }
+    console.log("Fetched word categories:", words);
 
-    // Load total points from localStorage (handled in app.js)
-    updateTotalPointsDisplay();
-
-    // Pre-load audio
-    preloadAudio();
-
-    // Fetch word categories
-    try {
-      words = await fetchWordCategories();
-      if (!words) {
-          throw new Error('Failed to fetch word categories');
-      }
-      console.log('Fetched word categories:', words);
-  
-      // Load letter sounds
-      letterSounds = await fetchLetterSounds();
-      if (!letterSounds) {
-          throw new Error('Failed to fetch letter sounds');
-      }
-      console.log('Fetched letter sounds:', letterSounds);
-    } catch (error) {
-      console.error('Error loading data:', error);
-      return;
+    // Load letter sounds
+    letterSounds = await fetchLetterSounds();
+    if (!letterSounds) {
+      throw new Error("Failed to fetch letter sounds");
     }
+    console.log("Fetched letter sounds:", letterSounds);
+  } catch (error) {
+    console.error("Error loading data:", error);
+    return;
+  }
 
-    // Set the difficulty based on the selected value
-    if (selectedDifficulty === 'easy') {
-        numImages = 3;
-    } else if (selectedDifficulty === 'hard') {
-        numImages = 4;
-    } else if (selectedDifficulty === 'superhard') {
-        numImages = 6;
-    } else if (selectedDifficulty === 'superduperhard') {
-        numImages = 12;
-    }
+  // Set the difficulty based on the selected value
+  if (selectedDifficulty === "easy") {
+    numImages = 3;
+  } else if (selectedDifficulty === "hard") {
+    numImages = 4;
+  } else if (selectedDifficulty === "superhard") {
+    numImages = 6;
+  } else if (selectedDifficulty === "superduperhard") {
+    numImages = 12;
+  }
 
-    // Shuffle words and create levels
-    const categoryWords = words[selectedCategory].words;
-    if (!Array.isArray(categoryWords) || categoryWords.length === 0) {
-        console.error('No words found for the selected category');
-        return;
-    }
+  // Shuffle words and create levels
+  const categoryWords = words[selectedCategory].words;
+  if (!Array.isArray(categoryWords) || categoryWords.length === 0) {
+    console.error("No words found for the selected category");
+    return;
+  }
 
-    shuffleArray(categoryWords);
-    levels.length = 0; // Clear previous levels
-    for (let i = 0; i < Math.min(WORDS_PER_ROUND, categoryWords.length); i++) {
-        const word = categoryWords[i];
-        const level = {
-            word: word.toUpperCase(),
-            image: `./images/${word}.jpg`,
-        };
-        levels.push(level);
-    }
+  shuffleArray(categoryWords);
+  levels.length = 0; // Clear previous levels
+  for (let i = 0; i < Math.min(WORDS_PER_ROUND, categoryWords.length); i++) {
+    const word = categoryWords[i];
+    const level = {
+      word: word.toUpperCase(),
+      image: `./images/${word}.jpg`,
+    };
+    levels.push(level);
+  }
 
-    // Reset currentLevel and points
-    currentLevel = 0;
-    gamePoints = 0;
+  // Reset currentLevel and points
+  currentLevel = 0;
+  gamePoints = 0;
 
-    // Start the game with the selected difficulty
-    loadLevel();
+  // Start the game with the selected difficulty
+  loadLevel();
 
-    // Make sure the game container is visible
-    document.getElementById('level-container').style.display = 'block';
+  // Make sure the game container is visible
+  document.getElementById("level-container").style.display = "block";
 }
 
 // Load the level
 export function loadLevel() {
   const currentLevelData = levels[currentLevel];
-  const levelContainer = document.getElementById('level-container');
-  levelContainer.innerHTML = ''; // Clear previous elements
+  const levelContainer = document.getElementById("level-container");
+  const letterContainer = document.getElementById("letter-container");
+  // const imageContainer = document.getElementById("image-container");
+  levelContainer.innerHTML = ""; // Clear previous elements
+  letterContainer.innerHTML = "";
+  // imageContainer.innerHTML = "";
 
   // Reser disabled images
   resetDisabledImages();
 
   // Create and append the points display
-  const pointsDisplay = document.createElement('div');
-  pointsDisplay.className = 'points-display';
-  pointsDisplay.innerHTML = `
-    <span id="total-points-value">${totalPoints}</span>
-    <img src="icons/coin.png" alt="Total Points">
-  `;
-  levelContainer.appendChild(pointsDisplay);
+  // const pointsDisplay = document.createElement("div");
+  // pointsDisplay.className = "points-display";
+  // pointsDisplay.innerHTML = `
+  //   <span id="total-points-value">${totalPoints}</span>
+  //   <img src="icons/coin.png" alt="Total Points">
+  // `;
+  // levelContainer.appendChild(pointsDisplay);
 
   // Create and append the word display
-  const wordDisplay = document.createElement('div');
-  wordDisplay.id = 'word-display';
-  levelContainer.appendChild(wordDisplay);
+  // const wordDisplay = document.createElement("div");
+  // wordDisplay.id = "word-display";
+  // levelContainer.appendChild(wordDisplay);
 
   // Create and append the confetti container
-  const confettiGameContainer = document.createElement('div');
-  confettiGameContainer.id = 'confetti-container';
+  const confettiGameContainer = document.createElement("div");
+  confettiGameContainer.id = "confetti-container";
   levelContainer.appendChild(confettiGameContainer);
 
   // Create and append the score container
-  const scoreContainer = document.createElement('div');
-  scoreContainer.id = 'score-container';
-  scoreContainer.innerHTML = `
-    <div id="current-points">Points Won: <span id="current-points-value">${gamePoints}</span></div>
-    <div id="coin-container"></div>
-  `;
-  levelContainer.appendChild(scoreContainer);
+  // const scoreContainer = document.createElement("div");
+  // scoreContainer.id = "score-container";
+  // scoreContainer.innerHTML = `
+  //   <div id="current-points">Points Won: <span id="current-points-value">${gamePoints}</span></div>
+  //   <div id="coin-container"></div>
+  // `;
+  // levelContainer.appendChild(scoreContainer);
 
   // Create and append the letter container
-  const letterContainer = document.createElement('div');
-  letterContainer.id = 'letter-container';
-  levelContainer.appendChild(letterContainer);
+  // const letterContainer = document.createElement("div");
+  // letterContainer.id = "letter-container";
+  // levelContainer.appendChild(letterContainer);
 
   // Create and append the image container
-  const imageContainer = document.createElement('div');
-  imageContainer.id = 'image-container';
+  const imageContainer = document.createElement("div");
+  imageContainer.id = "image-container";
   levelContainer.appendChild(imageContainer);
 
   // Populate letter buttons
@@ -182,9 +186,9 @@ export function loadLevel() {
       }
     }
 
-    const letterButton = document.createElement('button');
+    const letterButton = document.createElement("button");
     letterButton.innerText = soundUnit.toUpperCase();
-    letterButton.className = 'letter-button';
+    letterButton.className = "letter-button";
     letterButton.onclick = () => playLetterSound(soundUnit);
     letterContainer.appendChild(letterButton);
 
@@ -193,9 +197,10 @@ export function loadLevel() {
 
   // Adjust letter container alignment
   if (letterContainer.scrollWidth > letterContainer.clientWidth) {
-    letterContainer.style.justifyContent = 'flex-start'; // Left align when overflow
+    letterContainer.style.justifyContent = "flex-start"; // Left align when overflow
+    letterContainer.style.paddingLeft = "20px";
   } else {
-    letterContainer.style.justifyContent = 'center'; // Center align when no overflow
+    letterContainer.style.justifyContent = "center"; // Center align when no overflow
   }
 
   // Populate image options
@@ -203,16 +208,16 @@ export function loadLevel() {
   const shuffledImages = shuffleArray(images);
 
   for (const imgSrc of shuffledImages) {
-    const imgElement = document.createElement('img');
+    const imgElement = document.createElement("img");
     imgElement.src = imgSrc;
-    imgElement.alt = 'Word Image';
-    imgElement.classList.add('image-option');
+    imgElement.alt = "Word Image";
+    imgElement.classList.add("image-option");
     imgElement.onclick = () => checkImage(imgElement, currentLevelData);
     imageContainer.appendChild(imgElement);
   }
 
   // Update coin icons
-  updateCoinIcons();
+  // updateCoinIcons();
 }
 
 // Shuffle array function
@@ -229,9 +234,15 @@ export function playLetterSound(soundUnit) {
   let soundFile;
   soundUnit = soundUnit.toLowerCase();
 
-  if (letterSounds.letterCombinations && letterSounds.letterCombinations[soundUnit]) {
+  if (
+    letterSounds.letterCombinations &&
+    letterSounds.letterCombinations[soundUnit]
+  ) {
     soundFile = letterSounds.letterCombinations[soundUnit];
-  } else if (letterSounds.singleLetters && letterSounds.singleLetters[soundUnit]) {
+  } else if (
+    letterSounds.singleLetters &&
+    letterSounds.singleLetters[soundUnit]
+  ) {
     soundFile = letterSounds.singleLetters[soundUnit];
   } else {
     console.warn(`No sound file found for: ${soundUnit}`);
@@ -239,21 +250,28 @@ export function playLetterSound(soundUnit) {
   }
 
   const audio = new Audio(`./letter-sounds/${soundFile}`);
-  audio.play().catch(error => console.error('Error playing audio:', error));
+  audio.play().catch((error) => console.error("Error playing audio:", error));
 }
 
 function getRandomImages(currentLevelData) {
-  if (!words || !words[selectedCategory] || !Array.isArray(words[selectedCategory].words)) {
-    console.error('Invalid word data structure');
+  if (
+    !words ||
+    !words[selectedCategory] ||
+    !Array.isArray(words[selectedCategory].words)
+  ) {
+    console.error("Invalid word data structure");
     return [];
   }
 
   const randomImages = [];
   const categoryWords = words[selectedCategory].words;
-  const wordIndex = categoryWords.findIndex(word => word.trim().toLowerCase() === currentLevelData.word.toLowerCase().trim());
+  const wordIndex = categoryWords.findIndex(
+    (word) =>
+      word.trim().toLowerCase() === currentLevelData.word.toLowerCase().trim()
+  );
 
   if (wordIndex === -1) {
-    console.error('Current word not found in category words');
+    console.error("Current word not found in category words");
     return [];
   }
 
@@ -282,18 +300,24 @@ function getRandomImages(currentLevelData) {
 }
 
 export function checkImage(imgElement, currentLevelData) {
-  if (isProcessing || imgElement.classList.contains('disabled')) {
-    return; 
+  if (isProcessing || imgElement.classList.contains("disabled")) {
+    return;
   }
 
-  isProcessing = true; 
+  isProcessing = true;
 
   const wordDisplay = currentLevelData.word.toLowerCase();
   const currentImageSrc = imgElement.src.toLowerCase();
-  const currentWord = decodeURIComponent(currentImageSrc.substring(currentImageSrc.lastIndexOf('/') + 1, currentImageSrc.lastIndexOf('.')));
+  const currentWord = decodeURIComponent(
+    currentImageSrc.substring(
+      currentImageSrc.lastIndexOf("/") + 1,
+      currentImageSrc.lastIndexOf(".")
+    )
+  );
 
   if (currentWord === wordDisplay) {
-    updateGamePoints(true); // Pass true for correct answer
+    // updateGamePoints(true); // Pass true for correct answer
+    updatePoints(1); // Update total points in app.js
     playRandomSound(correctSounds);
 
     // Show confetti animation
@@ -301,103 +325,104 @@ export function checkImage(imgElement, currentLevelData) {
 
     setTimeout(() => {
       nextLevel();
-      isProcessing = false; 
+      isProcessing = false;
     }, 1000);
   } else {
-    updateGamePoints(false); 
+    // updateGamePoints(false);
+    updatePoints(-1); // Update total points in app.js
     playRandomSound(incorrectSounds);
-    imgElement.classList.add('disabled');
+    imgElement.classList.add("disabled");
     isProcessing = false;
   }
 }
 
 function updateGamePoints(correctAnswer) {
-    if (correctAnswer) {
-        gamePoints++;
-        updatePoints(1); // Update total points in app.js
-    } else {
-        if (gamePoints > 0) {
-            gamePoints--;
-            updatePoints(-1); // Update total points in app.js
-        }
+  if (correctAnswer) {
+    gamePoints++;
+    updatePoints(1); // Update total points in app.js
+  } else {
+    if (gamePoints > 0) {
+      gamePoints--;
+      updatePoints(-1); // Update total points in app.js
     }
-    console.log('Current Game Points:', gamePoints);
-    updateCoinIcons();
-    document.getElementById('current-points-value').innerText = gamePoints;
+  }
+  console.log("Current Game Points:", gamePoints);
+  updateCoinIcons();
+  document.getElementById("current-points-value").innerText = gamePoints;
 }
 
 function updateCoinIcons() {
-    const coinContainer = document.getElementById('coin-container');
-    coinContainer.innerHTML = ''; // Clear existing coins
+  const coinContainer = document.getElementById("coin-container");
+  coinContainer.innerHTML = ""; // Clear existing coins
 
-    for (let i = 0; i < gamePoints; i++) {
-        const coinIcon = document.createElement('img');
-        coinIcon.src = 'icons/coin.png';
-        coinIcon.alt = 'Coin';
-        coinIcon.classList.add('coin-icon');
-        coinContainer.appendChild(coinIcon);
-    }
+  for (let i = 0; i < gamePoints; i++) {
+    const coinIcon = document.createElement("img");
+    coinIcon.src = "icons/coin.png";
+    coinIcon.alt = "Coin";
+    coinIcon.classList.add("coin-icon");
+    coinContainer.appendChild(coinIcon);
+  }
 }
 
 function updateTotalPointsDisplay() {
-    const totalPointsDisplay = document.getElementById('total-points-value');
-    if (totalPointsDisplay) {
-        totalPointsDisplay.textContent = totalPoints;
-    }
+  const totalPointsDisplay = document.getElementById("total-points-value");
+  if (totalPointsDisplay) {
+    totalPointsDisplay.textContent = totalPoints;
+  }
 }
 
 export function nextLevel() {
-    currentLevel++;
-    if (currentLevel < WORDS_PER_ROUND) {
-        loadLevel();
-    } else {
-        showResultsScreen();
-    }
+  currentLevel++;
+  if (currentLevel < WORDS_PER_ROUND) {
+    loadLevel();
+  } else {
+    showResultsScreen();
+  }
 }
 
 // Function to show results screen after completing round of word game
 function showResultsScreen() {
-    const resultsMessage = document.getElementById('results-message');
-    resultsMessage.textContent = `You completed ${WORDS_PER_ROUND} words and earned ${gamePoints} points!`;
+  const resultsMessage = document.getElementById("results-message");
+  resultsMessage.textContent = `You completed ${WORDS_PER_ROUND} words and earned ${gamePoints} points!`;
 
-    const homeButton = document.getElementById('home-button');
-    const cardRevealButton = document.getElementById('card-reveal-button');
-    const plinkoButton = document.getElementById('plinko-button');
+  const homeButton = document.getElementById("home-button");
+  const cardRevealButton = document.getElementById("card-reveal-button");
+  const plinkoButton = document.getElementById("plinko-button");
 
-    homeButton.onclick = () => {
-        showScreen('home-screen');
-        updatePointsDisplay();
-    };
+  homeButton.onclick = () => {
+    showScreen("home-screen");
+    updatePointsDisplay();
+  };
 
-    cardRevealButton.onclick = () => {
-        showScreen('card-reveal-screen');
-        initCardReveal(selectedCategory, wordCategories[selectedCategory]);
-    };
+  cardRevealButton.onclick = () => {
+    showScreen("card-reveal-screen");
+    initCardReveal(selectedCategory, wordCategories[selectedCategory]);
+  };
 
-    plinkoButton.onclick = () => {
-        showScreen('plinko-screen');
-        initPlinkoGame(selectedCategory, wordCategories[selectedCategory]);
-    };
+  plinkoButton.onclick = () => {
+    showScreen("plinko-screen");
+    initPlinkoGame(selectedCategory, wordCategories[selectedCategory]);
+  };
 
-    showScreen('results-screen');
+  showScreen("results-screen");
 }
 
 // Function to play random sound file
 function playRandomSound(soundArray) {
-    const randomIndex = Math.floor(Math.random() * soundArray.length);
-    const sound = soundArray[randomIndex];
-    sound.currentTime = 0; // Reset to start of the audio
-    sound.play().catch(error => console.error('Error playing audio:', error));
+  const randomIndex = Math.floor(Math.random() * soundArray.length);
+  const sound = soundArray[randomIndex];
+  sound.currentTime = 0; // Reset to start of the audio
+  sound.play().catch((error) => console.error("Error playing audio:", error));
 }
 
 // Reset disabled images when next level loads
 function resetDisabledImages() {
-  const disabledImages = document.querySelectorAll('.image-option.disabled');
-  disabledImages.forEach(img => img.classList.remove('disabled'));
+  const disabledImages = document.querySelectorAll(".image-option.disabled");
+  disabledImages.forEach((img) => img.classList.remove("disabled"));
 }
 
 function preloadAudio() {
-    [...correctSounds, ...incorrectSounds].forEach(sound => {
-        sound.load();
-    });
+  [...correctSounds, ...incorrectSounds].forEach((sound) => {
+    sound.load();
+  });
 }

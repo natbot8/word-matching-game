@@ -1,148 +1,171 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    /* padding: 20px; */
-    background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background-color: rgb(240, 240, 240);
+  /* overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; */
 }
 
 #home-screen {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 20px;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: 10px;
+  background-color: rgb(240, 240, 240, 0.97);
 }
 
-.difficulty-selector, .points-display {
-    display: flex;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 5px 10px;
-    border-radius: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.game-displays {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 15px;
 }
 
-.difficulty-selector img, .points-display img {
-    width: 30px;
-    height: 30px;
+.difficulty-selector,
+.points-display {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.difficulty-selector select, .points-display span {
-    font-size: 16px;
-    font-weight: bold;
+.difficulty-selector img,
+.points-display img {
+  width: 30px;
+  height: 30px;
+}
+
+.difficulty-selector select,
+.points-display span {
+  font-size: 16px;
+  font-weight: bold;
 }
 
 #difficulty-dropdown {
-    border: none;
-    background: transparent;
-    font-size: 16px;
-    font-weight: bold;
-    margin: 5px;
-    cursor: pointer;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 5px;
+  cursor: pointer;
 }
 
 h1 {
-    font-size: 32px;
-    margin: 0 0 20px;
-    text-align: center;
+  font-size: 22px;
+  font-weight: bolder;
+  text-align: center;
+  margin: 0;
 }
 
 #category-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
 }
 
 .category-tile {
-    background-image: linear-gradient(93deg, #a92ce2, #7b00e0);
-    border-radius: 10px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  background-image: linear-gradient(93deg, #a92ce2, #7b00e0);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 .category-tile:hover {
-    transform: scale(1.05);
-    box-shadow: rgb(96, 44, 125, 0.3) 0px 19px 38px, rgb(164, 19, 77, 0.3) 0px 15px 12px;
+  transform: scale(1.05);
+  box-shadow: rgb(96, 44, 125, 0.3) 0px 19px 38px,
+    rgb(164, 19, 77, 0.3) 0px 15px 12px;
 }
 
 .category-cards {
-    display: flex;
+  display: flex;
 }
 
 .card-wrapper {
-    position: relative;
-    margin-right: -25px; /* This creates the overlap effect */
-    transition: transform 0.3s ease;
+  position: relative;
+  margin-right: -25px; /* This creates the overlap effect */
+  transition: transform 0.3s ease;
 }
 
 .card-wrapper:last-child {
-    margin-right: 0; /* Remove margin from the last card to prevent extra space */
+  margin-right: 0; /* Remove margin from the last card to prevent extra space */
 }
 
 .card-wrapper img {
-    display: block; /* This removes any extra space below the image */
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: block; /* This removes any extra space below the image */
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .card-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(128, 128, 128, 0.82); /* Grey overlay */
-    border-radius: 5px; /* Match the border-radius of the image */
-    transition: opacity 0.3s ease;
-    pointer-events: none; /* This allows clicks to pass through to the image */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(128, 128, 128, 0.82); /* Grey overlay */
+  border-radius: 5px; /* Match the border-radius of the image */
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* This allows clicks to pass through to the image */
 }
 
 .won-card .card-overlay {
-    opacity: 0;
+  opacity: 0;
 }
 
 .not-won-card .card-overlay {
-    opacity: 1;
+  opacity: 1;
 }
 
 .card-wrapper:hover {
-    transform: translateY(-5px) scale(1.3);
-    z-index: 1;
+  transform: translateY(-5px) scale(1.3);
+  z-index: 1;
 }
 
 .card-wrapper:hover .card-overlay {
-    opacity: 0;
+  opacity: 0;
 }
 
 .category-title {
-    color: white;
-    font-size: 18px;
-    margin: 10px 0;
+  color: white;
+  font-size: 18px;
+  margin: 10px 0;
 }
 
 .play-button {
-    background-image: linear-gradient(to right, #2eb22e, #32cd32);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-image: linear-gradient(to right, #2eb22e, #32cd32);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .play-button:hover {
-    background-color: #28a428;
+  background-color: #28a428;
 }

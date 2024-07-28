@@ -13,7 +13,7 @@
 h2 {
   font-size: 24px;
   text-align: center;
-  margin-top: 0px;
+  margin: 0px;
 }
 
 #plinko-progress-container {
@@ -87,9 +87,15 @@ h2 {
 }
 
 @keyframes pegPulse {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.5); }
-  100% { transform: translate(-50%, -50%) scale(1); }
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 .slot {
@@ -123,7 +129,13 @@ h2 {
 }
 
 @keyframes pulseNumber {
-  0% { transform: scale(1); }
-  50% { transform: scale(2); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
