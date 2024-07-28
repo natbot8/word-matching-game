@@ -20,7 +20,7 @@ export function createCategoryTiles() {
   const container = document.getElementById("category-container");
   container.innerHTML = ""; // Clear existing tiles
 
-  const wonCards = JSON.parse(localStorage.getItem("wonCards") || "{}");
+  const wonCards = JSON.parse(localStorage.getItem("wonCards") || "[]");
 
   for (const [category, data] of Object.entries(wordCategories)) {
     const tile = document.createElement("div");
@@ -42,7 +42,7 @@ export function createCategoryTiles() {
       cardWrapper.appendChild(img);
       cardWrapper.appendChild(overlay);
 
-      if (wonCards[category] && wonCards[category].includes(card)) {
+      if (wonCards.includes(card)) {
         cardWrapper.classList.add("won-card");
       } else {
         cardWrapper.classList.add("not-won-card");
