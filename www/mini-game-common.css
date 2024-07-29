@@ -1,0 +1,33 @@
+@keyframes pointsDecrement {
+    0% { color: inherit; transform: scale(1); }
+    25% { color: #cc0000; transform: scale(1.4); }
+    50% { color: red; transform: scale(1.6); }
+    75% { color: #cc0000; transform: scale(1.4); }
+    100% { color: inherit; transform: scale(1); }
+}
+
+.points-display span.decrement {
+    animation: pointsDecrement 0.5s ease-in-out;
+}
+
+.out-of-points-message {
+    position: absolute;
+    text-align: center;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 18px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 10;
+}
+
+.out-of-points-message.show {
+    opacity: 0.95;
+    visibility: visible;
+}
