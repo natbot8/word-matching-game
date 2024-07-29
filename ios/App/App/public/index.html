@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>The Word Game</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="home-screen.css" />
+    <link rel="stylesheet" href="card-reveal.css" />
+    <link rel="stylesheet" href="plinko.css" />
+    <link rel="stylesheet" href="show-won-card.css" />
+    <link rel="stylesheet" href="mini-game-common.css" />
+  </head>
+  <body>
+    <div id="home-screen">
+      <header>
+        <div class="game-displays">
+          <div class="difficulty-selector">
+            <img src="icons/brain.png" alt="Difficulty" />
+            <select id="difficulty-dropdown">
+              <option value="easy">Easy</option>
+              <option value="hard" selected>Hard</option>
+              <option value="superhard">Super Hard</option>
+              <option value="superduperhard">Super Duper Hard</option>
+            </select>
+          </div>
+
+          <div class="points-display">
+            <span id="total-points-value">0</span>
+            <img src="icons/coin.png" alt="Points" />
+          </div>
+        </div>
+        <h1>The Word Game</h1>
+      </header>
+
+      <div id="category-container" role="main">
+        <!-- Category tiles will be added here dynamically -->
+      </div>
+    </div>
+
+    <div id="game-screen" style="display: none">
+      <header>
+        <div class="game-displays">
+          <h2>Match the Image</h2>
+          <div class="points-display">
+            <span id="total-points-value">0</span>
+            <img src="icons/coin.png" alt="Points" />
+          </div>
+        </div>
+        <div id="letter-container"></div>
+      </header>
+      <div id="level-container">
+        <div id="image-container"></div>
+      </div>
+    </div>
+
+    <div id="results-screen" style="display: none">
+      <div class="results-container">
+        <h2>Congratulations!</h2>
+        <p id="results-message"></p>
+        <div class="results-buttons">
+          <button id="home-button" class="results-button">
+            <img src="icons/home.png" alt="Home Icon" />
+            Home
+          </button>
+          <button id="card-reveal-button" class="results-button">
+            <img src="icons/card-reveal.png" alt="Card Icon" />
+            Reveal
+          </button>
+          <button id="plinko-button" class="results-button">
+            <img src="icons/plinko.png" alt="Card Icon" />
+            Plinko
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="card-reveal-screen" style="display: none">
+      <header>
+        <div class="game-displays">
+          <h2>Reveal a Card</h2>
+          <div class="points-display">
+            <span id="total-points-value">0</span>
+            <img src="icons/coin.png" alt="Points" />
+          </div>
+        </div>
+      </header>
+      <div id="card-reveal-container" class="card-reveal-container">
+        <div class="card-reveal-image-container">
+          <img id="card-reveal-image" class="card-image" alt="Reward Card" />
+          <div id="card-board" class="card-board"></div>
+          <div
+            id="card-reveal-out-of-points-message"
+            class="out-of-points-message"
+          >
+            You're out of points
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="plinko-screen" class="screen" style="display: none">
+      <header>
+        <div class="game-displays">
+          <h2>Drop the Ball</h2>
+          <div class="points-display">
+            <span id="total-points-value">0</span>
+            <img src="icons/coin.png" alt="Points" />
+          </div>
+        </div>
+      </header>
+      <div id="plinko-game-container">
+        <div id="plinko-progress-container">
+          <div id="progress-and-card">
+            <div id="progress-bar-container">
+              <div id="plinko-progress-bar"></div>
+            </div>
+            <img
+              id="plinko-card-image"
+              class="card-image"
+              src=""
+              alt="Reward Card"
+            />
+          </div>
+        </div>
+        <div id="plinko-board"></div>
+        <!-- Plinko pegs will be added here dynamically -->
+        <div id="plinko-out-of-points-message" class="out-of-points-message">
+          You're out of points
+        </div>
+      </div>
+    </div>
+
+    <div id="show-won-card-screen" class="screen" style="display: none">
+      <div class="won-card-container">
+        <h2>You Won a Card!</h2>
+        <div class="won-card-image-container">
+          <img id="won-card-image" class="card-image" alt="Won Card" />
+        </div>
+        <button id="return-home-button" class="return-home-button">
+          <img src="icons/home.png" alt="Home Icon" />
+          Return Home
+        </button>
+      </div>
+    </div>
+
+    <nav id="bottom-nav">
+      <div class="nav-item" data-screen="home-screen">
+        <img src="icons/home.png" alt="Home" />
+        <span>Home</span>
+      </div>
+      <div class="nav-item" data-screen="card-reveal-screen">
+        <img src="icons/card-reveal.png" alt="Card Reveal" />
+        <span>Reveal</span>
+      </div>
+      <div class="nav-item" data-screen="plinko-screen">
+        <img src="icons/plinko.png" alt="Plinko" />
+        <span>Plinko</span>
+      </div>
+    </nav>
+
+    <script src="app.js" type="module"></script>
+    <script src="confetti.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
+  </body>
+</html>
