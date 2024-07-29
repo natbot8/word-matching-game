@@ -3,6 +3,7 @@ import { initCardReveal } from "./card-reveal.js";
 import { initPlinkoGame } from "./plinko.js";
 import { updatePoints, totalPoints, updatePointsDisplay } from "./app.js";
 import { wordCategories, fetchWordCategories } from "./app.js";
+import { animatePointsDecrement } from "./mini-game-common.js";
 
 let words = {};
 export const levels = [];
@@ -130,20 +131,6 @@ export function loadLevel() {
   // Reser disabled images
   resetDisabledImages();
 
-  // Create and append the points display
-  // const pointsDisplay = document.createElement("div");
-  // pointsDisplay.className = "points-display";
-  // pointsDisplay.innerHTML = `
-  //   <span id="total-points-value">${totalPoints}</span>
-  //   <img src="icons/coin.png" alt="Total Points">
-  // `;
-  // levelContainer.appendChild(pointsDisplay);
-
-  // Create and append the word display
-  // const wordDisplay = document.createElement("div");
-  // wordDisplay.id = "word-display";
-  // levelContainer.appendChild(wordDisplay);
-
   // Create and append the confetti container
   const confettiGameContainer = document.createElement("div");
   confettiGameContainer.id = "confetti-container";
@@ -157,11 +144,6 @@ export function loadLevel() {
   //   <div id="coin-container"></div>
   // `;
   // levelContainer.appendChild(scoreContainer);
-
-  // Create and append the letter container
-  // const letterContainer = document.createElement("div");
-  // letterContainer.id = "letter-container";
-  // levelContainer.appendChild(letterContainer);
 
   // Create and append the image container
   const imageContainer = document.createElement("div");
@@ -215,9 +197,6 @@ export function loadLevel() {
     imgElement.onclick = () => checkImage(imgElement, currentLevelData);
     imageContainer.appendChild(imgElement);
   }
-
-  // Update coin icons
-  // updateCoinIcons();
 }
 
 // Shuffle array function
@@ -316,8 +295,8 @@ export function checkImage(imgElement, currentLevelData) {
   );
 
   if (currentWord === wordDisplay) {
-    // updateGamePoints(true); // Pass true for correct answer
-    updatePoints(1); // Update total points in app.js
+    updateGamePoints(true); // Pass true for correct answer
+    // updatePoints(1); // Update total points in app.js
     playRandomSound(correctSounds);
 
     // Show confetti animation
@@ -328,8 +307,8 @@ export function checkImage(imgElement, currentLevelData) {
       isProcessing = false;
     }, 1000);
   } else {
-    // updateGamePoints(false);
-    updatePoints(-1); // Update total points in app.js
+    updateGamePoints(false);
+    // updatePoints(-1); // Update total points in app.js
     playRandomSound(incorrectSounds);
     imgElement.classList.add("disabled");
     isProcessing = false;
@@ -344,11 +323,12 @@ function updateGamePoints(correctAnswer) {
     if (gamePoints > 0) {
       gamePoints--;
       updatePoints(-1); // Update total points in app.js
+      animatePointsDecrement();
     }
   }
   console.log("Current Game Points:", gamePoints);
-  updateCoinIcons();
-  document.getElementById("current-points-value").innerText = gamePoints;
+  // updateCoinIcons();
+  // document.getElementById("current-points-value").innerText = gamePoints;
 }
 
 function updateCoinIcons() {

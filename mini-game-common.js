@@ -2,17 +2,17 @@ import { totalPoints } from "./app.js";
 
 const noPointsSound = new Audio("game-sounds/need-points.m4a");
 
-export function animatePointsDecrement(pointsDisplayId) {
-  const pointsDisplay = document.getElementById(pointsDisplayId);
-  if (pointsDisplay) {
-    pointsDisplay.classList.add("decrement");
-    setTimeout(() => {
-      pointsDisplay.classList.remove("decrement");
-    }, 500); // Match this to the animation duration in CSS
+export function animatePointsDecrement() {
+  const pointsDisplays = document.querySelectorAll(".points-display span");
+  if (pointsDisplays.length > 0) {
+    pointsDisplays.forEach((pointsDisplay) => {
+      pointsDisplay.classList.add("decrement");
+      setTimeout(() => {
+        pointsDisplay.classList.remove("decrement");
+      }, 500); // Match this to the animation duration in CSS
+    });
   } else {
-    console.error(
-      `Points display element with id '${pointsDisplayId}' not found`
-    );
+    console.error(`Points display not found`);
   }
 }
 
@@ -86,9 +86,7 @@ export function selectRandomCard(categoryData) {
 
 export function saveWonCard(currentCard) {
   const wonCards = JSON.parse(localStorage.getItem("wonCards") || "[]");
-  // if (!wonCards[currentCategory]) {
-  //     wonCards[currentCategory] = [];
-  // }
+
   if (!wonCards.includes(currentCard)) {
     wonCards.push(currentCard);
     localStorage.setItem("wonCards", JSON.stringify(wonCards));
