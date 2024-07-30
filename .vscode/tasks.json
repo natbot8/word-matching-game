@@ -4,7 +4,7 @@
     {
       "type": "shell",
       "label": "Build for iOS",
-      "command": "./build.sh && npx cap sync",
+      "command": "npm run build && npx cap sync",
       "problemMatcher": []
     }
   ]

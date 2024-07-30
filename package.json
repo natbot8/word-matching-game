@@ -4,22 +4,17 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build && npm run copy-assets",
+    "preview": "vite preview",
+    "copy-assets": "node copy-assets.js"
   },
   "dependencies": {
     "@capacitor/cli": "^6.1.1",
     "@capacitor/core": "^6.1.1",
     "@capacitor/ios": "^6.1.1",
-    "@capacitor/preferences": "^6.0.1",
-    "tsparticles": "^2.12.0",
-    "tsparticles-confetti": "^2.12.0",
-    "vite": "^4.2.1",
-    "vue3-particles": "^2.12.0"
+    "@capacitor/preferences": "^6.0.1"
   },
-  "description": "This template is a starter for building a website with HTML, CSS and JS, powered by [Vite](https://vitejs.dev/). HTML provides the basic structure, CSS controls formatting, and JavaScript controls the behavior of different elements.",
-  "main": "app.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "vite": "^4.2.1"
+  }
 }

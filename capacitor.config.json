@@ -1,5 +1,6 @@
 {
   "appId": "com.wordgame.app",
   "appName": "Word Game",
-  "webDir": "www"
+  "webDir": "www",
+  "bundledWebRuntime": false
 }

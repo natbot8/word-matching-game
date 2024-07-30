@@ -1,0 +1,45 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+
+# Build output
+www
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# iOS specific
+ios/App/build
+ios/App/Pods
+ios/App/output
+ios/App/App/public
+ios/DerivedData
+ios/xcuserdata
+
+# Cordova plugins for Capacitor
+ios/capacitor-cordova-ios-plugins
+
+# Generated Config files
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+
+# Android specific
+android/app/src/main/assets/public
+android/app/capacitor.build.gradle
