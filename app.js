@@ -187,5 +187,3 @@ window.playLetterSound = function (soundUnit) {
 window.checkImage = function (imgElement, currentLevelData) {
   Game.checkImage(imgElement, currentLevelData);
 };
-
-// export { totalPoints };

@@ -4,6 +4,7 @@ import { initPlinkoGame } from "./plinko.js";
 import { updatePoints, totalPoints, updatePointsDisplay } from "./app.js";
 import { wordCategories, fetchWordCategories } from "./app.js";
 import { animatePointsDecrement } from "./mini-game-common.js";
+import { showConfettiCannon } from "./confetti.js";
 
 let words = {};
 export const levels = [];

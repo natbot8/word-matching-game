@@ -99,7 +99,7 @@ function applyProgress() {
   }
 }
 
-function revealBlock(block, index) {
+export function revealBlock(block, index) {
   if (checkSufficientPoints() && block.style.opacity !== "0") {
     block.style.opacity = "0";
     updatePoints(-1); // This will decrease totalPoints and update localStorage

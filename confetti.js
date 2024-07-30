@@ -9,7 +9,7 @@ function showConfettiFireworks() {
     return Math.random() * (max - min) + min;
   }
 
-  const interval = setInterval(function() {
+  const interval = setInterval(function () {
     const timeLeft = animationEnd - Date.now();
 
     if (timeLeft <= 0) {
@@ -31,17 +31,17 @@ function showConfettiFireworks() {
         origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
         scalar: 2,
         shapes: ["emoji"],
-          shapeOptions: {
-            emoji: {
-              value: ["🦄", "🌈"],
-            },
+        shapeOptions: {
+          emoji: {
+            value: ["🦄", "🌈"],
           },
+        },
       })
     );
   }, 250);
 }
 
-function showConfettiCannon() {
+export function showConfettiCannon() {
   function randomInRange(min, max) {
     return Math.random() * (max - min) + min;
   }
@@ -53,11 +53,10 @@ function showConfettiCannon() {
     origin: { y: 0.6 },
     scalar: 2,
     shapes: ["emoji"],
-      shapeOptions: {
-        emoji: {
-          value: ["🦄", "🌈"],
-        },
+    shapeOptions: {
+      emoji: {
+        value: ["🦄", "🌈"],
       },
+    },
   });
 }
-
