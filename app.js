@@ -4,6 +4,8 @@ import * as Game from './word-match.js';
 import * as CardReveal from './card-reveal.js';
 import * as PlinkoGame from './plinko.js';
 import * as ShowWonCard from './show-won-card.js';
+import { Capacitor } from "@capacitor/core";
+import { Preferences } from "@capacitor/preferences";
 
 // Global state
 let currentScreen = 'home';
@@ -154,6 +156,10 @@ function initializePoints() {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', async () => {
+    // Initialize Capacitor
+    console.log("Capacitor version:", Capacitor.getPlatform());
+    console.log("Preferences:", Preferences);
+
     try {
         await fetchWordCategories();
         loadPoints();
