@@ -4,6 +4,7 @@ import { initPlinkoGame } from "./plinko.js";
 import { updatePoints, totalPoints, updatePointsDisplay } from "./app.js";
 import { wordCategories, fetchWordCategories } from "./app.js";
 import { animatePointsDecrement } from "./mini-game-common.js";
+import { StorageService } from "./storage-service.js";
 import { showConfettiCannon } from "./confetti.js";
 
 let words = {};
@@ -43,8 +44,8 @@ async function fetchLetterSounds() {
 
 // Function to start the game based on the selected difficulty
 export async function initializeGame() {
-  selectedCategory = localStorage.getItem("selectedCategory");
-  selectedDifficulty = localStorage.getItem("selectedDifficulty");
+  selectedCategory = await StorageService.getItem("selectedCategory");
+  selectedDifficulty = await StorageService.getItem("selectedDifficulty");
 
   console.log("Selected Category:", selectedCategory);
   console.log("Selected Difficulty:", selectedDifficulty);
@@ -136,15 +137,6 @@ export function loadLevel() {
   const confettiGameContainer = document.createElement("div");
   confettiGameContainer.id = "confetti-container";
   levelContainer.appendChild(confettiGameContainer);
-
-  // Create and append the score container
-  // const scoreContainer = document.createElement("div");
-  // scoreContainer.id = "score-container";
-  // scoreContainer.innerHTML = `
-  //   <div id="current-points">Points Won: <span id="current-points-value">${gamePoints}</span></div>
-  //   <div id="coin-container"></div>
-  // `;
-  // levelContainer.appendChild(scoreContainer);
 
   // Create and append the image container
   const imageContainer = document.createElement("div");
@@ -297,7 +289,6 @@ export function checkImage(imgElement, currentLevelData) {
 
   if (currentWord === wordDisplay) {
     updateGamePoints(true); // Pass true for correct answer
-    // updatePoints(1); // Update total points in app.js
     playRandomSound(correctSounds);
 
     // Show confetti animation
@@ -309,7 +300,6 @@ export function checkImage(imgElement, currentLevelData) {
     }, 1000);
   } else {
     updateGamePoints(false);
-    // updatePoints(-1); // Update total points in app.js
     playRandomSound(incorrectSounds);
     imgElement.classList.add("disabled");
     isProcessing = false;
@@ -328,8 +318,7 @@ function updateGamePoints(correctAnswer) {
     }
   }
   console.log("Current Game Points:", gamePoints);
-  // updateCoinIcons();
-  // document.getElementById("current-points-value").innerText = gamePoints;
+  updateCoinIcons();
 }
 
 function updateCoinIcons() {
@@ -364,7 +353,7 @@ export function nextLevel() {
 // Function to show results screen after completing round of word game
 function showResultsScreen() {
   const resultsMessage = document.getElementById("results-message");
-  resultsMessage.textContent = `You completed ${WORDS_PER_ROUND} words and earned ${gamePoints} points!`;
+  resultsMessage.textContent = `You earned ${gamePoints} points!`;
 
   const homeButton = document.getElementById("home-button");
   const cardRevealButton = document.getElementById("card-reveal-button");

@@ -4,6 +4,7 @@ import * as Game from "./word-match.js";
 import * as CardReveal from "./card-reveal.js";
 import * as PlinkoGame from "./plinko.js";
 import * as ShowWonCard from "./show-won-card.js";
+import { StorageService } from "./storage-service.js";
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 
@@ -13,12 +14,12 @@ export let totalPoints = 0;
 export let wordCategories = {};
 
 // Function to switch between screens
-export function showScreen(screenId) {
+export async function showScreen(screenId) {
   // Log the screen we're switching to
   console.log("Switching to screen:", screenId);
 
   // Update totalPoints from localStorage before switching screens
-  totalPoints = parseInt(localStorage.getItem("points") || "0");
+  totalPoints = await StorageService.getNumber("points", 0);
 
   document.getElementById("home-screen").style.display = "none";
   document.getElementById("game-screen").style.display = "none";
@@ -50,7 +51,7 @@ export function showScreen(screenId) {
     console.log("Updating points display for home screen");
     HomeScreen.initHomeScreen();
   } else if (screenId === "plinko-screen") {
-    const savedCategory = localStorage.getItem("selectedCategory");
+    const savedCategory = await StorageService.getItem("selectedCategory");
     if (savedCategory && wordCategories[savedCategory]) {
       PlinkoGame.initPlinkoGame(savedCategory, wordCategories[savedCategory]);
     } else {
@@ -59,7 +60,7 @@ export function showScreen(screenId) {
       showScreen("home-screen"); // Redirect to home screen on error
     }
   } else if (screenId === "card-reveal-screen") {
-    const savedCategory = localStorage.getItem("selectedCategory");
+    const savedCategory = await StorageService.getItem("selectedCategory");
     if (savedCategory && wordCategories[savedCategory]) {
       CardReveal.initCardReveal(savedCategory, wordCategories[savedCategory]);
     } else {
@@ -96,8 +97,8 @@ function initNavigation() {
   });
 }
 
-// Modified startGame function
-function startGame(category) {
+//StartGame function
+async function startGame(category) {
   const difficulty = document.getElementById("difficulty-dropdown").value;
   console.log(
     `Starting game with category: ${category}, difficulty: ${difficulty}`
@@ -107,8 +108,8 @@ function startGame(category) {
   new Audio("game-sounds/lets-go.m4a").play();
 
   // Set game parameters
-  localStorage.setItem("selectedCategory", category);
-  localStorage.setItem("selectedDifficulty", difficulty);
+  await StorageService.setItem("selectedCategory", category);
+  await StorageService.setItem("selectedDifficulty", difficulty);
 
   // Switch to game screen and initialize game
   showScreen("game-screen");
@@ -128,15 +129,15 @@ function updateNavHighlight(screenId) {
 }
 
 // Function to load points from localStorage
-function loadPoints() {
-  totalPoints = parseInt(localStorage.getItem("points") || "0");
+async function loadPoints() {
+  totalPoints = await StorageService.getNumber("points", 0);
 }
 
 // Function to update points
-export function updatePoints(change) {
+export async function updatePoints(change) {
   console.log("Updating points. Current:", totalPoints, "Change:", change);
   totalPoints += change;
-  localStorage.setItem("points", totalPoints.toString());
+  await StorageService.setItem("points", totalPoints.toString());
   console.log("New total points:", totalPoints);
   updatePointsDisplay();
 }
@@ -153,8 +154,8 @@ export function updatePointsDisplay() {
   });
 }
 
-function initializePoints() {
-  totalPoints = parseInt(localStorage.getItem("points") || "0");
+async function initializePoints() {
+  totalPoints = await StorageService.getNumber("points", 0);
   console.log("Initialized total points:", totalPoints);
   updatePointsDisplay();
 }

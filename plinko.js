@@ -1,6 +1,7 @@
 import { updatePoints, totalPoints, updatePointsDisplay } from "./app.js";
 import { wordCategories } from "./app.js";
 import { showWonCard } from "./show-won-card.js";
+import { StorageService } from "./storage-service.js";
 import {
   animatePointsDecrement,
   showOutOfPointsMessage,
@@ -23,8 +24,8 @@ let boardHeight = 600;
 let pegSpacing = 40;
 const pegRadius = 5;
 
-export function initPlinkoGame(category, categoryData) {
-  const currentPoints = parseInt(localStorage.getItem("points") || "0");
+export async function initPlinkoGame(category, categoryData) {
+  const currentPoints = await StorageService.getNumber("points", 0);
   console.log(
     "Initializing Plinko Game with",
     currentPoints,
@@ -33,7 +34,7 @@ export function initPlinkoGame(category, categoryData) {
   );
   currentPlinkoCategory = category;
 
-  const progress = JSON.parse(localStorage.getItem("plinkoProgress"));
+  const progress = await StorageService.getItem("plinkoProgress");
 
   if (progress) {
     console.log("Found saved progress:", progress);
@@ -280,7 +281,7 @@ function calculatePointsEarned(finalX) {
 function revealCard() {
   console.log("Card revealed:", currentPlinkoCard);
 
-  saveWonCard(currentPlinkoCard, currentPlinkoCategory);
+  saveWonCard(currentPlinkoCard);
 
   // Reset progress and set flag for new card
   progressBarFill = 0;

@@ -1,5 +1,6 @@
 import { updatePointsDisplay, totalPoints } from "./app.js";
 import { wordCategories, fetchWordCategories } from "./app.js";
+import { StorageService } from "./storage-service.js";
 
 let difficultyAudio = null;
 
@@ -8,7 +9,7 @@ export async function initHomeScreen() {
     if (Object.keys(wordCategories).length === 0) {
       await fetchWordCategories();
     }
-    createCategoryTiles();
+    await createCategoryTiles();
     setupDifficultySelector();
     updatePointsDisplay();
   } catch (error) {
@@ -16,11 +17,16 @@ export async function initHomeScreen() {
   }
 }
 
-export function createCategoryTiles() {
+export async function createCategoryTiles() {
   const container = document.getElementById("category-container");
   container.innerHTML = ""; // Clear existing tiles
 
-  const wonCards = JSON.parse(localStorage.getItem("wonCards") || "[]");
+  let wonCards = await StorageService.getItem("wonCards");
+
+  // Initialize wonCards as an empty array if it doesn't exist
+  if (!wonCards) {
+    wonCards = [];
+  }
 
   for (const [category, data] of Object.entries(wordCategories)) {
     const tile = document.createElement("div");
@@ -78,9 +84,9 @@ export function setupDifficultySelector() {
   difficultyDropdown.addEventListener("change", handleDifficultyChange);
 }
 
-function handleDifficultyChange(event) {
+async function handleDifficultyChange(event) {
   const difficulty = event.target.value;
-  localStorage.setItem("selectedDifficulty", difficulty);
+  await StorageService.setItem("selectedDifficulty", difficulty);
   playDifficultySound(difficulty);
 }
 

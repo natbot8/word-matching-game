@@ -1,4 +1,5 @@
 import { totalPoints } from "./app.js";
+import { StorageService } from "./storage-service.js";
 
 const noPointsSound = new Audio("game-sounds/need-points.m4a");
 
@@ -84,17 +85,22 @@ export function selectRandomCard(categoryData) {
   }
 }
 
-export function saveWonCard(currentCard) {
-  const wonCards = JSON.parse(localStorage.getItem("wonCards") || "[]");
+export async function saveWonCard(currentCard) {
+  let wonCards = await StorageService.getItem("wonCards");
+
+  // Initialize wonCards as an empty array if it doesn't exist
+  if (!wonCards) {
+    wonCards = [];
+  }
 
   if (!wonCards.includes(currentCard)) {
     wonCards.push(currentCard);
-    localStorage.setItem("wonCards", JSON.stringify(wonCards));
+    await StorageService.setItem("wonCards", wonCards);
   }
 }
 
-export function saveProgress(gameType, progressData) {
-  localStorage.setItem(`${gameType}Progress`, JSON.stringify(progressData));
+export async function saveProgress(gameType, progressData) {
+  await StorageService.setItem(`${gameType}Progress`, progressData);
   console.log(`${gameType} progress saved:`, progressData);
 }
 

@@ -1,5 +1,6 @@
 import { updatePoints, totalPoints, updatePointsDisplay } from "./app.js";
 import { showWonCard } from "./show-won-card.js";
+import { StorageService } from "./storage-service.js";
 import {
   animatePointsDecrement,
   showOutOfPointsMessage,
@@ -18,7 +19,7 @@ let needNewCard = true;
 export let isCardFullyRevealed = false;
 
 export async function initCardReveal(category, categoryData) {
-  const currentPoints = parseInt(localStorage.getItem("points") || "0");
+  const currentPoints = await StorageService.getNumber("points", 0);
   console.log(
     "Initializing Card Reveal with",
     currentPoints,
@@ -27,7 +28,7 @@ export async function initCardReveal(category, categoryData) {
   );
   currentCardCategory = category;
 
-  const progress = JSON.parse(localStorage.getItem("cardRevealProgress"));
+  const progress = await StorageService.getItem("cardRevealProgress");
 
   if (progress && !progress.isCardFullyRevealed) {
     console.log("Found saved progress:", progress);
@@ -125,7 +126,7 @@ function checkGameState() {
   if (revealedBlocks === totalBlocks && !isCardFullyRevealed) {
     isCardFullyRevealed = true;
     needNewCard = true;
-    saveWonCard(currentCard, currentCardCategory);
+    saveWonCard(currentCard);
     saveProgress("cardReveal", {
       revealedBlocks,
       currentCard,

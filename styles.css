@@ -56,29 +56,6 @@
   cursor: not-allowed;
 }
 
-/* .points-display {
-  position: absolute;
-  top: env(safe-area-inset-top, 20px);
-  right: 10px;
-  display: flex;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 5px 10px;
-  border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.points-display span {
-  font-size: 18px;
-  font-weight: bold;
-  margin-right: 5px;
-}
-
-.points-display img {
-  width: 30px;
-  height: 30px;
-} */
-
 #points-container {
   display: flex;
   flex-direction: column;
@@ -97,13 +74,14 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
+  margin-bottom: 10px;
 }
 
 .coin-icon {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   margin: 2px;
 }
 
@@ -130,12 +108,12 @@
 
 .results-container h2 {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 #results-message {
   font-size: 18px;
-  margin-bottom: 30px;
+  margin-bottom: 0px;
 }
 
 .results-buttons {
