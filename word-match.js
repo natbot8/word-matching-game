@@ -3,7 +3,10 @@ import { initCardReveal } from "./card-reveal.js";
 import { initPlinkoGame } from "./plinko.js";
 import { updatePoints, totalPoints, updatePointsDisplay } from "./app.js";
 import { wordCategories, fetchWordCategories } from "./app.js";
-import { animatePointsDecrement } from "./mini-game-common.js";
+import {
+  animatePointsDecrement,
+  animatePointsIncrement,
+} from "./mini-game-common.js";
 import { StorageService } from "./storage-service.js";
 import { showConfettiCannon } from "./confetti.js";
 
@@ -310,6 +313,7 @@ function updateGamePoints(correctAnswer) {
   if (correctAnswer) {
     gamePoints++;
     updatePoints(1); // Update total points in app.js
+    animatePointsIncrement();
   } else {
     if (gamePoints > 0) {
       gamePoints--;

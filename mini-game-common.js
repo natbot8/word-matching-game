@@ -17,6 +17,20 @@ export function animatePointsDecrement() {
   }
 }
 
+export function animatePointsIncrement() {
+  const pointsDisplays = document.querySelectorAll(".points-display span");
+  if (pointsDisplays.length > 0) {
+    pointsDisplays.forEach((pointsDisplay) => {
+      pointsDisplay.classList.add("increment");
+      setTimeout(() => {
+        pointsDisplay.classList.remove("increment");
+      }, 500); // Match this to the animation duration in CSS
+    });
+  } else {
+    console.error(`Points display not found`);
+  }
+}
+
 export function showOutOfPointsMessage(messageElementId) {
   const message = document.getElementById(messageElementId);
   if (message) {

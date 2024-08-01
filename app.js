@@ -137,7 +137,7 @@ async function loadPoints() {
 export async function updatePoints(change) {
   console.log("Updating points. Current:", totalPoints, "Change:", change);
   totalPoints += change;
-  await StorageService.setItem("points", totalPoints.toString());
+  await StorageService.setItem("points", totalPoints);
   console.log("New total points:", totalPoints);
   updatePointsDisplay();
 }
