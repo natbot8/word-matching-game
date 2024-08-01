@@ -40,14 +40,30 @@
   margin-bottom: 10px;
 }
 
+#image-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 .image-option {
-  max-height: 200px;
+  /* max-height: 200px; */
+  width: 44%;
   border-radius: 8px;
-  width: auto;
-  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  /* height: auto; */
   cursor: pointer;
   margin: 10px;
   transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .image-option {
+    max-height: 250px;
+    width: auto;
+  }
 }
 
 .image-option.disabled {

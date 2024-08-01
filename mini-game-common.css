@@ -31,15 +31,15 @@
     transform: scale(1);
   }
   25% {
-    color: #00a113;
+    color: #0ea51f;
     transform: scale(1.4);
   }
   50% {
-    color: rgb(0, 255, 51);
+    color: rgb(19, 202, 55);
     transform: scale(1.6);
   }
   75% {
-    color: #00a113;
+    color: #0ea51f;
     transform: scale(1.4);
   }
   100% {
