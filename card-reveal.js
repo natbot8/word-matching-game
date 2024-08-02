@@ -10,6 +10,7 @@ import {
   saveWonCard,
   saveProgress,
 } from "./mini-game-common.js";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 export let revealedBlocks = 0;
 export const totalBlocks = 16;
@@ -100,7 +101,7 @@ function applyProgress() {
   }
 }
 
-export function revealBlock(block, index) {
+export async function revealBlock(block, index) {
   if (checkSufficientPoints() && block.style.opacity !== "0") {
     block.style.opacity = "0";
     updatePoints(-1); // This will decrease totalPoints and update localStorage
@@ -117,6 +118,13 @@ export function revealBlock(block, index) {
       totalPoints,
       revealedBlocks,
     });
+
+    // Trigger haptic feedback
+    try {
+      await Haptics.impact({ style: ImpactStyle.Heavy });
+    } catch (error) {
+      console.error("Error triggering haptics:", error);
+    }
   } else if (!checkSufficientPoints()) {
     showOutOfPointsMessage("card-reveal-out-of-points-message");
   }

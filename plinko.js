@@ -11,6 +11,7 @@ import {
   saveWonCard,
   saveProgress,
 } from "./mini-game-common.js";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 let progressBarFill = 0;
 let currentPlinkoCategory = "";
@@ -187,7 +188,7 @@ export function dropBall(startX) {
   let position = { x: startX, y: 0 };
   let velocity = { x: 0, y: 0 };
 
-  function updateBall() {
+  async function updateBall() {
     if (position.y < boardHeight - 20) {
       velocity.y += 0.6; // Gravity
       position.x += velocity.x;
@@ -198,7 +199,7 @@ export function dropBall(startX) {
       velocity.y += (Math.random() - 0.5) * 0.3;
 
       // Collision with pegs
-      document.querySelectorAll(".peg").forEach((peg) => {
+      for (const peg of document.querySelectorAll(".peg")) {
         const pegRect = peg.getBoundingClientRect();
         const ballRect = ball.getBoundingClientRect();
         const dx =
@@ -225,8 +226,15 @@ export function dropBall(startX) {
           peg.style.animation = "none";
           peg.offsetHeight; // Trigger reflow
           peg.style.animation = "pegPulse 0.3s ease-out";
+
+          // Trigger haptic feedback
+          try {
+            await Haptics.impact({ style: ImpactStyle.Light });
+          } catch (error) {
+            console.error("Error triggering haptics:", error);
+          }
         }
-      });
+      }
 
       // Boundary collision
       if (position.x < pegRadius || position.x > boardWidth - pegRadius) {
