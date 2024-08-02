@@ -9,6 +9,7 @@ import {
 } from "./mini-game-common.js";
 import { StorageService } from "./storage-service.js";
 import { showConfettiCannon } from "./confetti.js";
+import { Haptics, ImpactStyle } from "@capacitor/haptics";
 
 let words = {};
 export const levels = [];
@@ -274,7 +275,7 @@ function getRandomImages(currentLevelData) {
   return randomImages;
 }
 
-export function checkImage(imgElement, currentLevelData) {
+export async function checkImage(imgElement, currentLevelData) {
   if (isProcessing || imgElement.classList.contains("disabled")) {
     return;
   }
@@ -289,6 +290,13 @@ export function checkImage(imgElement, currentLevelData) {
       currentImageSrc.lastIndexOf(".")
     )
   );
+
+  // Trigger haptic feedback
+  try {
+    await Haptics.impact({ style: ImpactStyle.Medium });
+  } catch (error) {
+    console.error("Error triggering haptics:", error);
+  }
 
   if (currentWord === wordDisplay) {
     updateGamePoints(true); // Pass true for correct answer
