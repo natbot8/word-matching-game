@@ -5,15 +5,18 @@
   }
   25% {
     color: #cc0000;
-    transform: scale(1.4);
+    box-shadow: inset 0 0 10px #cc0000;
+    transform: scale(0.9);
   }
   50% {
     color: red;
-    transform: scale(1.6);
+    box-shadow: inset 0 0 10px red;
+    transform: scale(0.8);
   }
   75% {
     color: #cc0000;
-    transform: scale(1.4);
+    box-shadow: inset 0 0 10px #cc0000;
+    transform: scale(0.9);
   }
   100% {
     color: inherit;
@@ -21,8 +24,8 @@
   }
 }
 
-.points-display span.decrement {
-  animation: pointsDecrement 0.5s ease-in-out;
+.points-display.decrement {
+  animation: pointsDecrement 0.7s ease-in-out;
 }
 
 @keyframes pointsIncrement {
@@ -32,15 +35,18 @@
   }
   25% {
     color: #0ea51f;
-    transform: scale(1.4);
+    box-shadow: inset 0 0 10px #0ea51f;
+    transform: scale(1.25);
   }
   50% {
     color: rgb(19, 202, 55);
-    transform: scale(1.6);
+    box-shadow: inset 0 0 10px rgb(19, 202, 55);
+    transform: scale(1.5);
   }
   75% {
     color: #0ea51f;
-    transform: scale(1.4);
+    box-shadow: inset 0 0 10px #0ea51f;
+    transform: scale(1.25);
   }
   100% {
     color: inherit;
@@ -48,8 +54,9 @@
   }
 }
 
-.points-display span.increment {
-  animation: pointsIncrement 0.5s ease-in-out;
+.points-display.increment,
+points-display span.points-display.increment {
+  animation: pointsIncrement 0.7s ease-in-out;
 }
 
 .out-of-points-message {

@@ -4,13 +4,13 @@ import { StorageService } from "./storage-service.js";
 const noPointsSound = new Audio("game-sounds/need-points.m4a");
 
 export function animatePointsDecrement() {
-  const pointsDisplays = document.querySelectorAll(".points-display span");
+  const pointsDisplays = document.querySelectorAll(".points-display");
   if (pointsDisplays.length > 0) {
     pointsDisplays.forEach((pointsDisplay) => {
       pointsDisplay.classList.add("decrement");
       setTimeout(() => {
         pointsDisplay.classList.remove("decrement");
-      }, 500); // Match this to the animation duration in CSS
+      }, 700); // Match this to the animation duration in CSS
     });
   } else {
     console.error(`Points display not found`);
@@ -18,13 +18,13 @@ export function animatePointsDecrement() {
 }
 
 export function animatePointsIncrement() {
-  const pointsDisplays = document.querySelectorAll(".points-display span");
+  const pointsDisplays = document.querySelectorAll(".points-display");
   if (pointsDisplays.length > 0) {
     pointsDisplays.forEach((pointsDisplay) => {
       pointsDisplay.classList.add("increment");
       setTimeout(() => {
         pointsDisplay.classList.remove("increment");
-      }, 500); // Match this to the animation duration in CSS
+      }, 700); // Match this to the animation duration in CSS
     });
   } else {
     console.error(`Points display not found`);
