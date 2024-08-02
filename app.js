@@ -7,6 +7,7 @@ import * as ShowWonCard from "./show-won-card.js";
 import { StorageService } from "./storage-service.js";
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
+import { SplashScreen } from "@capacitor/splash-screen";
 
 // Global state
 let currentScreen = "home";
@@ -160,21 +161,40 @@ async function initializePoints() {
   updatePointsDisplay();
 }
 
+// Function to initialize the app
+async function initializeApp() {
+  try {
+    await fetchWordCategories();
+    await loadPoints();
+    await HomeScreen.initHomeScreen();
+    await initializePoints();
+    initNavigation();
+
+    // Hide the splash screen
+    await SplashScreen.hide();
+
+    console.log("App initialized successfully");
+  } catch (error) {
+    console.error("Failed to initialize app:", error);
+    // Hide the splash screen even if there's an error
+    await SplashScreen.hide();
+  }
+}
+
 // Event listeners
 document.addEventListener("DOMContentLoaded", async () => {
   // Initialize Capacitor
   console.log("Capacitor version:", Capacitor.getPlatform());
   console.log("Preferences:", Preferences);
 
-  try {
-    await fetchWordCategories();
-    loadPoints();
-    HomeScreen.initHomeScreen();
-    initializePoints();
-    initNavigation();
-  } catch (error) {
-    console.error("Failed to initialize home screen:", error);
-  }
+  // Show the splash screen
+  await SplashScreen.show({
+    showDuration: 2000,
+    autoHide: false,
+  });
+
+  // Initialize the app
+  await initializeApp();
 });
 
 // Expose necessary functions to global scope
