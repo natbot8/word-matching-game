@@ -182,6 +182,10 @@ export function loadLevel() {
     letterContainer.style.justifyContent = "center"; // Center align when no overflow
   }
 
+  // Add this: Update fade effect after populating letters
+  updateFadeEffect();
+  letterContainer.addEventListener("scroll", updateFadeEffect);
+
   // Populate image options
   const images = [...getRandomImages(currentLevelData)];
   const shuffledImages = shuffleArray(images);
@@ -407,4 +411,39 @@ function preloadAudio() {
   [...correctSounds, ...incorrectSounds].forEach((sound) => {
     sound.load();
   });
+}
+
+// Add this function to check and update the fade effect
+function updateFadeEffect() {
+  const letterContainer = document.getElementById("letter-container");
+  const firstLetterButton = letterContainer.querySelector(".letter-button");
+  const rect = firstLetterButton.getBoundingClientRect();
+  let fadeElement = document.querySelector(".letter-fade");
+
+  if (!fadeElement) {
+    const fade = document.createElement("div");
+    fade.className = "letter-fade";
+    letterContainer.appendChild(fade);
+    fadeElement = fade;
+  }
+
+  // Update position of the fade element to match the letter container
+  fadeElement.style.top = `${rect.top}px`;
+  fadeElement.style.height = `${rect.height}px`;
+
+  // Check if scrolling is possible
+  if (letterContainer.scrollWidth > letterContainer.clientWidth) {
+    // Calculate the maximum scroll position
+    const maxScroll = letterContainer.scrollWidth - letterContainer.clientWidth;
+
+    // Show fade if not scrolled all the way to the right
+    if (Math.ceil(letterContainer.scrollLeft) < maxScroll) {
+      fadeElement.style.opacity = "1";
+    } else {
+      fadeElement.style.opacity = "0";
+    }
+  } else {
+    // Hide fade if no scrolling is needed
+    fadeElement.style.opacity = "0";
+  }
 }

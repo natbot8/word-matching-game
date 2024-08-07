@@ -8,6 +8,7 @@
   overflow-x: auto;
   padding-top: 10px;
   white-space: nowrap;
+  position: relative;
 }
 
 .letter-button {
@@ -38,6 +39,20 @@
   touch-action: manipulation;
   margin-right: 1px;
   margin-bottom: 10px;
+}
+
+.letter-fade {
+  position: fixed;
+  right: 0;
+  width: 50px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 1)
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 #image-container {
