@@ -46,6 +46,7 @@
   object-fit: cover;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.39) 0px 3px 8px;
+  margin-left: -14px;
 }
 
 #plinko-board {
