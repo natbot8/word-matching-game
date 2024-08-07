@@ -161,6 +161,19 @@ async function initializePoints() {
   updatePointsDisplay();
 }
 
+function disableImageContextMenu() {
+  document.body.addEventListener(
+    "contextmenu",
+    function (e) {
+      if (e.target.tagName === "IMG") {
+        e.preventDefault();
+        return false;
+      }
+    },
+    { passive: false }
+  );
+}
+
 // Function to initialize the app
 async function initializeApp() {
   try {
@@ -169,6 +182,7 @@ async function initializeApp() {
     await HomeScreen.initHomeScreen();
     await initializePoints();
     initNavigation();
+    disableImageContextMenu();
 
     // Hide the splash screen
     await SplashScreen.hide();
