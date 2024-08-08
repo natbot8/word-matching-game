@@ -94,13 +94,25 @@ header {
   cursor: pointer;
 }
 
-h1 {
+#home-title {
   font-family: "Inter", sans-serif;
   font-size: 46px;
   font-weight: 800;
   text-shadow: -0.06em 0 2px #fb00ff57;
   text-align: center;
   margin: 0;
+  animation: homeTitle 0.3s ease-in;
+}
+
+@keyframes homeTitle {
+  0% {
+    transform: translateX(100px);
+    text-shadow: -300px 0 2px #fb00ff57;
+  }
+  100% {
+    transform: translateX(0px);
+    text-shadow: inherit;
+  }
 }
 
 h2 {
