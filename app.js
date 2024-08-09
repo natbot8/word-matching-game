@@ -4,7 +4,7 @@ import * as Game from "./word-match.js";
 import * as CardReveal from "./card-reveal.js";
 import * as PlinkoGame from "./plinko.js";
 import * as ShowWonCard from "./show-won-card.js";
-import { StorageService } from "./storage-service.js";
+import { StorageService, migrateStorage } from "./storage-service.js";
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import { SplashScreen } from "@capacitor/splash-screen";
@@ -175,6 +175,7 @@ function disableImageContextMenu() {
 // Function to initialize the app
 async function initializeApp() {
   try {
+    await migrateStorage();
     await fetchWordCategories();
     await loadPoints();
     await HomeScreen.initHomeScreen();
