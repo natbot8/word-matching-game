@@ -41,6 +41,12 @@
   margin-bottom: 10px;
 }
 
+.letter-button.disabled {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  cursor: not-allowed;
+}
+
 .letter-fade {
   position: fixed;
   right: 0;

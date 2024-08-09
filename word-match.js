@@ -92,7 +92,7 @@ export async function initializeGame() {
   } else if (selectedDifficulty === "superhard") {
     numImages = 6;
   } else if (selectedDifficulty === "superduperhard") {
-    numImages = 12;
+    numImages = 8;
   }
 
   // Shuffle words and create levels
@@ -129,60 +129,45 @@ export function loadLevel() {
   const currentLevelData = levels[currentLevel];
   const levelContainer = document.getElementById("level-container");
   const letterContainer = document.getElementById("letter-container");
-  // const imageContainer = document.getElementById("image-container");
-  levelContainer.innerHTML = ""; // Clear previous elements
+  levelContainer.innerHTML = "";
   letterContainer.innerHTML = "";
-  // imageContainer.innerHTML = "";
 
-  // Reser disabled images
   resetDisabledImages();
 
-  // Create and append the confetti container
   const confettiGameContainer = document.createElement("div");
   confettiGameContainer.id = "confetti-container";
   levelContainer.appendChild(confettiGameContainer);
 
-  // Create and append the image container
   const imageContainer = document.createElement("div");
   imageContainer.id = "image-container";
   levelContainer.appendChild(imageContainer);
 
-  // Populate letter buttons
   const word = currentLevelData.word.toLowerCase();
-  let i = 0;
-  while (i < word.length) {
-    let soundUnit = word[i];
-    let j = i + 1;
+  const soundUnits = getSoundUnits(word);
+  const disabledUnits = getDisabledSoundUnits(soundUnits);
 
-    // Check for letter combinations
-    if (letterSounds && letterSounds.letterCombinations) {
-      for (let combo of Object.keys(letterSounds.letterCombinations)) {
-        if (word.slice(i).startsWith(combo)) {
-          soundUnit = combo;
-          j = i + combo.length;
-          break;
-        }
-      }
-    }
-
+  soundUnits.forEach((soundUnit, index) => {
     const letterButton = document.createElement("button");
     letterButton.innerText = soundUnit.toUpperCase();
     letterButton.className = "letter-button";
-    letterButton.onclick = () => playLetterSound(soundUnit);
-    letterContainer.appendChild(letterButton);
 
-    i = j;
-  }
+    if (disabledUnits.includes(index)) {
+      letterButton.classList.add("disabled");
+    } else {
+      letterButton.onclick = () => playLetterSound(soundUnit);
+    }
+
+    letterContainer.appendChild(letterButton);
+  });
 
   // Adjust letter container alignment
   if (letterContainer.scrollWidth > letterContainer.clientWidth) {
-    letterContainer.style.justifyContent = "flex-start"; // Left align when overflow
+    letterContainer.style.justifyContent = "flex-start";
     letterContainer.style.paddingLeft = "20px";
   } else {
-    letterContainer.style.justifyContent = "center"; // Center align when no overflow
+    letterContainer.style.justifyContent = "center";
   }
 
-  // Add this: Update fade effect after populating letters
   updateFadeEffect();
   letterContainer.addEventListener("scroll", updateFadeEffect);
 
@@ -198,6 +183,61 @@ export function loadLevel() {
     imgElement.onclick = () => checkImage(imgElement, currentLevelData);
     imageContainer.appendChild(imgElement);
   }
+}
+
+// Functions get sound units for a word
+function getSoundUnits(word) {
+  const soundUnits = [];
+  let i = 0;
+  while (i < word.length) {
+    let soundUnit = word[i];
+    let j = i + 1;
+
+    if (letterSounds && letterSounds.letterCombinations) {
+      for (let combo of Object.keys(letterSounds.letterCombinations)) {
+        if (word.slice(i).startsWith(combo)) {
+          soundUnit = combo;
+          j = i + combo.length;
+          break;
+        }
+      }
+    }
+
+    soundUnits.push(soundUnit);
+    i = j;
+  }
+  return soundUnits;
+}
+
+// Function to set disabled sound units (for certain difficulty levels)
+function getDisabledSoundUnits(soundUnits) {
+  const totalUnits = soundUnits.length;
+  let disabledUnits = [];
+
+  if (selectedDifficulty === "superhard") {
+    const numDisabled = totalUnits < 5 ? 1 : 2;
+    while (disabledUnits.length < numDisabled) {
+      const randomIndex = Math.floor(Math.random() * totalUnits);
+      if (!disabledUnits.includes(randomIndex)) {
+        disabledUnits.push(randomIndex);
+      }
+    }
+  } else if (selectedDifficulty === "superduperhard") {
+    const numEnabled = totalUnits < 5 ? 1 : 2;
+    const numDisabled = totalUnits - numEnabled;
+
+    // Create an array of all indices
+    const allIndices = Array.from({ length: totalUnits }, (_, i) => i);
+
+    // Randomly select indices to disable
+    for (let i = 0; i < numDisabled; i++) {
+      const randomIndex = Math.floor(Math.random() * allIndices.length);
+      disabledUnits.push(allIndices[randomIndex]);
+      allIndices.splice(randomIndex, 1);
+    }
+  }
+
+  return disabledUnits;
 }
 
 // Shuffle array function

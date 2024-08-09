@@ -92,14 +92,29 @@ export async function createCategoryTiles() {
 }
 
 // Set up difficulty selector
-export function setupDifficultySelector() {
+export async function setupDifficultySelector() {
   const difficultyDropdown = document.getElementById("difficulty-dropdown");
+  difficultyDropdown.style.display = "none";
 
   // Remove any existing event listeners
   difficultyDropdown.removeEventListener("change", handleDifficultyChange);
 
   // Add the event listener
   difficultyDropdown.addEventListener("change", handleDifficultyChange);
+
+  // Load the saved difficulty from storage
+  const savedDifficulty = await StorageService.getItem("selectedDifficulty");
+
+  // If a difficulty was saved, set it as the selected option
+  if (savedDifficulty) {
+    difficultyDropdown.value = savedDifficulty;
+  } else {
+    // If no difficulty was saved, set it to "hard" (default) and save it
+    difficultyDropdown.value = "hard";
+    await StorageService.setItem("selectedDifficulty", "hard");
+  }
+
+  difficultyDropdown.style.display = "";
 }
 
 async function handleDifficultyChange(event) {
