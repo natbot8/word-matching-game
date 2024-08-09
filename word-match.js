@@ -92,7 +92,7 @@ export async function initializeGame() {
   } else if (selectedDifficulty === "superhard") {
     numImages = 6;
   } else if (selectedDifficulty === "superduperhard") {
-    numImages = 8;
+    numImages = 6;
   }
 
   // Shuffle words and create levels
