@@ -86,7 +86,7 @@ export async function initializeGame() {
 
   // Set the difficulty based on the selected value
   if (selectedDifficulty === "easy") {
-    numImages = 3;
+    numImages = 2;
   } else if (selectedDifficulty === "hard") {
     numImages = 4;
   } else if (selectedDifficulty === "superhard") {

@@ -56,18 +56,16 @@ export async function showScreen(screenId) {
     if (savedCategory && wordCategories[savedCategory]) {
       PlinkoGame.initPlinkoGame(savedCategory, wordCategories[savedCategory]);
     } else {
-      console.error("Invalid category for Plinko game:", savedCategory);
-      alert("Error loading Plinko game. Please try again.");
-      showScreen("home-screen"); // Redirect to home screen on error
+      console.log("No saved category or invalid category for Plinko game");
+      PlinkoGame.initPlinkoGame("Simple Words", wordCategories["Simple Words"]);
     }
   } else if (screenId === "card-reveal-screen") {
     const savedCategory = await StorageService.getItem("selectedCategory");
     if (savedCategory && wordCategories[savedCategory]) {
       CardReveal.initCardReveal(savedCategory, wordCategories[savedCategory]);
     } else {
-      console.error("Invalid category for card reveal:", savedCategory);
-      alert("Error loading card reveal. Please try again.");
-      showScreen("home-screen"); // Redirect to home screen on error
+      console.log("No saved category or invalid category for Card Reveal game");
+      CardReveal.initCardReveal("Simple Words", wordCategories["Simple Words"]);
     }
   } else if (screenId === "show-won-card-screen") {
     // No initialization needed for this screen
