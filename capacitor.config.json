@@ -1,5 +1,5 @@
 {
-  "appId": "com.wordmatchgame.app",
+  "appId": "com.rime.wordmatch",
   "appName": "Word Game",
   "webDir": "www",
   "plugins": {

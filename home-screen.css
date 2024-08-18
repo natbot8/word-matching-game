@@ -36,10 +36,6 @@ body {
     );
     scrollbar-width: none;
   }
-
-  #category-container::-webkit-scrollbar {
-    display: none;
-  }
 } */
 
 header {
@@ -143,11 +139,11 @@ h2 {
     rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
-.category-tile:hover {
+/* .category-tile:hover {
   transform: scale(1.05);
   box-shadow: rgb(96, 44, 125, 0.3) 0px 19px 38px,
     rgb(164, 19, 77, 0.3) 0px 15px 12px;
-}
+} */
 
 .category-cards {
   display: flex;
