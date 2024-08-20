@@ -21,7 +21,9 @@ export function showWonCard(cardImage, fromGame) {
       returnHomeButton.classList.add("visible");
 
       // Play won card audio
-      new Audio("/game-sounds/won-card.m4a").play();
+      const wonCardAudio = new Audio("/game-sounds/won-card.m4a");
+      wonCardAudio.currentTime = 0; // Reset to start of the audio
+      wonCardAudio.play();
     }, 500);
   }, 50);
 
