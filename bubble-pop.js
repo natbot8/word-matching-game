@@ -221,7 +221,7 @@ function createBubblePopBoard() {
       x: startCol * BUBBLE_SPACE + BOARD_PADDING,
       y:
         rowIndex * BUBBLE_SPACE +
-        BOARD_PADDING +
+        BOARD_PADDING / 2 +
         (BUBBLE_SPACE - BLOCK_HEIGHT) / 2,
       width: BLOCK_WIDTH,
       height: BLOCK_HEIGHT,
@@ -290,9 +290,9 @@ function drawBubbles() {
     if (bubble.visible) {
       ctx.beginPath();
       ctx.arc(bubble.x, bubble.y, BUBBLE_SIZE / 2, 0, Math.PI * 2);
-      ctx.fillStyle = "green";
+      ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
       ctx.fill();
-      ctx.strokeStyle = "darkgreen";
+      ctx.strokeStyle = "rgba(255, 255, 255)";
       ctx.lineWidth = 2;
       ctx.stroke();
     }
@@ -300,9 +300,22 @@ function drawBubbles() {
 }
 
 function drawObstacles() {
-  ctx.fillStyle = "gray";
+  ctx.fillStyle = "rgb(255, 0, 239, 0.8)";
+  ctx.strokeStyle = "rgb(255, 0, 239)";
+  ctx.lineWidth = 4;
+  const cornerRadius = 6;
+
   obstacles.forEach((obstacle) => {
-    ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+    ctx.beginPath();
+    ctx.roundRect(
+      obstacle.x,
+      obstacle.y,
+      obstacle.width,
+      obstacle.height,
+      cornerRadius
+    );
+    ctx.fill();
+    ctx.stroke();
   });
 }
 
