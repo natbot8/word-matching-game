@@ -29,6 +29,7 @@ let accumulator = 0;
 let lastTime = 0;
 
 const BALL_SPEED = 300; // pixels per second
+const NUM_OBSTACLES = 2;
 
 const BUBBLE_SIZE = 30;
 const BUBBLE_PADDING = 6;
@@ -209,7 +210,7 @@ function createBubblePopBoard() {
 
   // Create obstacles
   const availableRows = [2, 3, 4, 5];
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < NUM_OBSTACLES; i++) {
     const rowIndex = availableRows.splice(
       Math.floor(Math.random() * availableRows.length),
       1
