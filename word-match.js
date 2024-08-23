@@ -412,15 +412,10 @@ function showResultsScreen() {
   const resultsMessage = document.getElementById("results-message");
   resultsMessage.textContent = `You earned ${gamePoints} points!`;
 
-  const homeButton = document.getElementById("home-button");
   const cardRevealButton = document.getElementById("card-reveal-button");
   const plinkoButton = document.getElementById("plinko-button");
   const bubblePopButton = document.getElementById("bubble-pop-button");
-
-  homeButton.onclick = () => {
-    showScreen("home-screen");
-    updatePointsDisplay();
-  };
+  const homeButton = document.getElementById("results-home-button");
 
   cardRevealButton.onclick = () => {
     showScreen("card-reveal-screen");
@@ -437,7 +432,17 @@ function showResultsScreen() {
     initBubblePopGame(selectedCategory, wordCategories[selectedCategory]);
   };
 
+  homeButton.onclick = () => {
+    showScreen("home-screen");
+    updatePointsDisplay();
+  };
+
   showScreen("results-screen");
+
+  // Animate the home button
+  setTimeout(() => {
+    homeButton.classList.add("visible");
+  }, 500);
 }
 
 // Function to play random sound file

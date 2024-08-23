@@ -23,13 +23,20 @@ let isGameEnding = false;
 const gameArea = document.getElementById("bubble-pop-game-area");
 const ctx = gameArea.getContext("2d");
 
-const BUBBLE_SIZE = 40;
+let animationFrameId = null;
+const FIXED_TIME_STEP = 1000 / 120; // 120 FPS
+let accumulator = 0;
+let lastTime = 0;
+
+const BALL_SPEED = 300; // pixels per second
+
+const BUBBLE_SIZE = 30;
 const BUBBLE_PADDING = 6;
 const BUBBLE_SPACE = BUBBLE_SIZE + BUBBLE_PADDING;
 const BLOCK_WIDTH = BUBBLE_SPACE * 3 - BUBBLE_PADDING;
 const BLOCK_HEIGHT = BUBBLE_SIZE;
 const ROWS = 7;
-const COLS = 8;
+const COLS = 9;
 const BOARD_PADDING = BUBBLE_PADDING;
 
 const shooter = {
@@ -59,12 +66,20 @@ export async function initBubblePopGame(category, categoryData) {
   const progress = await StorageService.getItem("bubblePopProgress");
 
   // Set canvas size to match the inner game area
-  gameArea.width = 374;
+  gameArea.width = 330;
   gameArea.height = 497;
 
   // Recalculate shooter position
   shooter.x = gameArea.width / 2;
   shooter.y = gameArea.height - 30;
+
+  // Reset the game state
+  resetGameState();
+
+  // Cancel any existing animation frame
+  if (animationFrameId !== null) {
+    window.cancelAnimationFrame(animationFrameId);
+  }
 
   if (progress && progress.bubbles && progress.bubbles.length > 0) {
     console.log("Found saved progress:", progress);
@@ -109,6 +124,7 @@ export async function initBubblePopGame(category, categoryData) {
   gameArea.addEventListener("touchend", handleTouchEnd);
 
   // Start the game loop
+  lastTime = performance.now();
   gameLoop();
 
   saveProgress("bubblePop", getGameState());
@@ -123,6 +139,12 @@ function getGameState() {
     obstacles,
     totalVisibleBubbles,
   };
+}
+
+function resetGameState() {
+  balls = [];
+  accumulator = 0;
+  lastTime = 0;
 }
 
 function updateShooterAngle(e) {
@@ -284,88 +306,96 @@ function drawObstacles() {
   });
 }
 
-function updateBalls() {
-  balls.forEach((ball, index) => {
-    const newX = ball.x + ball.dx;
-    const newY = ball.y + ball.dy;
+async function updateBalls(deltaTime) {
+  const timeStep = deltaTime / 1000; // Convert to seconds
 
-    // Check for collisions with walls and obstacles
-    const collision = checkCollision(ball, newX, newY);
+  for (let i = balls.length - 1; i >= 0; i--) {
+    const ball = balls[i];
+    let newX = ball.x + ball.dx * timeStep;
+    let newY = ball.y + ball.dy * timeStep;
 
-    if (collision.hit) {
-      // Resolve the collision
-      if (collision.normal.x !== 0) ball.dx = -ball.dx;
-      if (collision.normal.y !== 0) ball.dy = -ball.dy;
-
-      // Move the ball to the collision point
-      ball.x = collision.point.x;
-      ball.y = collision.point.y;
-    } else {
-      // No collision, update position normally
-      ball.x = newX;
-      ball.y = newY;
+    // Check wall collisions
+    if (
+      newX - ballRadius < BOARD_PADDING ||
+      newX + ballRadius > gameArea.width - BOARD_PADDING
+    ) {
+      ball.dx = -ball.dx;
+      newX = ball.x + ball.dx * timeStep;
+      try {
+        await Haptics.impact({ style: ImpactStyle.Heavy });
+      } catch (error) {
+        console.error("Error triggering haptics:", error);
+      }
     }
+    if (newY - ballRadius < BOARD_PADDING) {
+      ball.dy = -ball.dy;
+      newY = ball.y + ball.dy * timeStep;
+      try {
+        await Haptics.impact({ style: ImpactStyle.Heavy });
+      } catch (error) {
+        console.error("Error triggering haptics:", error);
+      }
+    }
+
+    // Check obstacle collisions
+    let collided = false;
+    for (const obstacle of obstacles) {
+      const collisionBuffer = ballRadius + 1; // Buffer zone around the obstacle
+      const closestX = Math.max(
+        obstacle.x - collisionBuffer,
+        Math.min(newX, obstacle.x + obstacle.width + collisionBuffer)
+      );
+      const closestY = Math.max(
+        obstacle.y - collisionBuffer,
+        Math.min(newY, obstacle.y + obstacle.height + collisionBuffer)
+      );
+
+      const distanceX = newX - closestX;
+      const distanceY = newY - closestY;
+      const distanceSquared = distanceX * distanceX + distanceY * distanceY;
+
+      if (distanceSquared <= ballRadius * ballRadius) {
+        // Collision detected
+        collided = true;
+
+        // Determine which side of the obstacle was hit
+        const overlapX = Math.abs(distanceX);
+        const overlapY = Math.abs(distanceY);
+
+        if (overlapX > overlapY) {
+          // Horizontal collision
+          ball.dx = -ball.dx;
+          newX = closestX + (distanceX > 0 ? ballRadius : -ballRadius);
+        } else {
+          // Vertical collision
+          ball.dy = -ball.dy;
+          newY = closestY + (distanceY > 0 ? ballRadius : -ballRadius);
+        }
+
+        try {
+          await Haptics.impact({ style: ImpactStyle.Heavy });
+        } catch (error) {
+          console.error("Error triggering haptics:", error);
+        }
+        break;
+      }
+    }
+
+    // Update ball position
+    ball.x = newX;
+    ball.y = newY;
 
     // Remove ball if it goes off the bottom of the screen
     if (ball.y + ballRadius > gameArea.height) {
-      balls.splice(index, 1);
+      balls.splice(i, 1);
     }
-  });
+  }
 }
 
-function checkCollision(ball, newX, newY) {
-  const result = {
-    hit: false,
-    point: { x: newX, y: newY },
-    normal: { x: 0, y: 0 },
-  };
-
-  // Check wall collisions
-  if (newX - ballRadius < BOARD_PADDING) {
-    result.hit = true;
-    result.point.x = BOARD_PADDING + ballRadius;
-    result.normal.x = 1;
-  } else if (newX + ballRadius > gameArea.width - BOARD_PADDING) {
-    result.hit = true;
-    result.point.x = gameArea.width - BOARD_PADDING - ballRadius;
-    result.normal.x = -1;
-  }
-
-  if (newY - ballRadius < BOARD_PADDING) {
-    result.hit = true;
-    result.point.y = BOARD_PADDING + ballRadius;
-    result.normal.y = 1;
-  }
-
-  // Check obstacle collisions
-  obstacles.forEach((obstacle) => {
-    const nearestX = Math.max(
-      obstacle.x,
-      Math.min(newX, obstacle.x + obstacle.width)
-    );
-    const nearestY = Math.max(
-      obstacle.y,
-      Math.min(newY, obstacle.y + obstacle.height)
-    );
-    const dist = Math.sqrt((newX - nearestX) ** 2 + (newY - nearestY) ** 2);
-
-    if (dist < ballRadius) {
-      result.hit = true;
-      const angle = Math.atan2(newY - nearestY, newX - nearestX);
-      result.point.x = nearestX + Math.cos(angle) * ballRadius;
-      result.point.y = nearestY + Math.sin(angle) * ballRadius;
-      result.normal.x = (newX - nearestX) / dist;
-      result.normal.y = (newY - nearestY) / dist;
-    }
-  });
-
-  return result;
-}
-
-function checkCollisions() {
+async function checkCollisions() {
   let bubbleCleared = false;
-  balls.forEach((ball) => {
-    bubbles.forEach((bubble, bubbleIndex) => {
+  for (const ball of balls) {
+    for (const bubble of bubbles) {
       if (bubble.visible) {
         const dx = ball.x - bubble.x;
         const dy = ball.y - bubble.y;
@@ -377,6 +407,12 @@ function checkCollisions() {
           bubbleCleared = true;
           updateProgressBar();
 
+          try {
+            await Haptics.impact({ style: ImpactStyle.Light });
+          } catch (error) {
+            console.error("Error triggering haptics:", error);
+          }
+
           // Check if all bubbles are cleared
           if (clearedBubbles >= totalVisibleBubbles && !isGameEnding) {
             isGameEnding = true;
@@ -384,13 +420,8 @@ function checkCollisions() {
           }
         }
       }
-    });
-  });
-
-  // Remove balls that are off-screen
-  balls = balls.filter(
-    (ball) => ball.y + ballRadius > 0 && ball.y - ballRadius < gameArea.height
-  );
+    }
+  }
 
   // Only save progress if a bubble was cleared
   if (bubbleCleared && !isGameEnding) {
@@ -400,13 +431,13 @@ function checkCollisions() {
 
 function shootBall() {
   if (checkSufficientPoints()) {
-    const speed = 10;
-    const dx = Math.sin(shooter.angle) * speed;
-    const dy = -Math.cos(shooter.angle) * speed;
+    const angle = shooter.angle;
+    const dx = Math.sin(angle) * BALL_SPEED;
+    const dy = -Math.cos(angle) * BALL_SPEED;
 
     balls.push({
-      x: shooter.x + Math.sin(shooter.angle) * (shooter.size + ballRadius),
-      y: shooter.y - Math.cos(shooter.angle) * (shooter.size + ballRadius),
+      x: shooter.x + Math.sin(angle) * (shooter.size + ballRadius),
+      y: shooter.y - Math.cos(angle) * (shooter.size + ballRadius),
       dx: dx,
       dy: dy,
     });
@@ -419,20 +450,32 @@ function shootBall() {
   }
 }
 
-function gameLoop() {
-  if (!isGameEnding) {
-    ctx.clearRect(0, 0, gameArea.width, gameArea.height);
-
-    drawObstacles();
-    drawAimingLine();
-    drawBubbles();
-    drawShooter();
-    drawBalls();
-    updateBalls();
-    checkCollisions();
+async function gameLoop(currentTime) {
+  if (isGameEnding) {
+    return;
   }
 
-  requestAnimationFrame(gameLoop);
+  const deltaTime = currentTime - lastTime;
+  lastTime = currentTime;
+
+  updateGame(deltaTime);
+  render();
+
+  animationFrameId = requestAnimationFrame(gameLoop);
+}
+
+async function updateGame(deltaTime) {
+  await updateBalls(deltaTime);
+  await checkCollisions();
+}
+
+function render() {
+  ctx.clearRect(0, 0, gameArea.width, gameArea.height);
+  drawObstacles();
+  drawAimingLine();
+  drawBubbles();
+  drawShooter();
+  drawBalls();
 }
 
 function revealCard() {

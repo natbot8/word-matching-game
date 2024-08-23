@@ -6,9 +6,8 @@
 
 #bubble-pop-game-container {
   width: 100%;
-  max-width: 394px;
+  max-width: 350px;
   padding: 10px;
-  margin: 0 auto;
 }
 
 #bubble-pop-progress-container {
@@ -51,7 +50,7 @@
 }
 
 #bubble-pop-game-area {
-  width: 374px;
+  width: 330px;
   height: 55vh;
   max-height: 600px;
   background-color: #4a90e2;

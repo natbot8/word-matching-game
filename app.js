@@ -35,6 +35,7 @@ export async function showScreen(screenId) {
   document.getElementById(screenId).style.display = [
     "results-screen",
     "plinko-screen",
+    "bubble-pop-screen",
     "show-won-card-screen",
   ].includes(screenId)
     ? "flex"

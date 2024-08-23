@@ -13,12 +13,13 @@
     
     
     
+    
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Inter:regular,light,bold"
     />
-    <script type="module" crossorigin src="/assets/main.b998e5e6.js"></script>
-    <link rel="stylesheet" href="/assets/index.f9d7c345.css">
+    <script type="module" crossorigin src="/assets/main.72316f26.js"></script>
+    <link rel="stylesheet" href="/assets/index.79ad5bd3.css">
   </head>
   <body>
     <div id="home-screen">
@@ -69,10 +70,6 @@
         <p id="results-message"></p>
         <div id="coin-container"></div>
         <div class="results-buttons">
-          <button id="home-button" class="results-button">
-            <img src="/assets/home.07c4767a.png" alt="Home Icon" />
-            Home
-          </button>
           <button id="card-reveal-button" class="results-button">
             <img src="/assets/card-reveal.8e9602c2.png" alt="Card Icon" />
             Reveal
@@ -81,8 +78,16 @@
             <img src="/assets/plinko.0d197840.png" alt="Card Icon" />
             Plinko
           </button>
+          <button id="bubble-pop-button" class="results-button">
+            <img src="/assets/bubble-pop.e1d05110.png" alt="Bubble Pop Icon" />
+            Pop
+          </button>
         </div>
       </div>
+      <button id="results-home-button" class="return-home-button">
+        <img src="/assets/home.07c4767a.png" alt="Home Icon" />
+        Home
+      </button>
     </div>
 
     <div id="card-reveal-screen" style="display: none">
@@ -141,6 +146,43 @@
       </div>
     </div>
 
+    <div id="bubble-pop-screen" class="screen" style="display: none">
+      <header>
+        <div class="game-displays">
+          <h2>Pop the Bubbles</h2>
+          <div class="points-display">
+            <span id="total-points-value">0</span>
+            <img src="data:image/png;base64,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" alt="Points" />
+          </div>
+        </div>
+      </header>
+
+      <div id="bubble-pop-game-container">
+        <div id="bubble-pop-progress-container">
+          <div id="progress-and-card">
+            <div id="progress-bar-container">
+              <div id="bubble-pop-progress-bar"></div>
+            </div>
+            <img
+              src=""
+              alt="Reward Card"
+              id="bubble-pop-card-image"
+              class="card-image"
+            />
+          </div>
+        </div>
+
+        <canvas id="bubble-pop-game-area"></canvas>
+
+        <div
+          id="bubble-pop-out-of-points-message"
+          class="out-of-points-message"
+        >
+          You're out of points
+        </div>
+      </div>
+    </div>
+
     <div id="show-won-card-screen" class="screen" style="display: none">
       <div class="won-card-container">
         <h2>You Won a Card!</h2>
@@ -166,6 +208,10 @@
       <div class="nav-item" data-screen="plinko-screen">
         <img src="/assets/plinko.0d197840.png" alt="Plinko" />
         <span>Plinko</span>
+      </div>
+      <div class="nav-item" data-screen="bubble-pop-screen">
+        <img src="/assets/bubble-pop.e1d05110.png" alt="Bubble Pop" />
+        <span>Pop</span>
       </div>
     </nav>
 

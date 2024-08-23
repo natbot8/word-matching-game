@@ -124,6 +124,7 @@
 
 #results-screen {
   position: fixed;
+  flex-direction: column;
   top: 0;
   left: 0;
   width: 100%;
@@ -139,6 +140,7 @@
   background-color: white;
   box-shadow: rgb(255, 255, 255, 0.6) 0px 3px 18px;
   padding: 30px;
+  margin-bottom: 20px;
   border-radius: 10px;
   text-align: center;
   max-width: 80%;
@@ -194,6 +196,39 @@
   margin-bottom: 10px;
 }
 
+#results-home-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s, opacity 0.5s ease-out,
+    transform 0.2s ease-out;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+#results-home-button.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#results-home-button:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+}
+
+#results-home-button img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
 #bottom-nav {
   position: fixed;
   bottom: max(env(safe-area-inset-bottom), 20px);
@@ -213,7 +248,7 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  padding: 0 30px;
+  padding: 0 20px;
   transition: transform 0.2s ease;
 }
 
