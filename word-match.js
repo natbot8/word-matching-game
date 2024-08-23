@@ -1,6 +1,7 @@
 import { showScreen } from "./app.js";
 import { initCardReveal } from "./card-reveal.js";
 import { initPlinkoGame } from "./plinko.js";
+import { initBubblePopGame } from "./bubble-pop.js";
 import { updatePoints, totalPoints, updatePointsDisplay } from "./app.js";
 import { wordCategories, fetchWordCategories } from "./app.js";
 import {
@@ -414,6 +415,7 @@ function showResultsScreen() {
   const homeButton = document.getElementById("home-button");
   const cardRevealButton = document.getElementById("card-reveal-button");
   const plinkoButton = document.getElementById("plinko-button");
+  const bubblePopButton = document.getElementById("bubble-pop-button");
 
   homeButton.onclick = () => {
     showScreen("home-screen");
@@ -428,6 +430,11 @@ function showResultsScreen() {
   plinkoButton.onclick = () => {
     showScreen("plinko-screen");
     initPlinkoGame(selectedCategory, wordCategories[selectedCategory]);
+  };
+
+  bubblePopButton.onclick = () => {
+    showScreen("bubble-pop-screen");
+    initBubblePopGame(selectedCategory, wordCategories[selectedCategory]);
   };
 
   showScreen("results-screen");

@@ -251,7 +251,8 @@
 }
 
 #card-reveal-screen,
-#plinko-screen {
+#plinko-screen,
+#bubble-pop-screen {
   padding-top: 70px;
   padding-bottom: 90px;
   margin: 0 20px;

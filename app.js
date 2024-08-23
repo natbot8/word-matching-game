@@ -3,6 +3,7 @@ import * as HomeScreen from "./home-screen.js";
 import * as Game from "./word-match.js";
 import * as CardReveal from "./card-reveal.js";
 import * as PlinkoGame from "./plinko.js";
+import * as BubblePopGame from "./bubble-pop.js";
 import * as ShowWonCard from "./show-won-card.js";
 import { StorageService, migrateStorage } from "./storage-service.js";
 import { Capacitor } from "@capacitor/core";
@@ -27,6 +28,7 @@ export async function showScreen(screenId) {
   document.getElementById("results-screen").style.display = "none";
   document.getElementById("card-reveal-screen").style.display = "none";
   document.getElementById("plinko-screen").style.display = "none";
+  document.getElementById("bubble-pop-screen").style.display = "none";
   document.getElementById("show-won-card-screen").style.display = "none";
 
   // Show the selected screen
@@ -58,6 +60,20 @@ export async function showScreen(screenId) {
     } else {
       console.log("No saved category or invalid category for Plinko game");
       PlinkoGame.initPlinkoGame("Simple Words", wordCategories["Simple Words"]);
+    }
+  } else if (screenId === "bubble-pop-screen") {
+    const savedCategory = await StorageService.getItem("selectedCategory");
+    if (savedCategory && wordCategories[savedCategory]) {
+      BubblePopGame.initBubblePopGame(
+        savedCategory,
+        wordCategories[savedCategory]
+      );
+    } else {
+      console.log("No saved category or invalid category for Bubble Pop game");
+      BubblePopGame.initBubblePopGame(
+        "Simple Words",
+        wordCategories["Simple Words"]
+      );
     }
   } else if (screenId === "card-reveal-screen") {
     const savedCategory = await StorageService.getItem("selectedCategory");

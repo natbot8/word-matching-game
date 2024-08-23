@@ -1,0 +1,64 @@
+#bubble-pop-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#bubble-pop-game-container {
+  width: 100%;
+  max-width: 394px;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+#bubble-pop-progress-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+#progress-and-card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+#progress-bar-container {
+  flex-grow: 1;
+  height: 35px;
+  background-color: #ddd;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-right: 2px;
+  box-shadow: rgba(0, 0, 0, 0.39) 0px 3px 8px;
+}
+
+#bubble-pop-progress-bar {
+  width: 0%;
+  height: 100%;
+  background-color: #32cd32;
+  transition: width 0.3s ease-in-out;
+}
+
+#bubble-pop-card-image {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.39) 0px 3px 8px;
+  margin-left: -14px;
+}
+
+#bubble-pop-game-area {
+  width: 374px;
+  height: 55vh;
+  max-height: 600px;
+  background-color: #4a90e2;
+  border: 10px solid #ffd700;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.39) 0px 3px 8px;
+}

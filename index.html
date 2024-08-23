@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="home-screen.css" />
     <link rel="stylesheet" href="card-reveal.css" />
     <link rel="stylesheet" href="plinko.css" />
+    <link rel="stylesheet" href="bubble-pop.css" />
     <link rel="stylesheet" href="show-won-card.css" />
     <link rel="stylesheet" href="mini-game-common.css" />
     <link
@@ -79,6 +80,10 @@
             <img src="icons/plinko.png" alt="Card Icon" />
             Plinko
           </button>
+          <button id="bubble-pop-button">
+            <img src="icons/bubble-pop.png" alt="Bubble Pop Icon" />
+            Pop
+          </button>
         </div>
       </div>
     </div>
@@ -139,6 +144,43 @@
       </div>
     </div>
 
+    <div id="bubble-pop-screen" class="screen" style="display: none">
+      <header>
+        <div class="game-displays">
+          <h2>Pop the Bubbles</h2>
+          <div class="points-display">
+            <span id="total-points-value">0</span>
+            <img src="icons/coin.png" alt="Points" />
+          </div>
+        </div>
+      </header>
+
+      <div id="bubble-pop-game-container">
+        <div id="bubble-pop-progress-container">
+          <div id="progress-and-card">
+            <div id="progress-bar-container">
+              <div id="bubble-pop-progress-bar"></div>
+            </div>
+            <img
+              src=""
+              alt="Reward Card"
+              id="bubble-pop-card-image"
+              class="card-image"
+            />
+          </div>
+        </div>
+
+        <canvas id="bubble-pop-game-area"></canvas>
+
+        <div
+          id="bubble-pop-out-of-points-message"
+          class="out-of-points-message"
+        >
+          You're out of points
+        </div>
+      </div>
+    </div>
+
     <div id="show-won-card-screen" class="screen" style="display: none">
       <div class="won-card-container">
         <h2>You Won a Card!</h2>
@@ -164,6 +206,10 @@
       <div class="nav-item" data-screen="plinko-screen">
         <img src="icons/plinko.png" alt="Plinko" />
         <span>Plinko</span>
+      </div>
+      <div class="nav-item" data-screen="bubble-pop-screen">
+        <img src="icons/bubble-pop.png" alt="Bubble Pop" />
+        <span>Pop</span>
       </div>
     </nav>
 
