@@ -176,6 +176,7 @@
   margin: 5px;
   border-radius: 5px;
   font-family: "Inter";
+  font-size: 14px;
   border: 2px solid;
   border-color: #ff3daf;
   box-shadow: -1px 2px;
@@ -196,6 +197,10 @@
   margin-bottom: 10px;
 }
 
+.results-button span {
+  margin: 0;
+}
+
 #results-home-button {
   display: flex;
   align-items: center;
@@ -206,6 +211,7 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  font-family: "Inter";
   font-size: 16px;
   transition: background-color 0.3s, opacity 0.5s ease-out,
     transform 0.2s ease-out;

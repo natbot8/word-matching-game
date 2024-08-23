@@ -50,8 +50,7 @@
 }
 
 #plinko-board {
-  height: 55vh;
-  max-height: 600px;
+  height: 497px;
   background-color: #4a90e2;
   border: 10px solid #ffd700;
   border-radius: 10px;

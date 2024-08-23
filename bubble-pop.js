@@ -263,15 +263,15 @@ function drawShooter() {
 }
 
 function drawAimingLine() {
-  const lineLength = 200;
+  const lineLength = 180;
   ctx.beginPath();
   ctx.moveTo(shooter.x, shooter.y);
   ctx.lineTo(
     shooter.x + Math.sin(shooter.angle) * lineLength,
     shooter.y - Math.cos(shooter.angle) * lineLength
   );
-  ctx.setLineDash([5, 5]);
-  ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
+  ctx.setLineDash([5, 7]);
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
   ctx.stroke();
   ctx.setLineDash([]);
 }
