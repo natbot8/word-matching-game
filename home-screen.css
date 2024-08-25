@@ -46,7 +46,6 @@ header {
   right: 0;
   z-index: 1000;
   padding-top: max(env(safe-area-inset-top), 20px);
-  padding-bottom: 10px;
   background-color: rgb(240, 240, 240, 0.97);
 }
 
