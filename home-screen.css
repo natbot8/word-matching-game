@@ -60,7 +60,8 @@ header {
 }
 
 .difficulty-selector,
-.points-display {
+.points-display,
+.reset-game {
   display: flex;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.8);
@@ -69,16 +70,35 @@ header {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.reset-game {
+  border: 3px solid;
+  border-color: #32cd32;
+  cursor: pointer;
+  width: 70px;
+  margin-top: 8px;
+}
+
 .difficulty-selector img,
 .points-display img {
   width: 30px;
   height: 30px;
 }
 
+.reset-game img {
+  width: 24px;
+  height: 24px;
+}
+
 .difficulty-selector select,
 .points-display span {
   font-size: 16px;
   font-weight: bold;
+}
+
+.reset-game span {
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 4px;
 }
 
 #difficulty-dropdown {
@@ -138,12 +158,6 @@ h2 {
   box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
     rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
-
-/* .category-tile:hover {
-  transform: scale(1.05);
-  box-shadow: rgb(96, 44, 125, 0.3) 0px 19px 38px,
-    rgb(164, 19, 77, 0.3) 0px 15px 12px;
-} */
 
 .category-cards {
   display: flex;

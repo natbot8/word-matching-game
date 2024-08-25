@@ -124,6 +124,11 @@ export async function initBubblePopGame(category, categoryData) {
   gameArea.addEventListener("touchmove", handleTouchMove);
   gameArea.addEventListener("touchend", handleTouchEnd);
 
+  // Add reset button
+  const resetButton = document.getElementById("reset-bubble-pop");
+  resetButton.removeEventListener("click", resetBubblePopGame);
+  resetButton.addEventListener("click", resetBubblePopGame);
+
   // Start the game loop
   lastTime = performance.now();
   gameLoop();
@@ -146,6 +151,31 @@ function resetGameState() {
   balls = [];
   accumulator = 0;
   lastTime = 0;
+}
+
+// Function to reset the game board and progress in case you get stuck
+export async function resetBubblePopGame() {
+  console.log("Resetting Bubble Pop Game");
+
+  // Reset progress bar
+  clearedBubbles = 0;
+  updateProgressBar();
+
+  // Clear the bubble pop board
+  bubbles = [];
+  obstacles = [];
+
+  // Create a new bubble pop board
+  createBubblePopBoard();
+
+  // Reset game state
+  resetGameState();
+
+  // Save new progress and state to local storage
+  saveProgress("bubblePop", getGameState());
+
+  // Redraw the game
+  render();
 }
 
 function updateShooterAngle(e) {
