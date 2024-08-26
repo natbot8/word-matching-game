@@ -7,7 +7,7 @@
 #plinko-game-container {
   width: 100%;
   max-width: 350px;
-  padding: 10px;
+  padding-top: 8px;
 }
 
 #plinko-progress-container {
