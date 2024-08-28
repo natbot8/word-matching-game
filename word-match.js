@@ -167,6 +167,7 @@ export function loadLevel() {
     letterContainer.style.paddingLeft = "20px";
   } else {
     letterContainer.style.justifyContent = "center";
+    letterContainer.style.paddingLeft = "0px";
   }
 
   updateFadeEffect();
