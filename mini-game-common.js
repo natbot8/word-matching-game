@@ -1,7 +1,6 @@
 import { totalPoints } from "./app.js";
 import { StorageService } from "./storage-service.js";
-
-const noPointsSound = new Audio("game-sounds/need-points.m4a");
+import { audioService } from "./audio-service.js";
 
 export function animatePointsDecrement() {
   const pointsDisplays = document.querySelectorAll(".points-display");
@@ -38,7 +37,7 @@ export function showOutOfPointsMessage(messageElementId) {
     setTimeout(() => {
       message.classList.remove("show");
     }, 1500);
-    playNoPointsSound();
+    audioService.playNeedPointsAudio();
   } else {
     console.error(`Message element with id '${messageElementId}' not found`);
   }
@@ -116,11 +115,4 @@ export async function saveWonCard(currentCard) {
 export async function saveProgress(gameType, progressData) {
   await StorageService.setItem(`${gameType}Progress`, progressData);
   console.log(`${gameType} progress saved:`, progressData);
-}
-
-function playNoPointsSound() {
-  noPointsSound.currentTime = 0; // Reset to start of the audio
-  noPointsSound
-    .play()
-    .catch((error) => console.error("Error playing audio:", error));
 }

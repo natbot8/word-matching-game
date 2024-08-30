@@ -1,6 +1,7 @@
 import { updatePointsDisplay, totalPoints } from "./app.js";
 import { wordCategories, fetchWordCategories } from "./app.js";
 import { StorageService } from "./storage-service.js";
+import { audioService } from "./audio-service.js";
 
 let difficultyAudio = null;
 let touchStartX = 0;
@@ -120,31 +121,7 @@ export async function setupDifficultySelector() {
 async function handleDifficultyChange(event) {
   const difficulty = event.target.value;
   await StorageService.setItem("selectedDifficulty", difficulty);
-  playDifficultySound(difficulty);
-}
-
-// Play difficulty sounds
-function playDifficultySound(difficulty) {
-  const soundMap = {
-    easy: "easy.m4a",
-    hard: "hard.m4a",
-    superhard: "superhard.m4a",
-    superduperhard: "superduperhard.m4a",
-  };
-  const soundFile = soundMap[difficulty];
-
-  // Stop any currently playing audio
-  if (difficultyAudio) {
-    difficultyAudio.pause();
-    difficultyAudio.currentTime = 0;
-  }
-
-  if (soundFile) {
-    difficultyAudio = new Audio(`game-sounds/${soundFile}`);
-    difficultyAudio
-      .play()
-      .catch((error) => console.error("Error playing audio:", error));
-  }
+  audioService.playDifficultyAudio(difficulty);
 }
 
 function handleTouchStart(event) {

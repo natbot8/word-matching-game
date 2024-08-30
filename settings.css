@@ -1,0 +1,90 @@
+#settings-screen {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(73, 73, 73);
+  justify-content: center;
+  align-items: center;
+  z-index: 1001;
+}
+
+.settings-container {
+  background-color: white;
+  box-shadow: rgb(255, 255, 255, 0.6) 0px 3px 18px;
+  padding: 30px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 70%;
+}
+
+.settings-container h2 {
+  font-family: "Inter", sans-serif;
+  font-size: 40px;
+  font-weight: 800;
+  text-shadow: -0.06em 0 2px #fb00ff57;
+  margin-bottom: 0px;
+  padding-bottom: 30px;
+}
+
+.settings-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#voice-select {
+  border: none;
+  background: transparent;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 10px;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+#voice-select label {
+  color: grey;
+}
+
+#settings-home-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: "Inter";
+  font-size: 16px;
+  transition: background-color 0.3s, opacity 0.5s ease-out,
+    transform 0.2s ease-out;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+#settings-home-button.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#settings-home-button:hover {
+  background-color: #45a049;
+  transform: scale(1.1);
+}
+
+#settings-home-button img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}

@@ -14,17 +14,21 @@
     
     
     
+    
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Inter:regular,light,bold"
     />
-    <script type="module" crossorigin src="/assets/main.fbfe1a2f.js"></script>
-    <link rel="stylesheet" href="/assets/index.6271afb2.css">
+    <script type="module" crossorigin src="/assets/main.ce621b23.js"></script>
+    <link rel="stylesheet" href="/assets/index.61cc38b3.css">
   </head>
   <body>
     <div id="home-screen">
       <header>
         <div class="game-displays">
+          <div class="settings-display">
+            <img src="/assets/settings.3d9a26ec.png" alt="Settings" />
+          </div>
           <div class="difficulty-selector">
             <img src="/assets/brain.5a50df43.png" alt="Difficulty" />
             <select id="difficulty-dropdown" style="display: none">
@@ -46,6 +50,23 @@
       <div id="category-container" role="main">
         <!-- Category tiles will be added here dynamically -->
       </div>
+    </div>
+
+    <div id="settings-screen" class="screen" style="display: none">
+      <div class="settings-container">
+        <h2>Settings</h2>
+        <div class="settings-option">
+          <label for="voice-select">Voice:</label>
+          <select id="voice-select">
+            <option value="emi">Emi</option>
+            <option value="gabby">Gabby</option>
+          </select>
+        </div>
+      </div>
+      <button id="settings-home-button" class="return-home-button">
+        <img src="/assets/home.07c4767a.png" alt="Home Icon" />
+        Return Home
+      </button>
     </div>
 
     <div id="game-screen" style="display: none">

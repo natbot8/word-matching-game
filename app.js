@@ -9,6 +9,8 @@ import { StorageService, migrateStorage } from "./storage-service.js";
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import { SplashScreen } from "@capacitor/splash-screen";
+import { audioService } from "./audio-service.js";
+import { initSettingsScreen } from "./settings.js";
 
 // Global state
 let currentScreen = "home";
@@ -30,6 +32,7 @@ export async function showScreen(screenId) {
   document.getElementById("plinko-screen").style.display = "none";
   document.getElementById("bubble-pop-screen").style.display = "none";
   document.getElementById("show-won-card-screen").style.display = "none";
+  document.getElementById("settings-screen").style.display = "none";
 
   // Show the selected screen
   document.getElementById(screenId).style.display = [
@@ -37,6 +40,7 @@ export async function showScreen(screenId) {
     "plinko-screen",
     "bubble-pop-screen",
     "show-won-card-screen",
+    "settings-screen",
   ].includes(screenId)
     ? "flex"
     : "block";
@@ -121,7 +125,7 @@ async function startGame(category) {
   );
 
   // Play start game audio
-  new Audio("game-sounds/lets-go.m4a").play();
+  audioService.playGameStartAudio();
 
   // Set game parameters
   await StorageService.setItem("selectedCategory", category);
@@ -176,6 +180,11 @@ async function initializePoints() {
   updatePointsDisplay();
 }
 
+function setupSettingsIcon() {
+  const settingsIcon = document.querySelector(".settings-display");
+  settingsIcon.onclick = () => showScreen("settings-screen");
+}
+
 function disableImageContextMenu() {
   document.body.addEventListener(
     "contextmenu",
@@ -195,10 +204,13 @@ async function initializeApp() {
     await migrateStorage();
     await fetchWordCategories();
     await loadPoints();
+    await audioService.initialize();
     await HomeScreen.initHomeScreen();
     await initializePoints();
     initNavigation();
     disableImageContextMenu();
+    setupSettingsIcon();
+    initSettingsScreen();
 
     // Hide the splash screen
     await SplashScreen.hide();

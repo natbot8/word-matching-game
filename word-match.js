@@ -11,6 +11,7 @@ import {
 import { StorageService } from "./storage-service.js";
 import { showConfettiCannon } from "./confetti.js";
 import { Haptics, ImpactStyle } from "@capacitor/haptics";
+import { audioService } from "./audio-service.js";
 
 let words = {};
 export const levels = [];
@@ -22,18 +23,6 @@ export let currentLevel = 0;
 export let isProcessing = false;
 export let selectedCategory = "Simple Words";
 export let selectedDifficulty = "Hard";
-
-const correctSounds = [
-  new Audio("game-sounds/nice.m4a"),
-  new Audio("game-sounds/oo-nice.m4a"),
-  new Audio("game-sounds/good-job.m4a"),
-  new Audio("game-sounds/great.m4a"),
-];
-
-const incorrectSounds = [
-  new Audio("game-sounds/try-again.m4a"),
-  new Audio("game-sounds/oops.m4a"),
-];
 
 // Fetch letter sounds from JSON file
 async function fetchLetterSounds() {
@@ -62,9 +51,6 @@ export async function initializeGame() {
 
   // Load total points from localStorage (handled in app.js)
   updateTotalPointsDisplay();
-
-  // Pre-load audio
-  preloadAudio();
 
   // Fetch word categories
   try {
@@ -346,7 +332,7 @@ export async function checkImage(imgElement, currentLevelData) {
 
   if (currentWord === wordDisplay) {
     updateGamePoints(true); // Pass true for correct answer
-    playRandomSound(correctSounds);
+    audioService.playCorrectAudio();
 
     // Show confetti animation
     showConfettiCannon();
@@ -357,7 +343,7 @@ export async function checkImage(imgElement, currentLevelData) {
     }, 1000);
   } else {
     updateGamePoints(false);
-    playRandomSound(incorrectSounds);
+    audioService.playIncorrectAudio();
     imgElement.classList.add("disabled");
     isProcessing = false;
   }
@@ -446,24 +432,10 @@ function showResultsScreen() {
   }, 500);
 }
 
-// Function to play random sound file
-function playRandomSound(soundArray) {
-  const randomIndex = Math.floor(Math.random() * soundArray.length);
-  const sound = soundArray[randomIndex];
-  sound.currentTime = 0; // Reset to start of the audio
-  sound.play().catch((error) => console.error("Error playing audio:", error));
-}
-
 // Reset disabled images when next level loads
 function resetDisabledImages() {
   const disabledImages = document.querySelectorAll(".image-option.disabled");
   disabledImages.forEach((img) => img.classList.remove("disabled"));
-}
-
-function preloadAudio() {
-  [...correctSounds, ...incorrectSounds].forEach((sound) => {
-    sound.load();
-  });
 }
 
 // Add this function to check and update the fade effect

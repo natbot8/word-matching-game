@@ -1,4 +1,5 @@
 import { showScreen } from "./app.js";
+import { audioService } from "./audio-service.js";
 
 export function showWonCard(cardImage, fromGame) {
   const wonCardScreen = document.getElementById("show-won-card-screen");
@@ -21,9 +22,7 @@ export function showWonCard(cardImage, fromGame) {
       returnHomeButton.classList.add("visible");
 
       // Play won card audio
-      const wonCardAudio = new Audio("/game-sounds/won-card.m4a");
-      wonCardAudio.currentTime = 0; // Reset to start of the audio
-      wonCardAudio.play();
+      audioService.playWinCardAudio();
     }, 500);
   }, 50);
 

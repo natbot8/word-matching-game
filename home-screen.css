@@ -60,6 +60,7 @@ header {
 
 .difficulty-selector,
 .points-display,
+.settings-display,
 .reset-game {
   display: flex;
   align-items: center;
@@ -67,6 +68,10 @@ header {
   padding: 5px 10px;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.settings-display {
+  cursor: pointer;
 }
 
 /* .difficulty-selector select {
@@ -83,7 +88,8 @@ header {
 }
 
 .difficulty-selector img,
-.points-display img {
+.points-display img,
+.settings-display img {
   width: 30px;
   height: 30px;
 }
