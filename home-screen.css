@@ -56,6 +56,27 @@ header {
   padding-left: 20px;
   padding-right: 20px;
   margin-bottom: 15px;
+  position: relative;
+}
+
+.settings-display,
+.points-display {
+  flex: 0 0 auto; /* Prevent the elements from stretching */
+}
+
+.difficulty-selector {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* Center the element horizontally */
+}
+
+@media (max-width: 768px) {
+  .difficulty-selector {
+    position: static; /* Reset to normal flow on smaller screens */
+    transform: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .difficulty-selector,
@@ -90,8 +111,8 @@ header {
 .difficulty-selector img,
 .points-display img,
 .settings-display img {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
 }
 
 .reset-game img {
@@ -101,7 +122,7 @@ header {
 
 .difficulty-selector select,
 .points-display span {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -112,15 +133,17 @@ header {
 }
 
 #difficulty-dropdown {
-  appearance: menulist;
-  -webkit-appearance: menulist;
+  appearance: menulist-button;
+  -webkit-appearance: menulist-button;
   border: none;
-  background: transparent;
-  font-size: 16px;
+  background-color: inherit;
+  font-size: 14px;
   font-weight: bold;
   margin: 5px;
   cursor: pointer;
   color: #000000;
+  outline: none;
+  margin: 0;
 }
 
 #home-title {

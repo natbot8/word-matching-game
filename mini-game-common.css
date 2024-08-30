@@ -42,7 +42,7 @@ points-display span.points-display.increment {
 .out-of-points-message {
   position: absolute;
   text-align: center;
-  top: 40%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
