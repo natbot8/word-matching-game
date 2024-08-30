@@ -34,7 +34,7 @@ const voiceAudio = {
     ],
     incorrect: ["gabby-oops.m4a"],
     winCard: "gabby-won-card.m4a",
-    needPoints: "need-points.m4a",
+    needPoints: "gabby-need-points.m4a",
   },
 };
 

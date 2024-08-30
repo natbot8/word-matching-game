@@ -10,7 +10,7 @@ import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { audioService } from "./audio-service.js";
-import { initSettingsScreen } from "./settings.js";
+import { initSettingsScreen, showSettingsScreen } from "./settings.js";
 
 // Global state
 let currentScreen = "home";
@@ -182,7 +182,7 @@ async function initializePoints() {
 
 function setupSettingsIcon() {
   const settingsIcon = document.querySelector(".settings-display");
-  settingsIcon.onclick = () => showScreen("settings-screen");
+  settingsIcon.onclick = () => showSettingsScreen();
 }
 
 function disableImageContextMenu() {

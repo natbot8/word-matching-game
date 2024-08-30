@@ -4,7 +4,6 @@ import { showScreen } from "./app.js";
 
 export function initSettingsScreen() {
   const voiceSelect = document.getElementById("voice-select");
-  const homeButton = document.getElementById("settings-home-button");
 
   // Set the initial value
   voiceSelect.value = audioService.currentVoice;
@@ -16,12 +15,19 @@ export function initSettingsScreen() {
     // Optionally play a sample audio to demonstrate the new voice
     audioService.playGameStartAudio();
   });
+}
 
-  // Animate the home button
+export function showSettingsScreen() {
+  const homeButton = document.getElementById("settings-home-button");
+
+  showScreen("settings-screen");
+
   homeButton.onclick = () => {
     showScreen("home-screen");
+    homeButton.classList.remove("visible");
   };
 
+  // Animate the home button
   setTimeout(() => {
     homeButton.classList.add("visible");
   }, 500);

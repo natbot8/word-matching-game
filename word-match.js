@@ -421,6 +421,7 @@ function showResultsScreen() {
 
   homeButton.onclick = () => {
     showScreen("home-screen");
+    homeButton.classList.remove("visible");
     updatePointsDisplay();
   };
 
