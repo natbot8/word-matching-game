@@ -21,30 +21,30 @@ export function initSettingsScreen() {
     audioService.playGameStartAudio();
   });
 
-  // Add event listener for rate app button
-  rateAppButton.addEventListener("click", () => {
-    if (Capacitor.isNativePlatform()) {
-      InAppReview.requestReview();
-    } else {
-      // Fallback for non-iOS or web environment
-      alert("App rating is only available on native platforms.");
-    }
-  });
+  // // Add event listener for rate app button
+  // rateAppButton.addEventListener("click", () => {
+  //   if (Capacitor.isNativePlatform()) {
+  //     InAppReview.requestReview();
+  //   } else {
+  //     // Fallback for non-iOS or web environment
+  //     alert("App rating is only available on native platforms.");
+  //   }
+  // });
 
-  // Add event listener for share app button
-  shareAppButton.addEventListener("click", async () => {
-    if (Capacitor.isNativePlatform()) {
-      await Share.share({
-        title: "Check out this fun app!",
-        text: "Check out this reading app!",
-        url: "https://apps.apple.com/us/app/word-match-learn-to-read/id6636469947",
-        dialogTitle: "Share with friends",
-      });
-    } else {
-      // Fallback for web environment
-      alert("App sharing is only available on native platforms.");
-    }
-  });
+  // // Add event listener for share app button
+  // shareAppButton.addEventListener("click", async () => {
+  //   if (Capacitor.isNativePlatform()) {
+  //     await Share.share({
+  //       title: "Check out this fun app!",
+  //       text: "Check out this reading app!",
+  //       url: "https://apps.apple.com/us/app/word-match-learn-to-read/id6636469947",
+  //       dialogTitle: "Share with friends",
+  //     });
+  //   } else {
+  //     // Fallback for web environment
+  //     alert("App sharing is only available on native platforms.");
+  //   }
+  // });
 }
 
 export function showSettingsScreen() {
