@@ -49,7 +49,7 @@ export async function initPlinkoGame(category, categoryData) {
   }
 
   if (needNewCard) {
-    currentPlinkoCard = selectRandomCard(categoryData);
+    currentPlinkoCard = await selectRandomCard(categoryData);
     needNewCard = false;
     saveProgress("plinko", {
       progressBarFill,

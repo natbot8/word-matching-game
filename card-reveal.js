@@ -46,7 +46,7 @@ export async function initCardReveal(category, categoryData) {
     needNewCard = true;
   }
   if (needNewCard) {
-    currentCard = selectRandomCard(categoryData);
+    currentCard = await selectRandomCard(categoryData);
     needNewCard = false;
     saveProgress("cardReveal", {
       revealedBlocks,

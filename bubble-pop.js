@@ -96,7 +96,7 @@ export async function initBubblePopGame(category, categoryData) {
   }
 
   if (needNewCard) {
-    currentBubblePopCard = selectRandomCard(categoryData);
+    currentBubblePopCard = await selectRandomCard(categoryData);
     needNewCard = false;
     createBubblePopBoard();
   }

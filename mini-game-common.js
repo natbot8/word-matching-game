@@ -76,7 +76,7 @@ export function updateCardImage(card, category, gameType, imageId) {
   };
 }
 
-export function selectRandomCard(categoryData) {
+export async function selectRandomCard(categoryData) {
   try {
     console.log("Selecting random card from category data:", categoryData);
     if (
@@ -87,9 +87,24 @@ export function selectRandomCard(categoryData) {
       console.error("Invalid category data or no cards available");
       return null;
     }
-    const cards = categoryData.cards;
-    console.log("Available cards:", cards);
-    const selectedCard = cards[Math.floor(Math.random() * cards.length)];
+
+    const wonCards = (await StorageService.getItem("wonCards")) || [];
+    console.log("Won cards:", wonCards);
+
+    // Filter out the cards that have already been won
+    let availableCards = categoryData.cards.filter(
+      (card) => !wonCards.includes(card)
+    );
+    console.log("Available cards (not yet won):", availableCards);
+
+    // If all cards have been won, reset to all cards
+    if (availableCards.length === 0) {
+      console.log("All cards have been won. Resetting to all cards.");
+      availableCards = categoryData.cards;
+    }
+
+    const selectedCard =
+      availableCards[Math.floor(Math.random() * availableCards.length)];
     console.log("Selected card:", selectedCard);
     return selectedCard;
   } catch (error) {
